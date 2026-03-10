@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOH — Exécution</title>
+    <style>
+        /* ═══════════════════════════════════════════════════════════
+           Styles de base pour la page d'exécution
+           ═══════════════════════════════════════════════════════════ */
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #1e1e1e;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #container { width: 100%; flex: 1; overflow: auto; min-height: 0; }
+
+        /* ═══════════════════════════════════════════════════════════
+           OVERLAY D'ERREUR — Thème clair, style éditeur VOH
+           ═══════════════════════════════════════════════════════════ */
+        #error-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ffffff;
+            color: #333333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            overflow: auto;
+            z-index: 9999;
+        }
+
+        /* ── Barre grise (style menubar éditeur) ── */
+        .error-bar {
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            background-color: #f0f0f0;
+            border-bottom: 1px solid #cccccc;
+            min-height: 28px;
+            user-select: none;
+        }
+
+        .error-bar-title {
+            font-size: 12px;
+            color: #333333;
+            font-weight: 600;
+        }
+
+        .error-bar-diagnostic {
+            margin-left: auto;
+            padding: 2px 10px;
+            font-size: 11px;
+            color: #ffffff;
+            background-color: #388e3c;
+            border: 1px solid #2e7d32;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .error-bar-diagnostic:hover {
+            background-color: #2e7d32;
+        }
+
+        /* ── Barre rouge ── */
+        .error-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 20px;
+            background-color: #d32f2f;
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .error-indicator-icon {
+            width: 22px; height: 22px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .error-indicator-filename {
+            opacity: 0.8;
+            font-weight: 400;
+            margin-left: auto;
+            font-size: 12px;
+        }
+
+        /* ── Contenu ── */
+        .error-content { padding: 24px 24px 32px; }
+
+        /* ── Badge type d'erreur ── */
+        .error-badge {
+            display: inline-block;
+            background-color: #ffebee;
+            color: #c62828;
+            font-family: 'Consolas', 'Fira Code', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 3px;
+            border: 1px solid #ef9a9a;
+            letter-spacing: 0.3px;
+            margin-bottom: 10px;
+        }
+
+        /* ── Message d'erreur ── */
+        .error-message-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #c62828;
+            line-height: 1.4;
+            margin-bottom: 18px;
+        }
+
+        /* ── Indicateur de ligne ── */
+        .error-line-info {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 6px 14px;
+            background-color: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .error-line-info-label { color: #666666; }
+
+        .error-line-info-number {
+            font-family: 'Consolas', 'Fira Code', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            color: #d32f2f;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           BLOC DE CODE SOURCE — Style CodeMirror
+           ═══════════════════════════════════════════════════════════ */
+        .error-code {
+            background-color: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 22px;
+        }
+
+        .error-code-line {
+            display: flex;
+            border-left: 3px solid transparent;
+            min-height: 22px;
+        }
+
+        .error-code-gutter {
+            min-width: 44px;
+            text-align: right;
+            padding-right: 10px;
+            color: #999999;
+            background-color: #f0f0f0;
+            border-right: 1px solid #e0e0e0;
+            margin-right: 16px;
+            user-select: none;
+        }
+
+        .error-code-text {
+            white-space: pre;
+            color: #333333;
+        }
+
+        /* ── Ligne fautive ── */
+        .error-code-line-fault {
+            background-color: #fff0f0;
+            border-left-color: #d32f2f;
+        }
+
+        .error-code-line-fault .error-code-gutter {
+            color: #d32f2f;
+            font-weight: 700;
+            background-color: #ffebee;
+            border-right-color: #ef9a9a;
+        }
+
+        .error-code-line-fault .error-code-text {
+            color: #b71c1c;
+            font-weight: 600;
+            text-decoration: wavy underline #d32f2f;
+            text-underline-offset: 4px;
+            text-decoration-skip-ink: none;
+        }
+
+        /* ── Pied de page ── */
+        .error-divider {
+            border: none;
+            border-top: 1px solid #e8e8e8;
+            margin: 22px 0 14px;
+        }
+
+        .error-footer { color: #999999; font-size: 12px; }
+
+        .error-footer kbd {
+            display: inline-block;
+            background-color: #f0f0f0;
+            border: 1px solid #cccccc;
+            border-bottom-width: 2px;
+            border-radius: 3px;
+            padding: 1px 6px;
+            font-family: 'Consolas', monospace;
+            font-size: 11px;
+            color: #555555;
+        }
+        /* ═══════════════════════════════════════════════════════════
+           PANNEAU CONSOLE — Affiche les logs en bas de la page
+           ═══════════════════════════════════════════════════════════ */
+
+        /* ── Séparateur draggable ── */
+        #console-splitter {
+            width: 100%;
+            height: 5px;
+            background-color: #e0e0e0;
+            cursor: ns-resize;
+            flex-shrink: 0;
+            display: none; /* Masqué quand la console est fermée */
+        }
+
+        #console-splitter:hover,
+        #console-splitter.console-splitter-active {
+            background-color: #007acc;
+        }
+
+        /* ── Panneau console ── */
+        #console-panel {
+            width: 100%;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* ── Barre d'en-tête (toujours visible) ── */
+        #console-header {
+            display: flex;
+            align-items: center;
+            height: 28px;
+            min-height: 28px;
+            padding: 0 12px;
+            background-color: #f3f3f3;
+            border-bottom: 1px solid #e0e0e0;
+            user-select: none;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        #console-header:hover {
+            background-color: #e8e8e8;
+        }
+
+        #console-header-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333333;
+            flex: 1;
+        }
+
+        #console-header-toggle {
+            font-size: 11px;
+            color: #666666;
+            margin-right: 8px;
+        }
+
+        #console-header-count {
+            font-size: 11px;
+            color: #666666;
+            margin-right: 12px;
+        }
+
+        #console-header-clear {
+            font-size: 11px;
+            color: #666666;
+            background: none;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            padding: 2px 8px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        #console-header-clear:hover {
+            color: #333333;
+            background-color: #e0e0e0;
+            border-color: #cccccc;
+        }
+
+        /* ── Zone de sortie des logs ── */
+        #console-output {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 4px 0;
+            font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 20px;
+            min-height: 0;
+        }
+
+        /* ── Ligne de log individuelle ── */
+        .console-line {
+            padding: 1px 12px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .console-line:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* ── Types de logs (couleurs Chrome DevTools thème clair) ── */
+        .console-line-log {
+            color: #333333;
+        }
+
+        .console-line-warn {
+            color: #5c3c00;
+            background-color: #fffbe6;
+            border-bottom-color: #fff5c2;
+        }
+
+        .console-line-error {
+            color: #ff0000;
+            background-color: #fff0f0;
+            border-bottom-color: #ffd6d6;
+        }
+
+        .console-line-info {
+            color: #333333;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- ═══ Conteneur principal pour le rendu VOH ═══ -->
+    <div id="container"></div>
+
+    <!-- ═══ Overlay d'erreurs ═══ -->
+    <div id="error-overlay">
+        <div class="error-bar">
+            <span class="error-bar-title">Visual Objects Handler</span>
+            <button class="error-bar-diagnostic" id="error-diagnostic-button" title="Télécharger un rapport complet pour le débogage (Ctrl+Shift+D)">Rapport de diagnostic</button>
+        </div>
+        <div class="error-indicator">
+            <span class="error-indicator-icon">✕</span>
+            <span>Erreur d'exécution</span>
+            <span class="error-indicator-filename" id="error-filename"></span>
+        </div>
+        <div class="error-content" id="error-content"></div>
+    </div>
+
+    <!-- ═══ Séparateur draggable + Panneau console ═══ -->
+    <div id="console-splitter"></div>
+    <div id="console-panel">
+        <div id="console-header">
+            <span id="console-header-title">Console</span>
+            <span id="console-header-count"></span>
+            <span id="console-header-toggle">▲</span>
+            <button id="console-header-clear">Vider</button>
+        </div>
+        <div id="console-output"></div>
+    </div>
+
+    <!-- ═══ Console visuelle — Intercepteur + Splitter ═══ -->
+    <script>
+    (function() {
+        'use strict';
+
+        /* ══════════════════════════════════════════════════════════
+           RÉFÉRENCES DOM
+           ══════════════════════════════════════════════════════════ */
+
+        const consolePanel   = document.getElementById('console-panel');
+        const consoleSplitter = document.getElementById('console-splitter');
+        const consoleHeader  = document.getElementById('console-header');
+        const consoleOutput  = document.getElementById('console-output');
+        const consoleToggle  = document.getElementById('console-header-toggle');
+        const consoleCount   = document.getElementById('console-header-count');
+        const consoleClear   = document.getElementById('console-header-clear');
+
+        /* ══════════════════════════════════════════════════════════
+           ÉTAT
+           ══════════════════════════════════════════════════════════ */
+
+        /** Clé localStorage pour la hauteur mémorisée. */
+        const CONSOLE_HEIGHT_KEY = 'voh_console_height';
+
+        /** Clé localStorage pour l'état ouvert/fermé. */
+        const CONSOLE_OPEN_KEY = 'voh_console_open';
+
+        /** Hauteur par défaut quand on ouvre pour la première fois (en pixels). */
+        const CONSOLE_DEFAULT_HEIGHT = 200;
+
+        /** Hauteur minimum du panneau console ouvert (en pixels). */
+        const CONSOLE_MIN_HEIGHT = 80;
+
+        /** Hauteur minimum du conteneur VOH (en pixels). */
+        const CONTAINER_MIN_HEIGHT = 100;
+
+        /** Compteur de messages pour le badge. */
+        let consoleMessageCount = 0;
+
+        /** La console est-elle ouverte ? */
+        let consoleIsOpen = false;
+
+        /** Hauteur mémorisée (en pixels). */
+        let consoleSavedHeight = CONSOLE_DEFAULT_HEIGHT;
+
+
+        /* ══════════════════════════════════════════════════════════
+           RESTAURER L'ÉTAT DEPUIS LOCALSTORAGE
+           ══════════════════════════════════════════════════════════ */
+
+        const storedHeight = localStorage.getItem(CONSOLE_HEIGHT_KEY);
+        if (storedHeight !== null) {
+            const parsed = parseInt(storedHeight, 10);
+            if (!isNaN(parsed) && parsed >= CONSOLE_MIN_HEIGHT) {
+                consoleSavedHeight = parsed;
+            }
+        }
+
+        const storedOpen = localStorage.getItem(CONSOLE_OPEN_KEY);
+        if (storedOpen === 'true') {
+            _consoleOpen(false);
+        } else {
+            _consoleClose(false);
+        }
+
+
+        /* ══════════════════════════════════════════════════════════
+           OUVRIR / FERMER
+           ══════════════════════════════════════════════════════════ */
+
+        /**
+         * Ouvre le panneau console avec la hauteur mémorisée.
+         * @param {boolean} [save=true] — Sauvegarder l'état dans localStorage.
+         */
+        function _consoleOpen(save) {
+            consoleIsOpen = true;
+            consolePanel.style.height = consoleSavedHeight + 'px';
+            consoleOutput.style.display = 'block';
+            consoleSplitter.style.display = 'block';
+            consoleToggle.textContent = '▼';
+            if (save !== false) {
+                localStorage.setItem(CONSOLE_OPEN_KEY, 'true');
+            }
+            /* Scroller en bas pour voir les derniers messages */
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        /**
+         * Ferme le panneau console (ne montre que la barre d'en-tête).
+         * @param {boolean} [save=true] — Sauvegarder l'état dans localStorage.
+         */
+        function _consoleClose(save) {
+            consoleIsOpen = false;
+            consolePanel.style.height = '28px';
+            consoleOutput.style.display = 'none';
+            consoleSplitter.style.display = 'none';
+            consoleToggle.textContent = '▲';
+            if (save !== false) {
+                localStorage.setItem(CONSOLE_OPEN_KEY, 'false');
+            }
+        }
+
+        /** Bascule ouvert/fermé. */
+        function _consoleToggle() {
+            if (consoleIsOpen) {
+                _consoleClose(true);
+            } else {
+                _consoleOpen(true);
+            }
+        }
+
+        /* ── Clic sur l'en-tête pour basculer ── */
+        consoleHeader.addEventListener('click', function(event) {
+            /* Ne pas basculer si on clique sur le bouton "Vider" */
+            if (event.target === consoleClear) return;
+            _consoleToggle();
+        });
+
+        /* ── Bouton "Vider" ── */
+        consoleClear.addEventListener('click', function(event) {
+            event.stopPropagation();
+            consoleOutput.innerHTML = '';
+            consoleMessageCount = 0;
+            _consoleUpdateCount();
+        });
+
+
+        /* ══════════════════════════════════════════════════════════
+           SPLITTER DRAGGABLE
+           ══════════════════════════════════════════════════════════ */
+
+        let splitterIsDragging = false;
+        let splitterStartY = 0;
+        let splitterStartHeight = 0;
+
+        consoleSplitter.addEventListener('mousedown', function(event) {
+            event.preventDefault();
+            splitterIsDragging = true;
+            splitterStartY = event.clientY;
+            splitterStartHeight = consoleSavedHeight;
+            consoleSplitter.classList.add('console-splitter-active');
+            document.body.style.cursor = 'ns-resize';
+            /* Empêcher la sélection de texte pendant le drag */
+            document.body.style.userSelect = 'none';
+        });
+
+        document.addEventListener('mousemove', function(event) {
+            if (!splitterIsDragging) return;
+
+            /* Calculer la nouvelle hauteur (on tire vers le haut = plus grand) */
+            const deltaY = splitterStartY - event.clientY;
+            let newHeight = splitterStartHeight + deltaY;
+
+            /* Borner entre la hauteur minimum et l'espace disponible */
+            const maxHeight = window.innerHeight - CONTAINER_MIN_HEIGHT - 28 - 5;
+            newHeight = Math.max(CONSOLE_MIN_HEIGHT, Math.min(maxHeight, newHeight));
+
+            consoleSavedHeight = newHeight;
+            consolePanel.style.height = newHeight + 'px';
+        });
+
+        document.addEventListener('mouseup', function() {
+            if (!splitterIsDragging) return;
+            splitterIsDragging = false;
+            consoleSplitter.classList.remove('console-splitter-active');
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+            /* Sauvegarder la hauteur dans localStorage */
+            localStorage.setItem(CONSOLE_HEIGHT_KEY, String(consoleSavedHeight));
+        });
+
+
+        /* ══════════════════════════════════════════════════════════
+           INTERCEPTEUR DE CONSOLE
+           ══════════════════════════════════════════════════════════ */
+
+        /** Sauvegarde des fonctions originales. */
+        const _originalConsoleLog   = console.log.bind(console);
+        const _originalConsoleWarn  = console.warn.bind(console);
+        const _originalConsoleError = console.error.bind(console);
+        const _originalConsoleInfo  = console.info.bind(console);
+
+        /**
+         * Échappe les caractères HTML pour un affichage sûr.
+         * @param {string} text
+         * @returns {string}
+         */
+        function _consoleEscapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        /**
+         * Met à jour le compteur de messages dans l'en-tête.
+         */
+        function _consoleUpdateCount() {
+            if (consoleMessageCount > 0) {
+                consoleCount.textContent = consoleMessageCount + ' message' + (consoleMessageCount > 1 ? 's' : '');
+            } else {
+                consoleCount.textContent = '';
+            }
+        }
+
+        /**
+         * Convertit un argument en texte lisible.
+         * @param {*} argument — N'importe quel type.
+         * @returns {string}
+         */
+        function _consoleFormatArgument(argument) {
+            if (argument === null) return 'null';
+            if (argument === undefined) return 'undefined';
+            if (typeof argument === 'string') return argument;
+            if (typeof argument === 'number' || typeof argument === 'boolean') return String(argument);
+            if (argument instanceof Error) return argument.name + ': ' + argument.message;
+            try {
+                return JSON.stringify(argument, null, 2);
+            } catch (error) {
+                return String(argument);
+            }
+        }
+
+        /**
+         * Ajoute une ligne dans la console visuelle.
+         * @param {string} type — 'log', 'warn', 'error' ou 'info'.
+         * @param {Array} args — Les arguments passés à console.*.
+         */
+        function _consoleAddLine(type, args) {
+
+            /* Formater les arguments en une seule chaîne */
+            const parts = [];
+            for (let i = 0; i < args.length; i++) {
+                parts.push(_consoleFormatArgument(args[i]));
+            }
+            const text = parts.join(' ');
+
+            /* Créer l'élément DOM */
+            const lineElement = document.createElement('div');
+            lineElement.className = 'console-line console-line-' + type;
+            lineElement.innerHTML = _consoleEscapeHtml(text);
+
+            consoleOutput.appendChild(lineElement);
+
+            /* Auto-scroll vers le bas */
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+
+            /* Mettre à jour le compteur */
+            consoleMessageCount++;
+            _consoleUpdateCount();
+        }
+
+        /* ── Remplacer les fonctions console ── */
+        console.log = function() {
+            _consoleAddLine('log', arguments);
+            _originalConsoleLog.apply(null, arguments);
+        };
+
+        console.warn = function() {
+            _consoleAddLine('warn', arguments);
+            _originalConsoleWarn.apply(null, arguments);
+        };
+
+        console.error = function() {
+            _consoleAddLine('error', arguments);
+            _originalConsoleError.apply(null, arguments);
+        };
+
+        console.info = function() {
+            _consoleAddLine('info', arguments);
+            _originalConsoleInfo.apply(null, arguments);
+        };
+
+    })();
+    </script>
+
+    <!-- ═══ Pixi.js + Core VOH ═══ -->
+    <script src="Libraries/Pixi/Pixi.js"></script>
+    <script src="Core/Core-Diagnostics.js"></script>
+    <script src="Core/Core-EventEmitter.js"></script>
+    <script src="Core/Core-API.js"></script>
+    <script src="Core/Core-Zone.js"></script>
+    <script src="Core/Core-CanvasSelection.js"></script>
+    <script src="Core/Core-CanvasHistory.js"></script>
+    <script src="Core/Core-CanvasPage.js"></script>
+    <script src="Core/Core-RenderEngine.js"></script>
+    <script src="Core/Core-Canvas.js"></script>
+    <script src="Core/Core-Objects.js"></script>
+    <script src="Core/Core-ObjectSelection.js"></script>
+    <script src="Core/Core-SpatialGrid.js"></script>
+    <script src="Core/Core-ObjectInteraction.js"></script>
+    <script src="Core/Core-Main.js"></script>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         EXÉCUTION DU SCRIPT UTILISATEUR
+
+         Le script est injecté comme un vrai fichier JS via Blob URL.
+         Ça donne des numéros de ligne fiables pour TOUTES les
+         erreurs, y compris les SyntaxError.
+         ═══════════════════════════════════════════════════════════ -->
+    <script>
+
+        /* ══════════════════════════════════════════════════════════
+           VARIABLES GLOBALES
+           ══════════════════════════════════════════════════════════ */
+
+        /** Lignes du script utilisateur, pour affichage dans l'erreur. */
+        let _runnerUserScriptLines = [];
+
+        /** Empêche d'afficher plusieurs erreurs à la suite. */
+        let _runnerErrorAlreadyShown = false;
+
+        /** Tab map pour le remapping des erreurs en mode projet.
+         *  Format: [{name, startLine, lineCount}, ...] ou tableau vide en mode script. */
+        let _runnerTabMap = [];
+
+
+        /* ══════════════════════════════════════════════════════════
+           AFFICHAGE D'ERREUR
+           ══════════════════════════════════════════════════════════ */
+
+        /**
+         * Affiche une erreur formatée avec badge, message, numéro
+         * de ligne et extrait de code source avec ligne fautive
+         * soulignée en rouge ondulé.
+         *
+         * @param {string} errorType — Ex: "ReferenceError", "SyntaxError".
+         * @param {string} errorMessage — Ex: "ghjgjf is not defined".
+         * @param {number|null} lineNumber — Ligne dans le script (1-based).
+         */
+        function _runnerShowError(errorType, errorMessage, lineNumber) {
+            if (_runnerErrorAlreadyShown) return;
+            _runnerErrorAlreadyShown = true;
+
+            const overlay = document.getElementById('error-overlay');
+            const content = document.getElementById('error-content');
+            const filenameElement = document.getElementById('error-filename');
+
+            /* Nom du fichier */
+            const scriptName = localStorage.getItem('voh_editor_filename') || 'Script sans nom';
+
+            /* ── Remapping en mode projet ── */
+            let tabName     = null;
+            let localLine   = lineNumber;
+            let displayLines = _runnerUserScriptLines;  /* Lignes à afficher dans le contexte d'erreur. */
+
+            if (_runnerTabMap.length > 0 && lineNumber !== null) {
+                for (let t = 0; t < _runnerTabMap.length; t++) {
+                    const tab = _runnerTabMap[t];
+                    const tabEndLine = tab.startLine + tab.lineCount - 1;
+                    if (lineNumber >= tab.startLine && lineNumber <= tabEndLine) {
+                        tabName   = tab.name;
+                        localLine = lineNumber - tab.startLine + 1;
+                        break;
+                    }
+                }
+            }
+
+            filenameElement.textContent = tabName
+                ? tabName + ' (projet)'
+                : scriptName;
+
+            let html = '';
+
+            /* Badge + message */
+            html += '<div class="error-badge">' + _runnerEscapeHtml(errorType) + '</div>';
+            html += '<div class="error-message-text">' + _runnerEscapeHtml(errorMessage) + '</div>';
+
+            /* Numéro de ligne + code source */
+            if (lineNumber !== null && lineNumber > 0 && lineNumber <= _runnerUserScriptLines.length) {
+
+                html += '<div class="error-line-info">';
+                if (tabName) {
+                    html += '<span class="error-line-info-label">Script:</span>';
+                    html += '<span class="error-line-info-number" style="margin-right:10px">' + _runnerEscapeHtml(tabName) + '</span>';
+                }
+                html += '<span class="error-line-info-label">Ligne:</span>';
+                html += '<span class="error-line-info-number">' + localLine + '</span>';
+                html += '</div>';
+
+                /* Contexte: 3 lignes avant / 3 après (lignes globales pour le code source) */
+                const startLine = Math.max(1, lineNumber - 3);
+                const endLine = Math.min(_runnerUserScriptLines.length, lineNumber + 3);
+
+                html += '<div class="error-code">';
+                for (let i = startLine; i <= endLine; i++) {
+                    const code = _runnerUserScriptLines[i - 1] || '';
+                    const isFault = (i === lineNumber);
+                    /* En mode projet, afficher les numéros de ligne locaux. */
+                    let displayLineNum = i;
+                    if (tabName) {
+                        const tab = _runnerTabMap.find(t => t.name === tabName);
+                        if (tab) displayLineNum = i - tab.startLine + 1;
+                    }
+                    html += '<div class="error-code-line' + (isFault ? ' error-code-line-fault' : '') + '">';
+                    html += '<span class="error-code-gutter">' + displayLineNum + '</span>';
+                    html += '<span class="error-code-text">' + _runnerEscapeHtml(code) + '</span>';
+                    html += '</div>';
+                }
+                html += '</div>';
+            }
+
+            /* Pied de page */
+            html += '<hr class="error-divider">';
+            html += '<div class="error-footer">';
+            html += 'Corrigez votre script dans l\'éditeur et relancez avec <kbd>F5</kbd>';
+            html += '</div>';
+
+            content.innerHTML = html;
+            overlay.style.display = 'block';
+        }
+
+
+        /**
+         * Affiche un message d'erreur simple (pas de script, etc.).
+         * @param {string} message — Le message.
+         */
+        function _runnerShowSimpleError(message) {
+            if (_runnerErrorAlreadyShown) return;
+            _runnerErrorAlreadyShown = true;
+
+            const overlay = document.getElementById('error-overlay');
+            const content = document.getElementById('error-content');
+            document.getElementById('error-filename').textContent = '';
+
+            content.innerHTML =
+                '<div class="error-message-text">' + _runnerEscapeHtml(message) + '</div>' +
+                '<hr class="error-divider">' +
+                '<div class="error-footer">Ouvrez l\'éditeur et relancez avec <kbd>F5</kbd></div>';
+
+            overlay.style.display = 'block';
+        }
+
+
+        /**
+         * Échappe les caractères HTML.
+         * @param {string} text
+         * @returns {string}
+         */
+        function _runnerEscapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+
+        /**
+         * Charge un script externe de manière asynchrone.
+         * @param {string} source — Chemin vers le fichier JS.
+         * @returns {Promise}
+         */
+        function _runnerLoadScript(source) {
+            return new Promise((resolve, reject) => {
+                const scriptElement = document.createElement('script');
+                scriptElement.src = source;
+                scriptElement.onload = resolve;
+                scriptElement.onerror = () => reject(new Error('Impossible de charger : ' + source));
+                document.head.appendChild(scriptElement);
+            });
+        }
+
+
+        /* ══════════════════════════════════════════════════════════
+           CORRECTION DU DIAGNOSTIC APRÈS REMAPPING
+
+           Quand une erreur est capturée, Core-Diagnostics.js
+           enregistre les infos brutes (URL blob, ligne globale).
+           Cette fonction corrige la dernière entrée du journal
+           avec le vrai nom du script et le numéro de ligne local.
+           ══════════════════════════════════════════════════════════ */
+
+        /**
+         * Corrige la dernière erreur dans le DiagnosticsManager avec les infos remappées.
+         * @param {number|null} globalLine — Ligne dans le script concaténé (1-based).
+         */
+        function _runnerPatchDiagnosticLastError(globalLine, column) {
+            /* Accéder au DiagnosticsManager via la référence globale */
+            const diagnosticsManager = window._vohDiagnosticsManager;
+            if (!diagnosticsManager) return;
+
+            /* Nom du script */
+            const scriptName = localStorage.getItem('voh_editor_filename') || 'Script utilisateur';
+
+            /* Remapping en mode projet (même logique que _runnerShowError) */
+            let sourceName = scriptName;
+            let localLine  = globalLine;
+
+            if (_runnerTabMap.length > 0 && globalLine !== null) {
+                for (let t = 0; t < _runnerTabMap.length; t++) {
+                    const tab = _runnerTabMap[t];
+                    const tabEndLine = tab.startLine + tab.lineCount - 1;
+                    if (globalLine >= tab.startLine && globalLine <= tabEndLine) {
+                        sourceName = tab.name + ' (projet)';
+                        localLine  = globalLine - tab.startLine + 1;
+                        break;
+                    }
+                }
+            }
+
+            /* Corriger l'entrée dans le DiagnosticsManager */
+            diagnosticsManager._diagnosticsPatchLastError({
+                source: sourceName,
+                line:   localLine,
+                column: column || 0
+            });
+        }
+
+
+        /* ══════════════════════════════════════════════════════════
+           CAPTURE GLOBALE DES ERREURS
+
+           window.onerror attrape TOUTES les erreurs, y compris
+           les SyntaxError. Le paramètre lineno est donné
+           directement par le navigateur — fiable et exact.
+
+           Offset: le code injecté commence par une ligne wrapper
+           "(async () => {\n" donc ligne du script = lineno - 1.
+           ══════════════════════════════════════════════════════════ */
+
+        window.onerror = function(message, source, lineno, colno, error) {
+            /* Ne traiter que les erreurs du script utilisateur (Blob URL) */
+            if (source && source.startsWith('blob:')) {
+                const scriptLine = lineno > 0 ? lineno - 1 : null;
+                const errorType = error ? error.name : 'Erreur';
+                const errorMsg = error ? error.message : message;
+                _runnerShowError(errorType, errorMsg, scriptLine);
+
+                /* ── Corriger l'entrée dans le DiagnosticsManager ── */
+                _runnerPatchDiagnosticLastError(scriptLine, colno);
+
+                return true; /* Empêche l'affichage dans la console */
+            }
+        };
+
+        window.addEventListener('unhandledrejection', function(event) {
+            const reason = event.reason;
+            if (reason instanceof Error) {
+                /* Pour les erreurs async, extraire la ligne et colonne depuis le stack */
+                let lineNumber = null;
+                let columnNumber = null;
+                if (reason.stack) {
+                    const match = reason.stack.match(/blob:[^\s]+:(\d+):(\d+)/);
+                    if (match) {
+                        lineNumber = parseInt(match[1], 10) - 1;
+                        columnNumber = parseInt(match[2], 10);
+                        if (lineNumber <= 0) lineNumber = null;
+                    }
+                }
+                _runnerShowError(reason.name, reason.message, lineNumber);
+                _runnerPatchDiagnosticLastError(lineNumber, columnNumber);
+            } else {
+                _runnerShowError('Erreur', String(reason), null);
+                _runnerPatchDiagnosticLastError(null);
+            }
+        });
+
+
+        /* ══════════════════════════════════════════════════════════
+           POINT D'ENTRÉE — EXÉCUTION VIA BLOB URL
+
+           Au lieu de eval() ou new Function(), on crée un vrai
+           fichier JS en mémoire (Blob) et on l'injecte comme
+           <script src="blob:...">. Le navigateur le traite comme
+           un fichier normal → numéros de ligne exacts pour
+           TOUTES les erreurs (SyntaxError incluses).
+           ══════════════════════════════════════════════════════════ */
+
+        (function() {
+
+            /* ── Récupérer le script depuis localStorage ── */
+            const userScript = localStorage.getItem('voh_runner_script');
+
+            if (!userScript || userScript.trim() === '') {
+                _runnerShowSimpleError(
+                    'Aucun script à exécuter.\n\n' +
+                    'Ouvrez l\'éditeur (Index.html) et cliquez sur "Exécuter".'
+                );
+                return;
+            }
+
+            /* ── Stocker les lignes pour l'affichage d'erreur ── */
+            _runnerUserScriptLines = userScript.split('\n');
+
+            /* ── Charger la tab map pour le remapping d'erreurs en mode projet ── */
+            try {
+                const tabMapRaw = localStorage.getItem('voh_runner_tabmap');
+                if (tabMapRaw) _runnerTabMap = JSON.parse(tabMapRaw);
+            } catch (e) { _runnerTabMap = []; }
+
+            /* ── Récupérer le langage ── */
+            const language = localStorage.getItem('voh_runner_language') || 'javascript';
+
+            /* ── Si TypeScript, charger le compilateur puis exécuter ── */
+            if (language === 'typescript') {
+                _runnerLoadScript('Libraries/TypeScript/TypeScript.js').then(function() {
+                    if (typeof ts === 'undefined') {
+                        _runnerShowSimpleError(
+                            'Le compilateur TypeScript n\'a pas pu être chargé.\n\n' +
+                            'Vérifiez que Libraries/TypeScript/TypeScript.js est présent.'
+                        );
+                        return;
+                    }
+                    const result = ts.transpileModule(userScript, {
+                        compilerOptions: {
+                            target: ts.ScriptTarget.ES2020,
+                            module: ts.ModuleKind.None,
+                            strict: false
+                        }
+                    });
+                    _runnerInjectScript(result.outputText);
+                }).catch(function(error) {
+                    _runnerShowSimpleError('Erreur au chargement de TypeScript : ' + error.message);
+                });
+                return;
+            }
+
+            /* ── JavaScript: exécuter directement ── */
+            _runnerInjectScript(userScript);
+
+        })();
+
+
+        /**
+         * Injecte le code comme un vrai fichier JS via Blob URL.
+         *
+         * Le code est enveloppé dans (async () => { ... })()
+         * pour permettre l'utilisation de await au top-level.
+         *
+         * Structure du blob:
+         *   Ligne 1: (async () => {
+         *   Ligne 2: <ligne 1 du script>
+         *   Ligne 3: <ligne 2 du script>
+         *   ...
+         *   Ligne N+1: <ligne N du script>
+         *   Dernière: })();
+         *
+         * Quand le navigateur reporte "erreur ligne 16",
+         * la ligne du script = 16 - 1 = 15. ✓
+         *
+         * @param {string} code — Le code JavaScript à exécuter.
+         */
+        function _runnerInjectScript(code) {
+
+            /* Envelopper dans async pour autoriser await */
+            const wrappedCode = '(async () => {\n' + code + '\n})();\n';
+
+            /* Créer un Blob (= fichier en mémoire) */
+            const blob = new Blob([wrappedCode], { type: 'text/javascript' });
+            const blobUrl = URL.createObjectURL(blob);
+
+            /* Injecter comme un vrai <script src="..."> */
+            const scriptElement = document.createElement('script');
+            scriptElement.src = blobUrl;
+
+            /* Nettoyage après chargement */
+            scriptElement.onload = function() {
+                URL.revokeObjectURL(blobUrl);
+            };
+
+            /* Erreur de chargement du blob (ne devrait pas arriver) */
+            scriptElement.onerror = function() {
+                URL.revokeObjectURL(blobUrl);
+                _runnerShowSimpleError('Impossible de charger le script.');
+            };
+
+            document.body.appendChild(scriptElement);
+        }
+
+
+        /* ══════════════════════════════════════════════════════════
+           RAPPORT DE DIAGNOSTIC
+
+           Cherche l'instance VOH dans window pour accéder au
+           DiagnosticsManager et télécharger le rapport.
+           Raccourci clavier: Ctrl+Shift+D
+           ══════════════════════════════════════════════════════════ */
+
+        /**
+         * Télécharge le rapport de diagnostic via la référence globale.
+         */
+        function _runnerDownloadDiagnosticReport() {
+            const diagnosticsManager = window._vohDiagnosticsManager;
+            if (diagnosticsManager) {
+                diagnosticsManager.downloadReport();
+            } else {
+                /* Pas d'instance VOH — générer un rapport minimal */
+                const minimalReport = [
+                    '╔══════════════════════════════════════════════════════════════════╗',
+                    '║   RAPPORT DE DIAGNOSTIC — Visual Objects Handler                ║',
+                    '╚══════════════════════════════════════════════════════════════════╝',
+                    '',
+                    'Aucune instance VOH trouvée.',
+                    'Le rapport ci-dessous contient uniquement les informations système.',
+                    '',
+                    'Navigateur: ' + navigator.userAgent,
+                    'Écran: ' + screen.width + 'x' + screen.height,
+                    'Date: ' + new Date().toLocaleString('fr-FR'),
+                    '',
+                    '════════════════════════════════════════════════',
+                    '  FIN DU RAPPORT',
+                    '════════════════════════════════════════════════'
+                ].join('\n');
+
+                const blob = new Blob([minimalReport], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'VOH-Diagnostic-Minimal.txt';
+                link.click();
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        /* ── Bouton dans la barre d'erreur ── */
+        document.getElementById('error-diagnostic-button').addEventListener('click', function() {
+            _runnerDownloadDiagnosticReport();
+        });
+
+        /* ── Raccourci clavier Ctrl+Shift+D ── */
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && event.shiftKey && event.key === 'D') {
+                event.preventDefault();
+                _runnerDownloadDiagnosticReport();
+            }
+        });
+
+    </script>
+
+</body>
+</html>
