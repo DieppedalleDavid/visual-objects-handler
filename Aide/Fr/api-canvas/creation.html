@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Création / Suppression — voh.canvas</title>
+</head>
+<body>
+
+<h1>voh.canvas — Création / Suppression</h1>
+<p class="intro">Créer des canvas dans une zone et les supprimer.</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Créer un canvas</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">create</span><span class="sig-paren">(</span><span class="sig-param">zoneId, options</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre</span></div>
+    <div class="method-description">
+        Crée un nouveau canvas dans une zone et retourne son <strong>ID</strong> (un nombre unique).
+        Cet ID est ensuite utilisé dans toutes les autres fonctions pour désigner ce canvas.
+        Le premier canvas créé dans l'instance est automatiquement activé.
+        Chaque canvas a un z-order croissant (le dernier créé est au-dessus des autres).
+    </div>
+
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone dans laquelle créer le canvas</td></tr>
+        <tr><td>name</td><td>texte</td><td>Nom du canvas (par défaut: "Canvas N")</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X dans la zone en pixels (par défaut: 50)</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y dans la zone en pixels (par défaut: 50)</td></tr>
+        <tr><td>width</td><td>nombre</td><td>Largeur en pixels (par défaut: 800)</td></tr>
+        <tr><td>height</td><td>nombre</td><td>Hauteur en pixels (par défaut: 600)</td></tr>
+        <tr><td>backgroundColor</td><td>couleur</td><td>Couleur de fond (par défaut: blanc)</td></tr>
+        <tr><td>isLocked</td><td>vrai/faux</td><td>Verrouillé dès la création (par défaut: false)</td></tr>
+        <tr><td>isVisible</td><td>vrai/faux</td><td>Visible dès la création (par défaut: true)</td></tr>
+        <tr><td>opacity</td><td>nombre</td><td>Opacité: <code>0.0</code> = transparent → <code>1.0</code> = opaque (par défaut: 1.0)</td></tr>
+        <tr><td>selectionEnabled</td><td>vrai/faux</td><td>Sélection à la souris activée (par défaut: false) — voir <a href="selection.html">Sélection</a></td></tr>
+        <tr><td>selectionMouseButton</td><td>texte</td><td>Bouton souris: <code>'left'</code>, <code>'middle'</code>, <code>'right'</code> (par défaut: 'left')</td></tr>
+        <tr><td>selectionBackgroundColor</td><td>couleur</td><td>Couleur de fond du rectangle de sélection (par défaut: bleu semi-transparent)</td></tr>
+        <tr><td>selectionBorderColor</td><td>couleur</td><td>Couleur de bordure du rectangle de sélection (par défaut: bleu)</td></tr>
+        <tr><td>selectionBorderThickness</td><td>nombre</td><td>Épaisseur de bordure du rectangle en pixels (par défaut: 1)</td></tr>
+        <tr><td>selectionBorderStyle</td><td>texte</td><td>Style de trait: <code>'solid'</code>, <code>'dashed'</code>, <code>'dotted'</code> (par défaut: 'solid')</td></tr>
+    </table>
+
+    <div class="method-return">Retourne: <span class="return-type">nombre</span> — L'ID du canvas créé (nombre ≥ 1), ou <code>-1</code> si la zone n'existe pas.</div>
+
+<pre><span class="cmt">// Canvas simple</span>
+<span class="kw">const</span> <span class="var">canvas</span> = <span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">create</span>(<span class="var">zone</span>, {
+    <span class="var">name</span>: <span class="str">'Mon canvas'</span>,
+    <span class="var">x</span>: <span class="num">30</span>,
+    <span class="var">y</span>: <span class="num">30</span>,
+    <span class="var">width</span>: <span class="num">600</span>,
+    <span class="var">height</span>: <span class="num">400</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Supprimer un canvas</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">delete</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Supprime un canvas et tous ses objets. Si c'était le canvas actif, aucun autre canvas n'est activé
+        automatiquement — <code>voh.canvas.getActiveId()</code> retournera <code>null</code>.
+        C'est au développeur d'activer un autre canvas si nécessaire via <code>voh.canvas.setActive()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas à supprimer</td></tr>
+    </table>
+
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si le canvas a été supprimé, <code>false</code> si le canvas n'existe pas.</div>
+
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">delete</span>(<span class="var">canvas</span>);
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">exists</span>(<span class="var">canvas</span>));    <span class="cmt">// false</span>
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getActiveId</span>());  <span class="cmt">// null si c'était le canvas actif</span></pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

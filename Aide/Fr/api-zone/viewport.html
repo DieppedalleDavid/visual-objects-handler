@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Viewport (Scroll) — voh.zone</title>
+</head>
+<body>
+
+<h1>voh.zone — Viewport (Scroll)</h1>
+<p class="intro">Contrôler le défilement et les scrollbars de la zone.</p>
+
+<div class="note">
+    Le viewport est la fenêtre visible de la zone. Quand la zone est plus grande que le conteneur
+    (par exemple 3000×2000 pixels), on ne voit qu'une partie à la fois.
+    Les scrollbars permettent de naviguer, et on peut aussi contrôler le défilement par code.
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setScrollbarVisible</span><span class="sig-paren">(</span><span class="sig-param">zoneId, visible</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getScrollbarVisible</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description"><code>true</code> = scrollbars automatiques, <code>false</code> = masquées. Même sans scrollbars, le scroll par code fonctionne toujours.</div>
+    <div class="method-return"><strong>set</strong> → <code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setScrollX</span><span class="sig-paren">(</span><span class="sig-param">zoneId, x</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getScrollX</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Position horizontale du défilement en pixels. <code>0</code> = bord gauche.</div>
+    <div class="method-return"><strong>set</strong> → <code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setScrollY</span><span class="sig-paren">(</span><span class="sig-param">zoneId, y</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getScrollY</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Position verticale du défilement en pixels. <code>0</code> = bord haut.</div>
+    <div class="method-return"><strong>set</strong> → <code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">scrollToCenter</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Centre la vue pour que le milieu de la zone soit au milieu de l'écran.</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si zone inexistante.</div></div>
+
+<pre><span class="cmt">// Défiler vers le coin haut-gauche</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setScrollX</span>(<span class="var">zone</span>, <span class="num">0</span>);
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setScrollY</span>(<span class="var">zone</span>, <span class="num">0</span>);
+
+<span class="cmt">// Défiler vers une position précise</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setScrollX</span>(<span class="var">zone</span>, <span class="num">500</span>);
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setScrollY</span>(<span class="var">zone</span>, <span class="num">300</span>);
+
+<span class="cmt">// Lire la position actuelle</span>
+<span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Position:'</span>, <span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">getScrollX</span>(<span class="var">zone</span>), <span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">getScrollY</span>(<span class="var">zone</span>));
+
+<span class="cmt">// Centrer la vue</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">scrollToCenter</span>(<span class="var">zone</span>);</pre>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

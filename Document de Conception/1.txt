@@ -1,0 +1,436 @@
+# Visual Objects Handler v5 — Document de Conception
+
+**Auteur :** Shadow Storm (David Dieppedalle)
+**Date :** 11 février 2026 — Mis à jour le 1er mars 2026
+**Basé sur :** Analyse complète de la v4.34.27 (101 704 lignes de code)
+**Statut :** En cours de développement — Phase API-first (Core Zone fonctionnel, Canvas en conception)
+
+
+---
+
+
+## 1. Pourquoi une v5 ?
+
+La v4 a prouvé le concept. Elle fonctionne, elle est riche (290 méthodes API, 9 types d'objets, multi-pages, connexions, etc.). Mais plusieurs limitations fondamentales sont devenues évidentes avec le temps :
+
+**Limitations structurelles identifiées dans la v4 :**
+
+- **Rendu Canvas 2D (CPU) insuffisant** — Le rendu repose entièrement sur le CPU via l'API Canvas 2D du navigateur. 100 objets avec ombres portées (`ctx.shadowBlur`) suffisent à faire ramer l'application. Les 5 canvas HTML empilés (background couleur, background image, grille, objets, overlay) multiplient les opérations de composition. Le moteur ne redessine que quand quelque chose change (`requestRender()`), ce qui rend impossible les GIF animés (première frame figée), les vidéos, et les animations personnalisées. L'animation des tirets de connexion est un hack séparé avec sa propre boucle `requestAnimationFrame`.
+
+- **Comportements automatiques codés en dur** — Dans `Core-InteractionManager.js` (6 148 lignes), le curseur au survol, la sélection au clic, le déplacement au drag, le redimensionnement, la rotation — tout est codé directement en JavaScript avec des `if/else` imbriqués. L'utilisateur ne peut pas modifier ces comportements sans toucher au code source.
+
+- **Médias embarqués dans le fichier projet** — Les images, vidéos et fichiers sont stockés en Base64 à l'intérieur du fichier .voh (ZIP). Une vidéo de 58 Mo prend ~77 Mo en mémoire sous forme de chaîne Base64. Pas de chargement à la demande, tout est en RAM en permanence. Sauvegarde lente, fichiers .voh énormes.
+
+- **Pas de dossier projet** — Tout est dans un seul fichier ZIP. Pas de structure de fichiers, pas de fichiers séparés sur disque, pas de possibilité d'éditer des ressources à côté du projet.
+
+- **Dépendance au navigateur** — Les paramètres sont dans localStorage (perdus si on change de navigateur), l'accès au système de fichiers est limité par les restrictions des navigateurs web.
+
+- **Nommage API incohérent** — Certains noms de méthodes sont mal choisis, pas intuitifs. 290 méthodes publiques méritent un nettoyage et une réorganisation.
+
+- **Pas de système de modules** — Toutes les classes sont globales (`class RenderEngine`, `class ObjectManager`), ce qui empêche l'utilisation de bundlers, le tree-shaking, et rend les dépendances implicites.
+
+
+---
+
+
+## 2. Ce qui est conservé
+
+La v5 est une réécriture sur base propre. On ne prend pas le code v4 pour le refactorer fichier par fichier. On repart d'une interface neuve (la maquette de docking VS2010) et on reconstruit le Core en modules ES propres. Mais on ne repart pas de zéro sur les concepts : tout ce qui a fait ses preuves en v4 est conservé.
+
+### 2.1 Concepts et architecture conservés
+
+| Élément | Status | Notes |
+|---------|--------|-------|
+| Architecture Core / Editor | ✅ Conservé | Le Core reste autonome, l'Editor ajoute l'UI |
+| Le Core utilisable sans l'Editor | ✅ Conservé | Pilier fondamental du projet |
+| 5 layers de rendu (bg couleur, bg image, grille, objets, overlay) | ✅ Conservé | Le concept de layers empilés est conservé, mais l'implémentation change : 5 Containers Pixi.js dans 1 seul canvas WebGL au lieu de 5 éléments HTML canvas empilés (voir section 3.2) |
+| Système de pages avec visibilité | ✅ Conservé | Multi-page par projet fonctionne bien |
+| EventEmitter (pub/sub) | ✅ Conservé | Simple, léger (89 lignes), efficace |
+| TypeRegistry pour les formes | ✅ Conservé | Extensible, bon pattern |
+| Système de connexions/ancrages (25 points) | ✅ Conservé | Complet et fonctionnel |
+| Système de groupes | ✅ Conservé | Fonctionne |
+| Système d'épingle (pin) | ✅ Conservé | Unique et puissant |
+| Système de contraintes (zones, axes, pas) | ✅ Conservé | Très complet |
+| BBCode pour les labels/texte | ✅ Conservé | Fonctionnel |
+| InterfaceBuilder | ✅ Conservé | Constructeur d'UI autonome |
+| HistoryManager Snapshot + Diff par page | ✅ Conservé | Bon équilibre mémoire/fiabilité |
+
+### 2.2 Code v4 comme référence
+
+Le code v4 n'est pas porté tel quel. Il sert de référence pour réécrire les modules en propre :
+
+- Les **algorithmes et la logique métier** sont récupérés (calculs de rotation, snap to grid, gestion des contraintes, pipeline de rendu, etc.)
+- Le **code est réécrit en modules ES** dès le départ (import/export explicites, zéro global)
+- Les **fichiers sont structurés proprement** dès le départ (1 fichier = 1 responsabilité, ~1 500 lignes max)
+- L'**interface Editor est reconstruite** sur la base de la maquette de docking VS2010
+
+La v4 (101 704 lignes) est le cahier des charges vivant : tout ce qu'elle fait, la v5 doit le faire aussi, en mieux.
+
+
+---
+
+
+## 3. Ce qui change — Les 3 piliers de la v5
+
+
+### 3.1 PILIER 1 — Moteur de règles (Rule Engine)
+
+#### Le problème actuel
+
+Dans la v4, `Core-InteractionManager.js` contient **toute la logique d'interaction** en dur :
+
+```
+_onMouseDown → détecte clic → sélection automatique
+_onMouseMove → détecte hover → changement curseur automatique
+_updateHover → curseur objet, curseur poignée, tooltip
+_handleObjectClick → sélection, drag
+_startResizing → redimensionnement
+_startRotating → rotation
+_startDraggingPivot → pivot
+```
+
+C'est efficace (exécution directe) mais figé. L'utilisateur ne peut pas modifier ces comportements sans toucher au code source.
+
+#### La solution : Fichier de règles JSON
+
+Le Core charge un fichier de règles JSON qui définit les comportements. L'InteractionManager émet les événements bruts (mouseDown, mouseMove, mouseEnter...), le Rule Engine évalue les règles et exécute les actions.
+
+Format proposé pour une règle :
+
+```json
+{
+  "id": "cursor-hover-object",
+  "name": "Curseur au survol d'un objet",
+  "enabled": true,
+  "priority": 10,
+  "trigger": {
+    "event": "objectMouseEnter",
+    "conditions": [
+      { "property": "object.movable", "operator": "==", "value": true },
+      { "property": "object.locked", "operator": "==", "value": false }
+    ]
+  },
+  "actions": [
+    {
+      "type": "setCursor",
+      "params": { "source": "object.cursor", "fallback": "move" }
+    }
+  ]
+}
+```
+
+Fichier de règles par défaut du Core : `default-rules.json`
+
+Ce fichier reproduit exactement les comportements automatiques actuels de la v4. Voici les règles principales à coder :
+
+| # | Événement déclencheur | Action(s) | Équivalent v4 |
+|---|----------------------|-----------|---------------|
+| 1 | `objectMouseEnter` | Changer curseur (move / cursor perso) | `_updateHover` → obj.cursor |
+| 2 | `objectMouseLeave` | Restaurer curseur canvas | `_updateHover` → canvasCursor |
+| 3 | `handleMouseEnter` | Changer curseur (resize / rotate / etc.) | `_updateHover` → handle.cursor |
+| 4 | `handleMouseLeave` | Restaurer curseur | `_updateHover` → fallback |
+| 5 | `canvasLeftMouseDown` + objet sous curseur | Sélectionner l'objet | `_handleObjectClick` |
+| 6 | `canvasLeftMouseDown` + Ctrl + objet | Ajouter/retirer de la sélection | `_handleObjectClick` + ctrlKey |
+| 7 | `canvasLeftMouseDown` + vide | Désélectionner tout | `deselectAll` |
+| 8 | `canvasLeftMouseDown` + vide + drag | Rectangle de sélection | `_startSelectionBox` |
+| 9 | `objectLeftMouseDown` + drag | Déplacer l'objet | `_startDragging` |
+| 10 | `handleLeftMouseDown` (resize) + drag | Redimensionner | `_startResizing` |
+| 11 | `handleLeftMouseDown` (rotate) + drag | Rotation | `_startRotating` |
+| 12 | `handleLeftMouseDown` (pivot) + drag | Déplacer pivot | `_startDraggingPivot` |
+| 13 | `objectMouseEnter` + tooltip non vide | Afficher tooltip (avec délai) | `scheduleTooltip` |
+| 14 | `objectMouseLeave` | Cacher tooltip | `hideTooltip` |
+| 15 | `canvasLeftMouseDown` + outil connexion + ancrage | Démarrer connexion | `_handleConnectionClick` |
+
+Ce qui NE devient PAS une règle :
+
+La mécanique de déplacement, redimensionnement, rotation reste du code JavaScript natif. Les règles déclenchent les mécaniques (« commence à déplacer »), mais le calcul du déplacement pixel par pixel, le respect des contraintes de zone, le snap to grid — tout ça reste du code optimisé.
+
+#### Architecture du Rule Engine
+
+```
+┌─────────────────────────────────────┐
+│         InteractionManager          │
+│  (événements bruts : mouseDown,     │
+│   mouseMove, mouseUp, keyDown...)   │
+└──────────────┬──────────────────────┘
+               │ émet des événements
+               ▼
+┌─────────────────────────────────────┐
+│           Rule Engine               │
+│  - Charge rules.json au démarrage   │
+│  - Évalue les conditions            │
+│  - Exécute les actions              │
+│  - Règles pré-compilées en JS       │
+└──────────────┬──────────────────────┘
+               │ appelle les mécaniques
+               ▼
+┌─────────────────────────────────────┐
+│       Mécaniques (code natif)       │
+│  - DragEngine (déplacement)         │
+│  - ResizeEngine (redim.)            │
+│  - RotateEngine (rotation)          │
+│  - SelectionEngine (sélection)      │
+│  - CursorEngine (curseurs)          │
+└─────────────────────────────────────┘
+```
+
+#### Performance — Point critique
+
+Actuellement, `_onMouseMove` est appelé à chaque pixel de mouvement de souris. Avec 500+ objets, évaluer des règles JSON à chaque appel serait trop lent.
+
+Solution : Pré-compilation. Au chargement du fichier de règles, chaque règle est transformée en une fonction JavaScript native :
+
+```javascript
+// Règle JSON → compilée en :
+const compiledRule = {
+  id: 'cursor-hover-object',
+  test: (event, context) => context.object?.movable && !context.object?.locked,
+  execute: (event, context) => context.setCursor(context.object.cursor || 'move')
+};
+```
+
+Les conditions JSON (`property`, `operator`, `value`) sont compilées en comparaisons JavaScript directes au chargement. À l'exécution, c'est aussi rapide que du code en dur.
+
+Règles indexées par événement : au lieu de parcourir toutes les règles à chaque événement, les règles sont indexées dans une `Map<eventName, CompiledRule[]>`. Un `objectMouseEnter` ne vérifie que les 2-3 règles liées à cet événement, pas les 15+ règles totales.
+
+#### Interaction avec l'EventMaker (Editor)
+
+L'EventMaker (prototype en cours) est l'interface visuelle pour créer/modifier les règles :
+
+1. L'utilisateur ouvre l'EventMaker dans l'Editor
+2. Il voit les règles par défaut (celles du Core)
+3. Il peut les modifier, en désactiver, en ajouter
+4. Les règles modifiées sont sauvegardées dans le dossier projet
+5. Au chargement du projet, les règles du projet écrasent les règles par défaut
+
+
+### 3.2 PILIER 2 — Moteur de rendu hybride (Pixi.js)
+
+#### Le problème actuel
+
+Le rendu v4 repose entièrement sur l'API Canvas 2D (CPU). Cinq éléments HTML `<canvas>` sont empilés et chacun est redessiné indépendamment. Ce qui pose problème :
+
+- **Ombres portées** : `ctx.shadowBlur` est l'opération la plus coûteuse en Canvas 2D. 100 objets avec ombres suffisent à faire chuter les performances en dessous de 30 FPS.
+- **Composition multi-canvas** : 5 canvas HTML empilés = le navigateur doit les composer à chaque frame, ce qui ajoute du travail CPU.
+- **Contenu dynamique impossible** : le moteur ne redessine que quand quelque chose change (`requestRender()`). Les GIF animés s'affichent en première frame figée, les vidéos ne tournent pas, les animations personnalisées sont impossibles.
+- **Pas de filtres GPU** : pas de flou gaussien performant, pas d'effets visuels avancés sans impacter les performances.
+
+#### La solution : Pixi.js — Rendu GPU via WebGL
+
+Le rendu interne de VOH passe de Canvas 2D à **Pixi.js** (v8+), un moteur de rendu 2D JavaScript qui utilise le GPU via WebGL. Pixi.js est développé par Playco, sous licence MIT (usage commercial autorisé, aucune restriction).
+
+**Ce que Pixi.js remplace :** uniquement le moteur de rendu interne. Les appels `ctx.fillRect()`, `ctx.drawImage()`, `ctx.shadowBlur` sont remplacés par des sprites, graphics et filtres Pixi.js. L'API publique VOH ne change pas. L'utilisateur de VOH n'écrit jamais de code Pixi.js.
+
+```
+Avant (v4) : API VOH → Core → Canvas 2D (5 canvas HTML empilés, CPU)
+Après (v5) : API VOH → Core → Pixi.js (1 seul canvas WebGL, GPU)
+```
+
+#### Les 5 layers deviennent des Containers Pixi.js
+
+Les 5 layers de rendu de chaque canvas VOH deviennent 5 Containers Pixi.js empilés logiquement dans un seul canvas WebGL :
+
+```
+1 seul canvas WebGL (géré par Pixi.js)
+├── Container "backgroundColorLayer"     ← Couleur de fond
+├── Container "backgroundImageLayer"     ← Image de fond par-dessus
+├── Container "gridLayer"                ← Grille / snap
+├── Container "objectsLayer"             ← Formes visuelles (objets)
+└── Container "overlayLayer"             ← Poignées, ancres, rectangle de sélection
+```
+
+Avantages par rapport aux 5 canvas HTML empilés :
+- **Un seul élément DOM** au lieu de 5 (moins de composition navigateur)
+- **Z-order natif** via l'ordre des enfants dans le scene graph Pixi.js
+- **Pas de transparence inter-canvas** à gérer : tout est dans le même pipeline GPU
+
+#### Gains de performance avec Pixi.js
+
+| Opération | Canvas 2D (CPU) | Pixi.js (GPU) |
+|-----------|-----------------|---------------|
+| Ombres portées | `ctx.shadowBlur` — très coûteux, recalculé à chaque frame | `DropShadowFilter` — calculé par le GPU, quasi gratuit |
+| Dégradés | `ctx.createLinearGradient()` — CPU | Natif GPU |
+| Transparence / alpha | Composition CPU | Composition GPU native |
+| Rotation / scale | `ctx.rotate()` + `ctx.scale()` — transformation CPU par objet | Matrices GPU par batch |
+| 100 objets avec ombres | ~15-40 ms/frame (rame) | <5 ms/frame |
+| 1000+ objets | Inutilisable | Fluide à 60 FPS |
+| Filtres (flou, lueur, etc.) | Impossibles sans impacter les performances | GPU, quasi gratuit |
+| GIF animés | Impossible nativement (1ère frame figée) | Natif depuis Pixi.js v8.7.0 |
+| Vidéos sur objets | Hack avec `<video>` caché | Texture vidéo native |
+
+#### Capacités Pixi.js utilisées par VOH
+
+**Rendu de base (GPU) :**
+- Sprites (PNG, JPG, WebP, SVG) pour les images des objets
+- Textures vidéo (MP4, WebM) directement sur des objets
+- GIF animés natifs avec contrôles de lecture
+- Graphics (formes vectorielles : rectangles, cercles, ellipses, polygones, lignes, courbes de Bézier)
+- Texte anti-aliasé avec styles multiples
+- Dégradés linéaires et radiaux natifs
+- Masques par forme ou par texture
+
+**Transformations (GPU) :**
+- Position, rotation, échelle X/Y indépendantes, pivot configurable, skew
+- Toutes combinables sans perte de performance
+
+**Scene Graph :**
+- Containers hiérarchiques parent/enfant (les 5 layers VOH, les groupes d'objets)
+- Z-order automatique ou manuel via Render Layers
+- Visibilité et alpha hérités dans la hiérarchie
+
+**Filtres et effets GPU (via pixi-filters) :**
+- `DropShadowFilter` — ombres portées (remplace `ctx.shadowBlur`)
+- `GlowFilter` — lueur
+- `BlurFilter` — flou gaussien
+- `OutlineFilter` — contour (utile pour la sélection)
+- `ColorMatrixFilter` — ajustements couleur
+- Plusieurs filtres combinables sur le même objet
+- Filtres custom en GLSL possibles (futur)
+
+**Interactions / Événements :**
+- Pixi.js a son propre système d'événements (click, pointerdown, pointermove, wheel, etc.)
+- VOH peut l'utiliser en complément de son InteractionManager
+- Hit testing par bounding box ou forme custom
+- Propagation parent/enfant contrôlable
+
+**Performances :**
+- 100 000+ particules à 60 FPS avec ParticleContainer
+- Batching automatique des draw calls (le GPU dessine plusieurs objets en un seul appel)
+- Render Groups (containers comme textures GPU)
+- Garbage collection automatique des textures
+
+#### Boucle de rendu hybride
+
+Le concept de rendu hybride (statique/dynamique) est conservé, mais géré via le ticker Pixi.js :
+
+```
+┌─────────────────────────────────────────┐
+│          RenderEngine v5 (Pixi.js)      │
+│                                         │
+│  Mode STATIQUE (par défaut)             │
+│  → ticker Pixi.js arrêté               │
+│  → render() manuel sur demande          │
+│  → 0 CPU/GPU quand rien ne bouge        │
+│                                         │
+│  Mode DYNAMIQUE (activé automatiquement)│
+│  → ticker Pixi.js actif                 │
+│  → rendu à chaque frame (~60 FPS)       │
+│  → activé quand du contenu vivant existe│
+│  → désactivé quand plus rien n'anime    │
+│                                         │
+│  Détection automatique :                │
+│  - GIF animé sur la page ? → dynamique  │
+│  - Vidéo en lecture ? → dynamique        │
+│  - Animation active ? → dynamique        │
+│  - Connexion animée ? → dynamique        │
+│  - Transition en cours ? → dynamique     │
+│  - Rien ? → retour en statique          │
+└─────────────────────────────────────────┘
+```
+
+#### GIF animés
+
+Pixi.js v8.7.0+ gère nativement les GIF animés avec contrôles de lecture (play, pause, vitesse, boucle). Plus besoin de librairie de décodage externe (gifuct-js).
+
+#### Vidéos sur objets
+
+Les vidéos deviennent des textures Pixi.js directement. Un objet VOH avec une vidéo est un sprite dont la texture est mise à jour automatiquement par Pixi.js tant que la vidéo tourne.
+
+#### Ce qui NE change PAS avec Pixi.js
+
+L'utilisateur de VOH n'écrit **jamais** de code Pixi.js. Il écrit du code API VOH. Le Core traduit en interne. Pixi.js est un détail d'implémentation invisible pour l'utilisateur.
+
+Ne changent pas :
+- L'API publique VOH (`voh.zone`, `voh.canvas`, `voh.objects`, etc.)
+- Les scripts utilisateur
+- L'éditeur de code (CodeMirror)
+- L'exécution F5 (mode aperçu)
+- Le moteur de règles JSON
+- Le FileManager
+- L'undo/redo, le copy/paste
+- Tout le système de poignées, sélection, grille, snap, contraintes, connexions, ancres, tooltips, labels, pages
+
+#### Licence et taille
+
+- **Licence** : MIT — usage commercial autorisé, modification autorisée. Seule obligation : garder le copyright MIT (dans la modale À propos ou un fichier LICENSE).
+- **Taille** : Pixi.js ~500 Ko + pixi-filters ~50 Ko. Combiné avec le Core VOH (~200 Ko), le total est d'environ 700-750 Ko minifié. Négligeable.
+- **Maintenu par** : Playco (anciennement Goodboy Digital), qui utilise Pixi.js pour ses propres jeux HTML5. Projet très actif, version actuelle v8.16.0.
+
+#### WebGL garanti
+
+Tous les navigateurs modernes (Chrome, Firefox, Edge, Safari) supportent WebGL depuis des années. Le Core VOH est développé et testé en web-first dans un navigateur standard. Pas besoin de fallback Canvas 2D. On part sur WebGL uniquement. Si un wrapper desktop est ajouté plus tard, il embarquera un moteur Chromium qui supporte nativement WebGL.
+
+
+### 3.3 PILIER 3 — Médias sur disque + FileManager
+
+#### Le problème actuel
+
+Le MediaStore v4 déduplique les data URIs (chaînes de texte Base64). C'est mieux que rien (27 copies → 1), mais un fichier de 58 Mo prend ~77 Mo en mémoire sous forme de chaîne Base64, toutes les pages chargent leurs médias en même temps au démarrage, et il n'y a pas de garbage collection possible tant que la chaîne existe.
+
+#### La solution : Fichiers sur disque dans le dossier projet
+
+Les médias ne sont plus stockés dans le fichier .voh. Ils sont des fichiers normaux sur le disque, dans les sous-dossiers du projet (Images/, Vidéos/, Sons/, Fichiers/). Le fichier .voh ne contient que des chemins relatifs vers ces fichiers.
+
+```json
+{
+  "objects": [
+    {
+      "id": "obj_1",
+      "type": "rectangle",
+      "images": [{ "src": "Images/logo.jpg", "z": 0 }],
+      "userData": {
+        "video": { "type": "file", "path": "Vidéos/demo.mp4" }
+      }
+    }
+  ]
+}
+```
+
+Avantages :
+
+- Une vidéo de 58 Mo = 58 Mo sur disque, 0 Mo en RAM tant qu'elle n'est pas affichée
+- Sauvegarde du projet instantanée (on sauvegarde juste le JSON, pas les médias)
+- Chargement à la demande trivial : charger l'image quand l'objet est visible
+- L'utilisateur peut gérer ses fichiers à côté du projet (remplacer une image, etc.)
+- Pixi.js charge nativement les fichiers depuis des chemins (intégration naturelle avec le FileManager)
+
+#### Le FileManager — Remplacement du MediaStore
+
+Le MediaStore v4 disparaît. Il est remplacé par le FileManager, un module plus simple qui a deux responsabilités :
+
+**1. Gestionnaire d'import :** Quand l'utilisateur importe un fichier (dialogue fichier ou drag & drop), le FileManager le copie dans le bon sous-dossier du projet, détecte les doublons par hash SHA-256, et retourne le chemin relatif à stocker dans l'objet.
+
+**2. Cache mémoire pour le rendu :** Les fichiers sont sur disque, mais Pixi.js a besoin des textures en mémoire GPU pour dessiner. Le FileManager gère un cache LRU (Least Recently Used) qui charge les fichiers depuis le disque quand nécessaire et libère les moins utilisés quand le cache atteint sa taille max. Pixi.js gère aussi son propre cache de textures GPU — le FileManager travaille en amont pour décider ce qui doit être chargé.
+
+```javascript
+// Exemple d'utilisation du FileManager
+const fm = voh.files;
+
+// Import d'un fichier (copie dans le projet + retourne le chemin relatif)
+const relativePath = await fm.import('C:/Users/David/Photos/chat.jpg');
+// → copie vers MonProjet/Images/chat.jpg
+// → retourne "Images/chat.jpg"
+
+// Résolution pour le rendu (charge depuis le cache ou le disque)
+const texture = await fm.resolve('Images/chat.jpg');
+// → retourne une texture Pixi.js prête pour le rendu
+
+// Statistiques du cache
+const stats = fm.getCacheStats();
+// → { cached: 12, size: '45 Mo', maxSize: '200 Mo' }
+```
+
+Le FileManager détecte automatiquement le type de fichier pour le placer dans le bon sous-dossier :
+
+- `.jpg`, `.jpeg`, `.png`, `.gif`, `.webp`, `.bmp`, `.svg` → Images/
+- `.mp4`, `.webm`, `.avi`, `.mov` → Vidéos/
+- `.mp3`, `.wav`, `.ogg`, `.flac` → Sons/
+- Tout le reste → Fichiers/
+
+#### Fichiers manquants
+
+Si un fichier référencé dans le .voh n'existe pas sur le disque (supprimé manuellement, projet partagé incomplet, etc.), VOH affiche un placeholder "Fichier manquant" avec le chemin attendu. Une fonction "Vérifier l'intégrité du projet" dans les menus liste tous les fichiers manquants.
+
+
+---
+

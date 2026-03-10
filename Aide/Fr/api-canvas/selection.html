@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Sélection — voh.canvas.selection</title>
+</head>
+<body>
+
+<h1>voh.canvas.selection — Rectangle de sélection</h1>
+<p class="intro">
+    Propriétés visuelles et comportement du rectangle tracé à la souris pour sélectionner des objets sur un canevas.
+    Chaque canevas possède ses propres réglages de sélection, indépendants des autres.
+</p>
+<p class="intro">
+    Ces propriétés contrôlent uniquement l'<strong>apparence</strong> du rectangle de sélection.
+    Le comportement de la sélection (hit-test, multi-sélection, etc.) sera disponible dans une prochaine version.
+</p>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Activation</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.selection</span><span class="sig-sep">.</span><span class="sig-fn">setEnabled</span><span class="sig-paren">(</span><span class="sig-param">canvasId, enabled</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Active ou désactive la sélection à la souris sur un canevas. Quand <code>false</code> (valeur par défaut), aucun rectangle de sélection ne peut être tracé. Le style reste configurable dans tous les cas.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>enabled</td><td>vrai/faux</td><td><code>true</code> pour activer, <code>false</code> pour désactiver (défaut: <code>false</code>)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si le canevas n'existe pas.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setEnabled</span>(<span class="var">canvas</span>, <span class="kw">true</span>);   <span class="cmt">// activer</span>
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setEnabled</span>(<span class="var">canvas</span>, <span class="kw">false</span>);  <span class="cmt">// désactiver</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.selection</span><span class="sig-sep">.</span><span class="sig-fn">getEnabled</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux ou null</span></div>
+    <div class="method-description">Retourne l'état d'activation de la sélection à la souris.</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si activée, <code>false</code> si désactivée, <code>null</code> si le canevas n'existe pas.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">getEnabled</span>(<span class="var">canvas</span>));  <span class="cmt">// true ou false</span></pre>
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Bouton souris</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.selection</span><span class="sig-sep">.</span><span class="sig-fn">setMouseButton</span><span class="sig-paren">(</span><span class="sig-param">canvasId, button</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit le bouton souris utilisé pour tracer le rectangle de sélection. Valeurs acceptées: <code>'left'</code> (défaut), <code>'middle'</code>, <code>'right'</code>. Un bouton invalide est ignoré. Quand le bouton droit est configuré, le menu contextuel est bloqué automatiquement.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>button</td><td>texte</td><td><code>'left'</code>, <code>'middle'</code> ou <code>'right'</code> (défaut: <code>'left'</code>)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si le canevas n'existe pas ou bouton invalide.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setMouseButton</span>(<span class="var">canvas</span>, <span class="str">'left'</span>);    <span class="cmt">// bouton gauche (défaut)</span>
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setMouseButton</span>(<span class="var">canvas</span>, <span class="str">'right'</span>);   <span class="cmt">// bouton droit</span>
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setMouseButton</span>(<span class="var">canvas</span>, <span class="str">'middle'</span>);  <span class="cmt">// molette</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.selection</span><span class="sig-sep">.</span><span class="sig-fn">getMouseButton</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">texte ou null</span></div>
+    <div class="method-description">Retourne le bouton souris configuré pour la sélection.</div>
+    <div class="method-return">Retourne: <span class="return-type">texte</span> — <code>'left'</code>, <code>'middle'</code> ou <code>'right'</code>, ou <code>null</code> si le canevas n'existe pas.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">getMouseButton</span>(<span class="var">canvas</span>));  <span class="cmt">// 'left'</span></pre>
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Couleur de fond</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.selection</span><span class="sig-sep">.</span><span class="sig-fn">setBackgroundColor</span><span class="sig-paren">(</span><span class="sig-param">canvasId, color</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit la couleur de fond du rectangle de sélection. Utilisez <code>rgba()</code> pour contrôler la transparence — un fond semi-transparent est recommandé pour que les objets restent visibles sous le rectangle.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>color</td><td>texte</td><td>Couleur CSS — ex: <code>'rgba(0, 120, 215, 0.15)'</code> (défaut)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si le canevas n'existe pas.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setBackgroundColor</span>(<span class="var">canvas</span>, <span class="str">'rgba(0, 120, 215, 0.15)'</span>);  <span class="cmt">// bleu (défaut)</span>
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setBackgroundColor</span>(<span class="var">canvas</span>, <span class="str">'rgba(0, 200, 80, 0.10)'</span>);   <span class="cmt">// vert</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.selection</span><span class="sig-sep">.</span><span class="sig-fn">getBackgroundColor</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">texte ou null</span></div>
+    <div class="method-description">Retourne la couleur de fond actuelle du rectangle de sélection.</div>
+    <div class="method-return">Retourne: <span class="return-type">texte</span> — la valeur CSS, ou <code>null</code> si le canevas n'existe pas.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">getBackgroundColor</span>(<span class="var">canvas</span>));  <span class="cmt">// 'rgba(0, 120, 215, 0.15)'</span></pre>
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Couleur de bordure</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.selection</span><span class="sig-sep">.</span><span class="sig-fn">setBorderColor</span><span class="sig-paren">(</span><span class="sig-param">canvasId, color</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit la couleur de la bordure du rectangle de sélection. Accepte toute valeur CSS valide, dont <code>rgba()</code> pour la transparence.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>color</td><td>texte</td><td>Couleur CSS — ex: <code>'rgba(0, 120, 215, 0.8)'</code> (défaut)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si le canevas n'existe pas.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setBorderColor</span>(<span class="var">canvas</span>, <span class="str">'rgba(0, 120, 215, 0.8)'</span>);  <span class="cmt">// bleu (défaut)</span>
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setBorderColor</span>(<span class="var">canvas</span>, <span class="str">'rgba(0, 180, 60, 0.9)'</span>);   <span class="cmt">// vert</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.selection</span><span class="sig-sep">.</span><span class="sig-fn">getBorderColor</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">texte ou null</span></div>
+    <div class="method-description">Retourne la couleur de bordure actuelle du rectangle de sélection.</div>
+    <div class="method-return">Retourne: <span class="return-type">texte</span> — la valeur CSS, ou <code>null</code> si le canevas n'existe pas.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">getBorderColor</span>(<span class="var">canvas</span>));  <span class="cmt">// 'rgba(0, 120, 215, 0.8)'</span></pre>
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Épaisseur de bordure</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.selection</span><span class="sig-sep">.</span><span class="sig-fn">setBorderThickness</span><span class="sig-paren">(</span><span class="sig-param">canvasId, thickness</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit l'épaisseur de la bordure du rectangle de sélection, en pixels. La valeur est bornée à 0 minimum. <code>0</code> = pas de bordure visible.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>thickness</td><td>nombre</td><td>Épaisseur en pixels, minimum 0 (défaut: <code>1</code>)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si le canevas n'existe pas.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setBorderThickness</span>(<span class="var">canvas</span>, <span class="num">1</span>);  <span class="cmt">// défaut</span>
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setBorderThickness</span>(<span class="var">canvas</span>, <span class="num">2</span>);  <span class="cmt">// plus épais</span>
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setBorderThickness</span>(<span class="var">canvas</span>, <span class="num">0</span>);  <span class="cmt">// pas de bordure</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.selection</span><span class="sig-sep">.</span><span class="sig-fn">getBorderThickness</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre ou null</span></div>
+    <div class="method-description">Retourne l'épaisseur actuelle de la bordure du rectangle de sélection.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre</span> — l'épaisseur en pixels, ou <code>null</code> si le canevas n'existe pas.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">getBorderThickness</span>(<span class="var">canvas</span>));  <span class="cmt">// 1</span></pre>
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Style de bordure</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.selection</span><span class="sig-sep">.</span><span class="sig-fn">setBorderStyle</span><span class="sig-paren">(</span><span class="sig-param">canvasId, style</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit le style du trait de la bordure du rectangle de sélection. Valeurs acceptées: <code>'solid'</code> (défaut), <code>'dashed'</code>, <code>'dotted'</code>. Un style invalide est ignoré.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>style</td><td>texte</td><td><code>'solid'</code> (défaut), <code>'dashed'</code> ou <code>'dotted'</code></td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si le canevas n'existe pas ou style invalide.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setBorderStyle</span>(<span class="var">canvas</span>, <span class="str">'solid'</span>);   <span class="cmt">// continu (défaut)</span>
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setBorderStyle</span>(<span class="var">canvas</span>, <span class="str">'dashed'</span>);  <span class="cmt">// tiretés</span>
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">setBorderStyle</span>(<span class="var">canvas</span>, <span class="str">'dotted'</span>);  <span class="cmt">// pointillés</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.selection</span><span class="sig-sep">.</span><span class="sig-fn">getBorderStyle</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">texte ou null</span></div>
+    <div class="method-description">Retourne le style de bordure actuel du rectangle de sélection.</div>
+    <div class="method-return">Retourne: <span class="return-type">texte</span> — <code>'solid'</code>, <code>'dashed'</code> ou <code>'dotted'</code>, ou <code>null</code> si le canevas n'existe pas.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">getBorderStyle</span>(<span class="var">canvas</span>));  <span class="cmt">// 'solid'</span></pre>
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Définir à la création</h2>
+
+<div class="method">
+    <div class="method-description">
+        Toutes ces propriétés peuvent être définies directement dans les paramètres de <code>voh.canvas.create()</code>.
+    </div>
+<pre><span class="kw">const</span> <span class="var">canvas</span> = <span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">create</span>(<span class="var">zone</span>, {
+    <span class="var">name</span>:                    <span class="str">'Mon canevas'</span>,
+    <span class="var">selectionEnabled</span>:         <span class="kw">true</span>,
+    <span class="var">selectionMouseButton</span>:    <span class="str">'left'</span>,
+    <span class="var">selectionBackgroundColor</span>: <span class="str">'rgba(0, 120, 215, 0.15)'</span>,
+    <span class="var">selectionBorderColor</span>:     <span class="str">'rgba(0, 120, 215, 0.8)'</span>,
+    <span class="var">selectionBorderThickness</span>: <span class="num">1</span>,
+    <span class="var">selectionBorderStyle</span>:     <span class="str">'solid'</span>
+});</pre>
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+
+<!-- ════════════════════════════════════════ -->
+<h2>Simulation programmatique</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.selection</span><span class="sig-sep">.</span><span class="sig-fn">simulate</span><span class="sig-paren">(</span><span class="sig-param">canvasId, x1, y1, x2, y2, options</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">Promise</span></div>
+    <div class="method-description">
+        Simule programmatiquement un tracé de rectangle de sélection à la souris, sans interaction physique.<br><br>
+        La simulation émet les mêmes événements qu'un vrai tracé souris (<code>canvas:selectionStarted</code> et <code>canvas:selectionEnded</code>).<br><br>
+        <strong>Si un tracé souris est déjà en cours</strong>, il est annulé proprement avant de lancer la simulation.<br>
+        <strong>Pendant la simulation</strong>, la souris est ignorée — l'utilisateur ne peut pas interférer.<br>
+        <strong>Les overrides de style</strong> (<code>backgroundColor</code>, <code>borderColor</code>, etc.) sont appliqués uniquement le temps de la simulation, puis le style d'origine est restitué automatiquement.
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x1</td><td>nombre</td><td>X de départ du tracé (pixels, relatif au canevas)</td></tr>
+        <tr><td>y1</td><td>nombre</td><td>Y de départ du tracé (pixels, relatif au canevas)</td></tr>
+        <tr><td>x2</td><td>nombre</td><td>X de fin du tracé (pixels, relatif au canevas)</td></tr>
+        <tr><td>y2</td><td>nombre</td><td>Y de fin du tracé (pixels, relatif au canevas)</td></tr>
+        <tr><td>options.duration</td><td>nombre</td><td>Durée de l'animation en ms. <code>0</code> = instantané (défaut: <code>600</code>)</td></tr>
+        <tr><td>options.backgroundColor</td><td>texte</td><td>Override couleur de fond pendant la simulation (facultatif)</td></tr>
+        <tr><td>options.borderColor</td><td>texte</td><td>Override couleur de bordure pendant la simulation (facultatif)</td></tr>
+        <tr><td>options.borderThickness</td><td>nombre</td><td>Override épaisseur de bordure pendant la simulation (facultatif)</td></tr>
+        <tr><td>options.borderStyle</td><td>texte</td><td>Override style de bordure pendant la simulation (facultatif)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">Promise&lt;boolean&gt;</span> — Résout <code>true</code> quand le tracé est terminé, <code>false</code> si la simulation a été annulée en cours de route.</div>
+<pre><span class="cmt">// Simulation simple — tracé animé en 800ms avec le style courant du canevas</span>
+<span class="kw">await</span> <span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">simulate</span>(<span class="var">canvas</span>, <span class="num">50</span>, <span class="num">50</span>, <span class="num">300</span>, <span class="num">200</span>, { <span class="var">duration</span>: <span class="num">800</span> });
+
+<span class="cmt">// Simulation avec style temporaire (vert tiretés) — restitue le style d'origine à la fin</span>
+<span class="kw">await</span> <span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">simulate</span>(<span class="var">canvas</span>, <span class="num">50</span>, <span class="num">50</span>, <span class="num">300</span>, <span class="num">200</span>, {
+    <span class="var">duration</span>:        <span class="num">1000</span>,
+    <span class="var">backgroundColor</span>: <span class="str">'rgba(0, 200, 80, 0.12)'</span>,
+    <span class="var">borderColor</span>:     <span class="str">'rgba(0, 200, 80, 0.9)'</span>,
+    <span class="var">borderThickness</span>: <span class="num">2</span>,
+    <span class="var">borderStyle</span>:     <span class="str">'dashed'</span>
+});
+
+<span class="cmt">// Mode instantané (duration: 0) — émet les événements sans animation</span>
+<span class="kw">await</span> <span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">simulate</span>(<span class="var">canvas</span>, <span class="num">50</span>, <span class="num">50</span>, <span class="num">300</span>, <span class="num">200</span>, { <span class="var">duration</span>: <span class="num">0</span> });
+
+<span class="cmt">// Enchaîner plusieurs simulations avec await</span>
+<span class="kw">await</span> <span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">simulate</span>(<span class="var">canvas</span>, <span class="num">20</span>, <span class="num">20</span>, <span class="num">150</span>, <span class="num">100</span>, { <span class="var">duration</span>: <span class="num">600</span> });
+<span class="kw">await</span> <span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">simulate</span>(<span class="var">canvas</span>, <span class="num">200</span>, <span class="num">150</span>, <span class="num">500</span>, <span class="num">400</span>, { <span class="var">duration</span>: <span class="num">600</span> });</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.selection</span><span class="sig-sep">.</span><span class="sig-fn">cancelSimulation</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Annule une simulation de sélection en cours sur un canevas.<br>
+        Le rectangle est immédiatement masqué, le style d'origine est restitué, et la Promise de <code>simulate()</code> se résout avec <code>false</code>.<br>
+        Si aucune simulation n'est en cours, retourne <code>false</code> sans rien faire.
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si une simulation a été annulée, <code>false</code> si aucune n'était en cours ou si le canevas n'existe pas.</div>
+<pre><span class="cmt">// Lancer une simulation longue en arrière-plan</span>
+<span class="kw">const</span> <span class="var">promesse</span> = <span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">simulate</span>(<span class="var">canvas</span>, <span class="num">50</span>, <span class="num">50</span>, <span class="num">400</span>, <span class="num">300</span>, { <span class="var">duration</span>: <span class="num">5000</span> });
+
+<span class="cmt">// L'annuler après 2 secondes</span>
+<span class="fn">setTimeout</span>(() => {
+    <span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>.<span class="fn">cancelSimulation</span>(<span class="var">canvas</span>);
+}, <span class="num">2000</span>);
+
+<span class="kw">const</span> <span class="var">resultat</span> = <span class="kw">await</span> <span class="var">promesse</span>;  <span class="cmt">// false — annulée</span>
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">resultat</span>);  <span class="cmt">// false</span></pre>
+</div>
+
+
+<div class="note">
+    <strong>Événements:</strong> ces méthodes émettent des événements canvas capturables via <code>voh.on()</code> —
+    <code>canvas:selectionStarted</code>, <code>canvas:selectionEnded</code>, <code>canvas:selectionEnabledChanged</code>, etc.<br> <span class="sig-arrow">→</span> <span class="sig-return">Voir la documentation complète dans <a href="evenements.html">Événements canvas</a>.</span></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

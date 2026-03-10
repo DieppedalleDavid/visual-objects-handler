@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Fond — voh.zone</title>
+</head>
+<body>
+
+<h1>voh.zone — Fond</h1>
+<p class="intro">Couleur de fond, image de fond et opacité de l'image.</p>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setBackgroundColor</span><span class="sig-paren">(</span><span class="sig-param">zoneId, couleur</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getBackgroundColor</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Couleur de fond. Accepte tout format CSS: rgba, hex, nom de couleur.</div>
+    <div class="method-return"><strong>set</strong> → <code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div>
+<pre><span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setBackgroundColor</span>(<span class="var">zone</span>, <span class="str">'rgba(20, 40, 80, 1.0)'</span>);
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setBackgroundColor</span>(<span class="var">zone</span>, <span class="str">'#2d2d2d'</span>);
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">getBackgroundColor</span>(<span class="var">zone</span>));</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setBackgroundImage</span><span class="sig-paren">(</span><span class="sig-param">zoneId, image</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getBackgroundImage</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Image de fond. Accepte une URL ou un data:URI (base64). Passer une chaîne vide <code>''</code> pour enlever l'image.</div>
+    <div class="method-return"><strong>set</strong> → <code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div>
+<pre><span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setBackgroundImage</span>(<span class="var">zone</span>, <span class="str">'Medias/Images/fond.png'</span>);   <span class="cmt">// Depuis un fichier</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setBackgroundImage</span>(<span class="var">zone</span>, <span class="str">''</span>);                     <span class="cmt">// Enlever l'image</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setBackgroundImageOpacity</span><span class="sig-paren">(</span><span class="sig-param">zoneId, opacité</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getBackgroundImageOpacity</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Opacité de l'image de fond. <code>0.0</code> = invisible, <code>0.5</code> = semi-transparent, <code>1.0</code> = opaque.</div>
+    <div class="method-return"><strong>set</strong> → <code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div>
+<pre><span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setBackgroundImageOpacity</span>(<span class="var">zone</span>, <span class="num">0.5</span>);  <span class="cmt">// 50% de transparence</span></pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>voh.canvas.history — Undo/Redo</title>
+</head>
+<body>
+
+<h1>voh.canvas.history — Undo/Redo</h1>
+<p class="intro">Raccourci pour annuler et refaire les actions sur la page active d'un canevas.
+    Toutes les modifications (propriétés de page, création/suppression/modification d'objets) sont automatiquement enregistrées.</p>
+
+<div class="note">
+    Ces méthodes agissent sur la <strong>page active</strong> du canevas. Pour cibler une page spécifique, utiliser
+    <code>voh.canvas.pages.history.*</code> avec le paramètre <code>pageId</code>.
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Annuler / Refaire</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.history</span><span class="sig-sep">.</span><span class="sig-fn">undo</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Annule la dernière action sur la page active. Le rendu visuel est automatiquement mis à jour.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>ID du canevas</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si annulée, <code>false</code> si rien à annuler.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>.<span class="fn">undo</span>(<span class="var">canvas</span>);  <span class="cmt">// annuler la dernière modification</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.history</span><span class="sig-sep">.</span><span class="sig-fn">redo</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Refait la dernière action annulée. Le rendu visuel est automatiquement mis à jour.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>ID du canevas</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si refaite, <code>false</code> si rien à refaire.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>.<span class="fn">redo</span>(<span class="var">canvas</span>);  <span class="cmt">// refaire</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.history</span><span class="sig-sep">.</span><span class="sig-fn">canUndo</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Retourne <code>true</code> s'il y a au moins une action annulable.</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="kw">if</span> (<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>.<span class="fn">canUndo</span>(<span class="var">canvas</span>)) {
+    <span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>.<span class="fn">undo</span>(<span class="var">canvas</span>);
+}</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.history</span><span class="sig-sep">.</span><span class="sig-fn">canRedo</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Retourne <code>true</code> s'il y a au moins une action refaisable.</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Peut refaire:'</span>, <span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>.<span class="fn">canRedo</span>(<span class="var">canvas</span>));</pre>
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Compteurs</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.history</span><span class="sig-sep">.</span><span class="sig-fn">getUndoCount</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre</span></div>
+    <div class="method-description">Retourne le nombre d'actions annulables.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre</span></div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Undo:'</span>, <span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>.<span class="fn">getUndoCount</span>(<span class="var">canvas</span>));  <span class="cmt">// ex: 5</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.history</span><span class="sig-sep">.</span><span class="sig-fn">getRedoCount</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre</span></div>
+    <div class="method-description">Retourne le nombre d'actions refaisables.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre</span></div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Redo:'</span>, <span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>.<span class="fn">getRedoCount</span>(<span class="var">canvas</span>));  <span class="cmt">// ex: 2</span></pre>
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Configuration</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.history</span><span class="sig-sep">.</span><span class="sig-fn">setMaxLevel</span><span class="sig-paren">(</span><span class="sig-param">canvasId, maxLevel</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit le nombre maximum d'actions conservées dans la pile undo (défaut: <code>50</code>, minimum: <code>1</code>). Si la pile dépasse le nouveau max, les plus anciennes sont éjectées.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>ID du canevas</td></tr>
+        <tr><td>maxLevel</td><td>nombre</td><td>Nombre maximum d'actions (minimum 1)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>.<span class="fn">setMaxLevel</span>(<span class="var">canvas</span>, <span class="num">100</span>);  <span class="cmt">// garder 100 actions</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.history</span><span class="sig-sep">.</span><span class="sig-fn">getMaxLevel</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre | null</span></div>
+    <div class="method-description">Retourne le niveau maximum de l'historique.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre | null</span> — le max, ou <code>null</code> si erreur.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>.<span class="fn">getMaxLevel</span>(<span class="var">canvas</span>));  <span class="cmt">// 100</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.history</span><span class="sig-sep">.</span><span class="sig-fn">clear</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Vide entièrement l'historique undo et redo de la page active.</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>.<span class="fn">clear</span>(<span class="var">canvas</span>);  <span class="cmt">// vider tout l'historique</span></pre>
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Batch (pause / resume)</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.history</span><span class="sig-sep">.</span><span class="sig-fn">pause</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Met l'historique en pause. Toutes les modifications effectuées pendant la pause seront regroupées en une seule action à l'appel de <code>resume()</code>. Les pauses sont imbriquables (compteur).</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>ID du canevas</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi.</div>
+<pre><span class="cmt">// 3 modifications = 1 seul undo</span>
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>.<span class="fn">pause</span>(<span class="var">canvas</span>);
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">pages</span>.<span class="var">background</span>.<span class="fn">setColor</span>(<span class="var">canvas</span>, <span class="str">'rgba(50, 50, 60, 1.0)'</span>);
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">pages</span>.<span class="var">border</span>.<span class="fn">setVisible</span>(<span class="var">canvas</span>, <span class="kw">true</span>);
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">pages</span>.<span class="var">border</span>.<span class="fn">setColor</span>(<span class="var">canvas</span>, <span class="str">'rgba(255, 100, 0, 0.8)'</span>);
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>.<span class="fn">resume</span>(<span class="var">canvas</span>, <span class="str">'Style sombre + bordure orange'</span>);
+
+<span class="cmt">// Un seul undo annule les 3 modifications</span>
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>.<span class="fn">undo</span>(<span class="var">canvas</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.history</span><span class="sig-sep">.</span><span class="sig-fn">resume</span><span class="sig-paren">(</span><span class="sig-param">canvasId, description?</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Reprend l'enregistrement. Les actions accumulées pendant la pause deviennent une seule action batch. La description optionnelle nomme le batch.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>ID du canevas</td></tr>
+        <tr><td>description</td><td>texte</td><td>Description du batch (optionnel)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si pas en pause.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>.<span class="fn">resume</span>(<span class="var">canvas</span>, <span class="str">'Changement de thème'</span>);</pre>
+</div>
+
+<div class="note">
+    <strong>Événements:</strong> les opérations émettent <code>page:undone</code>, <code>page:redone</code>, <code>page:historyCleared</code>.
+</div>
+
+<div class="note">
+    <strong>Voir aussi:</strong> <code>voh.canvas.pages.history.*</code> pour cibler une page spécifique avec <code>pageId</code>.
+</div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

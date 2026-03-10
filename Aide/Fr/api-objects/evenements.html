@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Événements objet — VOH Documentation</title>
+</head>
+<body>
+
+<h1>Événements — Objet</h1>
+<p class="intro">Les 33 types d'événements émis par les objets : 20 événements de propriétés + 9 événements d'interaction souris + 4 événements de drag. Tous sont captés par <code>voh.on()</code>.</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Événements de propriétés</h2>
+
+<table class="param-table">
+    <tr><th>Événement</th><th>Données reçues</th><th>Quand</th></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">created</span></code></td><td>objectId, canvasId, name</td><td>Un objet est créé</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">deleted</span></code></td><td>objectId, canvasId, name</td><td>Un objet est supprimé</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">moved</span></code></td><td>objectId, x, y, previousX, previousY</td><td>La position change</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">resized</span></code></td><td>objectId, width, height, previousWidth, previousHeight</td><td>La taille change</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">locked</span></code></td><td>objectId</td><td>L'objet est verrouillé</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">unlocked</span></code></td><td>objectId</td><td>L'objet est déverrouillé</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">shown</span></code></td><td>objectId</td><td>L'objet redevient visible</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">hidden</span></code></td><td>objectId</td><td>L'objet est masqué</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">opacityChanged</span></code></td><td>objectId, opacity</td><td>L'opacité change</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">backgroundColorChanged</span></code></td><td>objectId, backgroundColor</td><td>La couleur de fond change</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">drawingCallbackChanged</span></code></td><td>objectId, hasCallback</td><td>Le callback de dessin change</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">nameChanged</span></code></td><td>objectId, name, previousName</td><td>Le nom change</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">zOrderChanged</span></code></td><td>objectId, zOrder</td><td>Le z-order change</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">cursorChanged</span></code></td><td>objectId, cursor</td><td>Le curseur au survol change</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseDragEnabledChanged</span></code></td><td>objectId, mouseDragEnabled</td><td>L'activation du drag change</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseDragButtonChanged</span></code></td><td>objectId, mouseDragButton</td><td>Le bouton drag change</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseDragModeChanged</span></code></td><td>objectId, mouseDragMode</td><td>Le mode drag change</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseDragOffsetXChanged</span></code></td><td>objectId, mouseDragOffsetX</td><td>Le décalage X du drag change</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseDragOffsetYChanged</span></code></td><td>objectId, mouseDragOffsetY</td><td>Le décalage Y du drag change</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseDragPreviewCallbackChanged</span></code></td><td>objectId, hasCallback</td><td>Le callback fantôme change</td></tr>
+</table>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Événements de drag</h2>
+
+<table class="param-table">
+    <tr><th>Événement</th><th>Données reçues</th><th>Quand</th></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">dragstart</span></code></td><td>objectId, canvasId, x, y, button, originalEvent</td><td>Le drag commence</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">dragmove</span></code></td><td>objectId, canvasId, x, y, deltaX, deltaY, originalEvent</td><td>Chaque mouvement pendant le drag</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">dragend</span></code></td><td>objectId, canvasId, x, y, previousX, previousY, originalEvent</td><td>Bouton relâché (position finale)</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">dragcancel</span></code></td><td>objectId, canvasId, originalX, originalY</td><td>Drag annulé par Escape ou par code</td></tr>
+</table>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Événements d'interaction souris</h2>
+
+<table class="param-table">
+    <tr><th>Événement</th><th>Données reçues</th><th>Quand</th></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">click</span></code></td><td>objectId, canvasId, x, y, button, originalEvent</td><td>Clic sur un objet</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">dblclick</span></code></td><td>objectId, canvasId, x, y, button, originalEvent</td><td>Double-clic sur un objet</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mousedown</span></code></td><td>objectId, canvasId, x, y, button, originalEvent</td><td>Bouton souris enfoncé sur un objet</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseup</span></code></td><td>objectId, canvasId, x, y, button, originalEvent</td><td>Bouton souris relâché sur un objet</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseenter</span></code></td><td>objectId, canvasId, x, y, originalEvent</td><td>La souris entre dans un objet</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseleave</span></code></td><td>objectId, canvasId, x, y, originalEvent</td><td>La souris quitte un objet</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mousemove</span></code></td><td>objectId, canvasId, x, y, originalEvent</td><td>La souris bouge sur un objet</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">wheel</span></code></td><td>objectId, canvasId, x, y, deltaX, deltaY, deltaZ, originalEvent</td><td>Molette souris sur un objet</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">contextmenu</span></code></td><td>objectId, canvasId, x, y, originalEvent</td><td>Clic droit sur un objet</td></tr>
+</table>
+
+<div class="note">
+    <strong>Note:</strong> Les événements de propriétés ne sont émis que si la valeur change réellement.
+    Les événements souris sont émis à chaque interaction (même objet verrouillé = cliquable).
+    Pendant le tracé d'un rectangle de sélection, les événements souris objet sont suspendus.
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION DÉTAILLÉE — Événements de propriétés
+     ════════════════════════════════════════════════════════════════════════ -->
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">created</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand un nouvel objet est créé avec <code>voh.objects.create()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet créé</td></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas parent</td></tr>
+        <tr><td>name</td><td>texte</td><td>Le nom de l'objet</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:created'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Objet créé:'</span>, <span class="var">data</span>.<span class="var">objectId</span>, <span class="var">data</span>.<span class="var">name</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">deleted</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand un objet est supprimé avec <code>voh.objects.delete()</code> ou par suppression en cascade du canevas.
+        Le nom est capturé avant la suppression.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet supprimé</td></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas parent</td></tr>
+        <tr><td>name</td><td>texte</td><td>Le nom de l'objet (avant suppression)</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:deleted'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Objet supprimé:'</span>, <span class="var">data</span>.<span class="var">name</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">moved</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la position X ou Y change. Chaque appel à <code>setX()</code> ou <code>setY()</code> émet un événement séparé.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Nouvelle position X</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Nouvelle position Y</td></tr>
+        <tr><td>previousX</td><td>nombre</td><td>Ancienne position X</td></tr>
+        <tr><td>previousY</td><td>nombre</td><td>Ancienne position Y</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:moved'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Position:'</span>, <span class="var">data</span>.<span class="var">x</span>, <span class="var">data</span>.<span class="var">y</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">resized</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand la largeur ou la hauteur change.</div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>width</td><td>nombre</td><td>Nouvelle largeur</td></tr>
+        <tr><td>height</td><td>nombre</td><td>Nouvelle hauteur</td></tr>
+        <tr><td>previousWidth</td><td>nombre</td><td>Ancienne largeur</td></tr>
+        <tr><td>previousHeight</td><td>nombre</td><td>Ancienne hauteur</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:resized'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Taille:'</span>, <span class="var">data</span>.<span class="var">width</span>, <span class="str">'×'</span>, <span class="var">data</span>.<span class="var">height</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">locked</span> <span class="event-sep">/</span> <span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">unlocked</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand l'objet est verrouillé ou déverrouillé.</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:locked'</span>, (<span class="var">data</span>) => { <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Verrouillé:'</span>, <span class="var">data</span>.<span class="var">objectId</span>); });
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:unlocked'</span>, (<span class="var">data</span>) => { <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Déverrouillé:'</span>, <span class="var">data</span>.<span class="var">objectId</span>); });</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">shown</span> <span class="event-sep">/</span> <span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">hidden</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand un objet est masqué ou réaffiché.</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:shown'</span>, (<span class="var">data</span>) => { <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Visible:'</span>, <span class="var">data</span>.<span class="var">objectId</span>); });
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:hidden'</span>, (<span class="var">data</span>) => { <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Masqué:'</span>, <span class="var">data</span>.<span class="var">objectId</span>); });</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">opacityChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand l'opacité change.</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>opacity</td><td>nombre</td><td>Nouvelle opacité (0.0 à 1.0)</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:opacityChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Opacité:'</span>, <span class="var">data</span>.<span class="var">opacity</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">backgroundColorChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand la couleur de fond change.</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>backgroundColor</td><td>texte</td><td>Nouvelle couleur CSS</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:backgroundColorChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Couleur:'</span>, <span class="var">data</span>.<span class="var">backgroundColor</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">drawingCallbackChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand le callback de dessin change.</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>hasCallback</td><td>vrai/faux</td><td><code>true</code> si un callback est défini</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:drawingCallbackChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Callback:'</span>, <span class="var">data</span>.<span class="var">hasCallback</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">nameChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand le nom change.</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>name</td><td>texte</td><td>Le nouveau nom</td></tr>
+        <tr><td>previousName</td><td>texte</td><td>L'ancien nom</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:nameChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="var">data</span>.<span class="var">previousName</span>, <span class="str">'→'</span>, <span class="var">data</span>.<span class="var">name</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">zOrderChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand le z-order change. <code>moveUp()</code> et <code>moveDown()</code> émettent 2 événements (échange).</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>zOrder</td><td>nombre</td><td>Le nouveau z-order</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:zOrderChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'z-order:'</span>, <span class="var">data</span>.<span class="var">zOrder</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">cursorChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand le curseur au survol change.</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>cursor</td><td>texte ou null</td><td>Le nouveau curseur CSS</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:cursorChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Curseur:'</span>, <span class="var">data</span>.<span class="var">cursor</span>);
+});</pre>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION DÉTAILLÉE — Événements d'interaction souris
+     ════════════════════════════════════════════════════════════════════════ -->
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">click</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand l'utilisateur clique sur un objet (gauche, milieu ou droit).
+        Le hit-test utilise une grille spatiale multi-niveaux pour identifier l'objet sous le curseur
+        en O(1) même avec 20 000+ objets. L'objet avec le z-order le plus élevé a la priorité.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet cliqué</td></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X du clic (relative au canevas)</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y du clic (relative au canevas)</td></tr>
+        <tr><td>button</td><td>texte</td><td><code>'left'</code>, <code>'middle'</code> ou <code>'right'</code></td></tr>
+        <tr><td>originalEvent</td><td>MouseEvent</td><td>L'événement DOM natif (pour accéder à ctrlKey, shiftKey, etc.)</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:click'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Clic sur objet'</span>, <span class="var">data</span>.<span class="var">objectId</span>, <span class="str">'bouton:'</span>, <span class="var">data</span>.<span class="var">button</span>);
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Position:'</span>, <span class="var">data</span>.<span class="var">x</span>, <span class="var">data</span>.<span class="var">y</span>);
+    <span class="kw">if</span> (<span class="var">data</span>.<span class="var">originalEvent</span>.<span class="var">ctrlKey</span>) {
+        <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Ctrl+clic !'</span>);
+    }
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">dblclick</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand l'utilisateur double-clique sur un objet.</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X du double-clic</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y du double-clic</td></tr>
+        <tr><td>button</td><td>texte</td><td><code>'left'</code>, <code>'middle'</code> ou <code>'right'</code></td></tr>
+        <tr><td>originalEvent</td><td>MouseEvent</td><td>L'événement DOM natif</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:dblclick'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Double-clic sur'</span>, <span class="var">data</span>.<span class="var">objectId</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mousedown</span> <span class="event-sep">/</span> <span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseup</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand un bouton souris est enfoncé ou relâché sur un objet.</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X de la souris</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y de la souris</td></tr>
+        <tr><td>button</td><td>texte</td><td><code>'left'</code>, <code>'middle'</code> ou <code>'right'</code></td></tr>
+        <tr><td>originalEvent</td><td>MouseEvent</td><td>L'événement DOM natif</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:mousedown'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Bouton enfoncé sur'</span>, <span class="var">data</span>.<span class="var">objectId</span>, <span class="str">'bouton:'</span>, <span class="var">data</span>.<span class="var">button</span>);
+});
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:mouseup'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Bouton relâché sur'</span>, <span class="var">data</span>.<span class="var">objectId</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseenter</span> <span class="event-sep">/</span> <span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseleave</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la souris entre dans un objet ou le quitte.
+        Fonctionne comme les événements DOM <code>mouseenter</code>/<code>mouseleave</code> :
+        un seul émis à l'entrée, un seul à la sortie (pas de bubbling).
+        Si l'objet a un curseur défini via <code>setCursor()</code>, il est appliqué automatiquement au <code>mouseenter</code>
+        et restauré au <code>mouseleave</code>.
+    </div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X de la souris</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y de la souris</td></tr>
+        <tr><td>originalEvent</td><td>MouseEvent</td><td>L'événement DOM natif</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:mouseenter'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Survol de'</span>, <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getName</span>(<span class="var">data</span>.<span class="var">objectId</span>));
+});
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:mouseleave'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Quitte'</span>, <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getName</span>(<span class="var">data</span>.<span class="var">objectId</span>));
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mousemove</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la souris bouge au-dessus d'un objet. Émis à chaque mouvement (haute fréquence).
+    </div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X de la souris</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y de la souris</td></tr>
+        <tr><td>originalEvent</td><td>MouseEvent</td><td>L'événement DOM natif</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:mousemove'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Souris sur'</span>, <span class="var">data</span>.<span class="var">objectId</span>, <span class="str">'à'</span>, <span class="var">data</span>.<span class="var">x</span>, <span class="var">data</span>.<span class="var">y</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">wheel</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la molette de la souris est utilisée au-dessus d'un objet.
+        Les valeurs delta correspondent aux axes de la molette (vertical, horizontal, profondeur).
+    </div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X de la souris</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y de la souris</td></tr>
+        <tr><td>deltaX</td><td>nombre</td><td>Défilement horizontal</td></tr>
+        <tr><td>deltaY</td><td>nombre</td><td>Défilement vertical (négatif = vers le haut)</td></tr>
+        <tr><td>deltaZ</td><td>nombre</td><td>Défilement en profondeur (rare)</td></tr>
+        <tr><td>originalEvent</td><td>WheelEvent</td><td>L'événement DOM natif</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:wheel'</span>, (<span class="var">data</span>) => {
+    <span class="kw">const</span> <span class="var">direction</span> = <span class="var">data</span>.<span class="var">deltaY</span> > <span class="num">0</span> ? <span class="str">'bas'</span> : <span class="str">'haut'</span>;
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Molette'</span>, <span class="var">direction</span>, <span class="str">'sur'</span>, <span class="var">data</span>.<span class="var">objectId</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">contextmenu</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand l'utilisateur fait un clic droit sur un objet (ouverture du menu contextuel).
+        Appeler <code>data.originalEvent.preventDefault()</code> pour empêcher le menu natif du navigateur.
+    </div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X du clic droit</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y du clic droit</td></tr>
+        <tr><td>originalEvent</td><td>MouseEvent</td><td>L'événement DOM natif</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:contextmenu'</span>, (<span class="var">data</span>) => {
+    <span class="var">data</span>.<span class="var">originalEvent</span>.<span class="fn">preventDefault</span>();  <span class="cmt">// empêche le menu natif</span>
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Menu contextuel sur'</span>, <span class="var">data</span>.<span class="var">objectId</span>);
+});</pre>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION — Événements de propriétés drag
+     ════════════════════════════════════════════════════════════════════════ -->
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseDragEnabledChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand l'activation du drag est modifiée via <code>setMouseDragEnabled()</code>.</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>mouseDragEnabled</td><td>vrai/faux</td><td>Nouvel état du drag</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:mouseDragEnabledChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Drag activé:'</span>, <span class="var">data</span>.<span class="var">mouseDragEnabled</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseDragButtonChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand le bouton souris du drag est modifié via <code>setMouseDragButton()</code>.</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>mouseDragButton</td><td>texte</td><td>Nouveau bouton : <code>'left'</code>, <code>'middle'</code> ou <code>'right'</code></td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:mouseDragButtonChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Bouton drag:'</span>, <span class="var">data</span>.<span class="var">mouseDragButton</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseDragModeChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand le mode de drag est modifié via <code>setMouseDragMode()</code>.</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>mouseDragMode</td><td>texte</td><td>Nouveau mode : <code>'direct'</code> ou <code>'preview'</code></td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:mouseDragModeChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Mode drag:'</span>, <span class="var">data</span>.<span class="var">mouseDragMode</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseDragOffsetXChanged</span> / <span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseDragOffsetYChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand le décalage X ou Y du drag est modifié.</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>mouseDragOffsetX <em>ou</em> mouseDragOffsetY</td><td>nombre</td><td>Nouveau décalage en pixels</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:mouseDragOffsetXChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Offset X:'</span>, <span class="var">data</span>.<span class="var">mouseDragOffsetX</span>);
+});
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:mouseDragOffsetYChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Offset Y:'</span>, <span class="var">data</span>.<span class="var">mouseDragOffsetY</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">mouseDragPreviewCallbackChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">Émis quand le callback du fantôme preview est modifié via <code>setMouseDragPreviewCallback()</code>.</div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>hasCallback</td><td>vrai/faux</td><td><code>true</code> si un callback personnalisé est défini</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:mouseDragPreviewCallbackChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Callback fantôme:'</span>, <span class="var">data</span>.<span class="var">hasCallback</span>);
+});</pre>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION — Événements de drag
+     ════════════════════════════════════════════════════════════════════════ -->
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">dragstart</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis une fois au démarrage du drag (premier mouvement de souris après l'enfoncement du bouton).
+        C'est ici qu'on peut changer le curseur (<code>setCursor</code>) ou préparer l'interface.
+    </div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet dragué</td></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X de la souris au démarrage</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y de la souris au démarrage</td></tr>
+        <tr><td>button</td><td>texte</td><td>Bouton utilisé : <code>'left'</code>, <code>'middle'</code> ou <code>'right'</code></td></tr>
+        <tr><td>originalEvent</td><td>MouseEvent</td><td>L'événement DOM natif</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:dragstart'</span>, (<span class="var">data</span>) => {
+    <span class="kw">if</span> (<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getCursor</span>(<span class="var">data</span>.<span class="var">objectId</span>) === <span class="str">'grab'</span>)
+        <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setCursor</span>(<span class="var">data</span>.<span class="var">objectId</span>, <span class="str">'grabbing'</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">dragmove</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis à chaque mouvement de souris pendant le drag (haute fréquence).
+        En mode <code>'direct'</code>, l'objet a déjà été déplacé — on peut lire et corriger sa position
+        (ex: contrainte dans une zone). En mode <code>'preview'</code>, le fantôme a déjà été repositionné.
+    </div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X actuelle de la souris</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y actuelle de la souris</td></tr>
+        <tr><td>deltaX</td><td>nombre</td><td>Déplacement X depuis le dernier événement</td></tr>
+        <tr><td>deltaY</td><td>nombre</td><td>Déplacement Y depuis le dernier événement</td></tr>
+        <tr><td>originalEvent</td><td>MouseEvent</td><td>L'événement DOM natif</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:dragmove'</span>, (<span class="var">data</span>) => {
+    <span class="cmt">// Contraindre l'objet dans le canevas (mode direct)</span>
+    <span class="kw">const</span> <span class="var">x</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getX</span>(<span class="var">data</span>.<span class="var">objectId</span>);
+    <span class="kw">const</span> <span class="var">y</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getY</span>(<span class="var">data</span>.<span class="var">objectId</span>);
+    <span class="kw">if</span> (<span class="var">x</span> < <span class="num">0</span>) <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setX</span>(<span class="var">data</span>.<span class="var">objectId</span>, <span class="num">0</span>);
+    <span class="kw">if</span> (<span class="var">y</span> < <span class="num">0</span>) <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setY</span>(<span class="var">data</span>.<span class="var">objectId</span>, <span class="num">0</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">dragend</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis une fois quand le bouton souris est relâché.
+        <code>x</code> / <code>y</code> = position finale. <code>previousX</code> / <code>previousY</code> = position avant le drag.
+        L'historique enregistre l'entrée à ce moment (une seule entrée par drag).
+    </div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X finale de l'objet</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y finale de l'objet</td></tr>
+        <tr><td>previousX</td><td>nombre</td><td>Position X avant le drag</td></tr>
+        <tr><td>previousY</td><td>nombre</td><td>Position Y avant le drag</td></tr>
+        <tr><td>originalEvent</td><td>MouseEvent</td><td>L'événement DOM natif</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:dragend'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Déplacé de'</span>, <span class="var">data</span>.<span class="var">previousX</span>, <span class="var">data</span>.<span class="var">previousY</span>, <span class="str">'→'</span>, <span class="var">data</span>.<span class="var">x</span>, <span class="var">data</span>.<span class="var">y</span>);
+    <span class="kw">if</span> (<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getCursor</span>(<span class="var">data</span>.<span class="var">objectId</span>) === <span class="str">'grabbing'</span>)
+        <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setCursor</span>(<span class="var">data</span>.<span class="var">objectId</span>, <span class="str">'grab'</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">dragcancel</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand un drag est annulé par Escape ou par <code>setMouseDragEnabled(false)</code>.
+        L'objet a déjà été ramené à sa position d'origine. Aucune entrée n'est ajoutée à l'historique.
+    </div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>originalX</td><td>nombre</td><td>Position X de départ (position restaurée)</td></tr>
+        <tr><td>originalY</td><td>nombre</td><td>Position Y de départ (position restaurée)</td></tr>
+    </table>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:dragcancel'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Annulé, retour à'</span>, <span class="var">data</span>.<span class="var">originalX</span>, <span class="var">data</span>.<span class="var">originalY</span>);
+    <span class="kw">if</span> (<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getCursor</span>(<span class="var">data</span>.<span class="var">objectId</span>) === <span class="str">'grabbing'</span>)
+        <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setCursor</span>(<span class="var">data</span>.<span class="var">objectId</span>, <span class="str">'grab'</span>);
+});</pre>
+</div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

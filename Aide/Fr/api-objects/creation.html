@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Création / Suppression — voh.objects</title>
+</head>
+<body>
+
+<h1>voh.objects — Création / Suppression</h1>
+<p class="intro">Créer des objets sur un canevas et les supprimer.</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Créer un objet</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">create</span><span class="sig-paren">(</span><span class="sig-param">canvasId, options</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre</span></div>
+    <div class="method-description">
+        Crée un nouvel objet sur un canevas et retourne son <strong>ID</strong> (un nombre unique).
+        Cet ID est ensuite utilisé dans toutes les autres fonctions pour désigner cet objet.
+        Par défaut, l'objet est un rectangle gris clair (<em>objet nu</em>). L'apparence peut être
+        entièrement personnalisée via un callback de dessin (<code>drawingCallback</code>).
+        Chaque objet créé reçoit un z-order croissant (le dernier créé est au-dessus).
+    </div>
+
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas sur lequel créer l'objet</td></tr>
+        <tr><td>name</td><td>texte</td><td>Nom de l'objet (par défaut: "Objet N")</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X sur le canevas en pixels (par défaut: 50)</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y sur le canevas en pixels (par défaut: 50)</td></tr>
+        <tr><td>width</td><td>nombre</td><td>Largeur en pixels (par défaut: 150, minimum: 5)</td></tr>
+        <tr><td>height</td><td>nombre</td><td>Hauteur en pixels (par défaut: 100, minimum: 5)</td></tr>
+        <tr><td>backgroundColor</td><td>couleur</td><td>Couleur de fond du rendu par défaut (par défaut: gris clair)</td></tr>
+        <tr><td>isLocked</td><td>vrai/faux</td><td>Verrouillé dès la création (par défaut: false)</td></tr>
+        <tr><td>isVisible</td><td>vrai/faux</td><td>Visible dès la création (par défaut: true)</td></tr>
+        <tr><td>opacity</td><td>nombre</td><td>Opacité: <code>0.0</code> = transparent → <code>1.0</code> = opaque (par défaut: 1.0)</td></tr>
+        <tr><td>drawingCallback</td><td>fonction</td><td>Callback de dessin personnalisé (par défaut: null = rendu par défaut)</td></tr>
+        <tr><td>cursor</td><td>texte</td><td>Curseur CSS au survol de l'objet (par défaut: null = curseur du canevas). Ex: <code>'pointer'</code>, <code>'grab'</code>, <code>'move'</code></td></tr>
+        <tr><td>mouseDragEnabled</td><td>vrai/faux</td><td>Activer le drag de cet objet (par défaut: false)</td></tr>
+        <tr><td>mouseDragButton</td><td>texte</td><td>Bouton souris pour le drag: <code>'left'</code>, <code>'middle'</code> ou <code>'right'</code> (par défaut: <code>'left'</code>)</td></tr>
+        <tr><td>mouseDragMode</td><td>texte</td><td>Mode de drag solo: <code>'direct'</code> (suit la souris) ou <code>'preview'</code> (fantôme) (par défaut: <code>'direct'</code>)</td></tr>
+        <tr><td>mouseDragOffsetX</td><td>nombre</td><td>Décalage X au début du drag en pixels (par défaut: 0)</td></tr>
+        <tr><td>mouseDragOffsetY</td><td>nombre</td><td>Décalage Y au début du drag en pixels (par défaut: 0)</td></tr>
+        <tr><td>mouseDragPreviewCallback</td><td>fonction</td><td>Callback de dessin du fantôme en mode preview (par défaut: null = fantôme bleu)</td></tr>
+        <tr><td>mouseDragMultiMode</td><td>texte</td><td>Mode de drag en multi-sélection (par défaut: null = hérite de <code>mouseDragMode</code>)</td></tr>
+        <tr><td>mouseDragMultiPreviewCallback</td><td>fonction</td><td>Callback du fantôme en multi-sélection (par défaut: null = hérite de <code>mouseDragPreviewCallback</code>)</td></tr>
+        <tr><td>selectionBorderColor</td><td>couleur</td><td>Couleur du contour de sélection (par défaut: <code>'rgba(0, 120, 215, 0.9)'</code>)</td></tr>
+        <tr><td>selectionBorderThickness</td><td>nombre</td><td>Épaisseur du contour de sélection en pixels (par défaut: 1)</td></tr>
+        <tr><td>selectionBorderOffset</td><td>nombre</td><td>Espace entre l'objet et le contour en pixels (par défaut: 0 = collé à l'extérieur). Négatif = par-dessus l'objet</td></tr>
+        <tr><td>selectionBorderStyle</td><td>texte</td><td>Style du contour: <code>'solid'</code>, <code>'dashed'</code> ou <code>'dotted'</code> (par défaut: <code>'solid'</code>)</td></tr>
+        <tr><td>selectionMode</td><td>texte</td><td>Mode de sélection par rectangle: <code>'enclosed'</code> (défaut, entièrement contenu), <code>'intersect'</code> (touché suffit) ou <code>null</code> (converti en <code>'enclosed'</code>)</td></tr>
+    </table>
+
+    <div class="method-return">Retourne: <span class="return-type">nombre</span> — L'ID de l'objet créé (nombre ≥ 1), ou <code>-1</code> si le canevas n'existe pas.</div>
+
+<pre><span class="cmt">// Objet avec tous les paramètres (valeurs par défaut)</span>
+<span class="kw">const</span> <span class="var">objet</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">create</span>(<span class="var">canvas</span>, {
+    <span class="var">name</span>:                         <span class="str">'Mon objet'</span>,
+    <span class="var">x</span>: <span class="num">100</span>,  <span class="var">y</span>: <span class="num">80</span>,
+    <span class="var">width</span>: <span class="num">200</span>,  <span class="var">height</span>: <span class="num">120</span>,
+    <span class="var">backgroundColor</span>:              <span class="str">'rgba(200, 200, 200, 1.0)'</span>,
+    <span class="var">isLocked</span>:                     <span class="kw">false</span>,
+    <span class="var">isVisible</span>:                    <span class="kw">true</span>,
+    <span class="var">opacity</span>:                      <span class="num">1.0</span>,
+    <span class="var">drawingCallback</span>:              <span class="kw">null</span>,
+    <span class="var">cursor</span>:                       <span class="kw">null</span>,
+    <span class="var">mouseDragEnabled</span>:             <span class="kw">false</span>,
+    <span class="var">mouseDragButton</span>:              <span class="str">'left'</span>,
+    <span class="var">mouseDragMode</span>:                <span class="str">'direct'</span>,
+    <span class="var">mouseDragOffsetX</span>:             <span class="num">0</span>,
+    <span class="var">mouseDragOffsetY</span>:             <span class="num">0</span>,
+    <span class="var">mouseDragPreviewCallback</span>:     <span class="kw">null</span>,
+    <span class="var">mouseDragMultiMode</span>:           <span class="kw">null</span>,
+    <span class="var">mouseDragMultiPreviewCallback</span>: <span class="kw">null</span>,
+    <span class="var">selectionBorderColor</span>:         <span class="str">'rgba(0, 120, 215, 0.9)'</span>,
+    <span class="var">selectionBorderThickness</span>:     <span class="num">1</span>,
+    <span class="var">selectionBorderOffset</span>:        <span class="num">0</span>,
+    <span class="var">selectionBorderStyle</span>:         <span class="str">'solid'</span>,
+    <span class="var">selectionMode</span>:                <span class="str">'enclosed'</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Supprimer un objet</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">delete</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Supprime un objet du canevas. L'élément DOM est retiré et l'objet est supprimé de la mémoire.
+        <br><br>
+        <strong>Suppression en cascade:</strong> quand un canevas est supprimé via <code>voh.canvas.delete()</code>,
+        tous ses objets sont automatiquement supprimés.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet à supprimer</td></tr>
+    </table>
+
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si l'objet a été supprimé, <code>false</code> si l'objet n'existe pas.</div>
+
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">delete</span>(<span class="var">objet</span>);
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">exists</span>(<span class="var">objet</span>));  <span class="cmt">// false</span></pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

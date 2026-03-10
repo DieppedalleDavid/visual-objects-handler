@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Curseur — voh.objects</title>
+</head>
+<body>
+
+<h1>voh.objects — Curseur</h1>
+<p class="intro">Définir le curseur CSS affiché quand la souris survole un objet.</p>
+
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Définir le curseur</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setCursor</span><span class="sig-paren">(</span><span class="sig-param">objectId, cursor</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Définit le curseur CSS affiché quand la souris survole l'objet.
+        Passer <code>null</code> pour revenir au curseur par défaut du canevas.
+        N'importe quelle valeur CSS valide est acceptée (voir tableau ci-dessous).
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>cursor</td><td>texte | null</td><td>Curseur CSS ou <code>null</code> pour le défaut</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setCursor</span>(<span class="var">objet</span>, <span class="str">'pointer'</span>);    <span class="cmt">// main de clic</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setCursor</span>(<span class="var">objet</span>, <span class="str">'move'</span>);       <span class="cmt">// croix de déplacement</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setCursor</span>(<span class="var">objet</span>, <span class="kw">null</span>);         <span class="cmt">// curseur par défaut</span></pre>
+</div>
+
+<h2>Curseurs disponibles</h2>
+
+<p>Tous les curseurs CSS standard sont acceptés. Voici la liste complète :</p>
+
+<table class="param-table">
+    <tr><th>Valeur</th><th>Description</th></tr>
+
+    <tr><td colspan="2" style="background:#f0f4ff; font-weight:bold; color:#3355aa;">Général</td></tr>
+    <tr><td><code>'default'</code></td><td>Curseur par défaut du système (flèche)</td></tr>
+    <tr><td><code>'none'</code></td><td>Curseur invisible</td></tr>
+    <tr><td><code>'auto'</code></td><td>Le navigateur choisit selon le contexte</td></tr>
+
+    <tr><td colspan="2" style="background:#f0f4ff; font-weight:bold; color:#3355aa;">Liens et actions</td></tr>
+    <tr><td><code>'pointer'</code></td><td>Main avec index pointé (lien, bouton cliquable)</td></tr>
+    <tr><td><code>'context-menu'</code></td><td>Menu contextuel disponible</td></tr>
+    <tr><td><code>'help'</code></td><td>Aide disponible (point d'interrogation)</td></tr>
+    <tr><td><code>'progress'</code></td><td>En cours de traitement (sablier + flèche)</td></tr>
+    <tr><td><code>'wait'</code></td><td>En attente (sablier seul)</td></tr>
+
+    <tr><td colspan="2" style="background:#f0f4ff; font-weight:bold; color:#3355aa;">Sélection</td></tr>
+    <tr><td><code>'cell'</code></td><td>Sélection de cellule (tableau)</td></tr>
+    <tr><td><code>'crosshair'</code></td><td>Réticule / viseur (dessin, sélection précise)</td></tr>
+    <tr><td><code>'text'</code></td><td>Curseur texte (I-beam horizontal)</td></tr>
+    <tr><td><code>'vertical-text'</code></td><td>Curseur texte vertical (I-beam vertical)</td></tr>
+
+    <tr><td colspan="2" style="background:#f0f4ff; font-weight:bold; color:#3355aa;">Glisser-déposer</td></tr>
+    <tr><td><code>'alias'</code></td><td>Créer un alias / raccourci</td></tr>
+    <tr><td><code>'copy'</code></td><td>Copier un élément</td></tr>
+    <tr><td><code>'move'</code></td><td>Déplacer un élément (croix à 4 flèches)</td></tr>
+    <tr><td><code>'no-drop'</code></td><td>Dépôt interdit ici</td></tr>
+    <tr><td><code>'not-allowed'</code></td><td>Action interdite (cercle barré)</td></tr>
+    <tr><td><code>'grab'</code></td><td>Main ouverte (saisir un objet)</td></tr>
+    <tr><td><code>'grabbing'</code></td><td>Main fermée (objet saisi, en cours de drag)</td></tr>
+
+    <tr><td colspan="2" style="background:#f0f4ff; font-weight:bold; color:#3355aa;">Redimensionnement</td></tr>
+    <tr><td><code>'e-resize'</code></td><td>Redimensionner vers l'est (droite)</td></tr>
+    <tr><td><code>'n-resize'</code></td><td>Redimensionner vers le nord (haut)</td></tr>
+    <tr><td><code>'ne-resize'</code></td><td>Redimensionner vers le nord-est (haut-droite)</td></tr>
+    <tr><td><code>'nw-resize'</code></td><td>Redimensionner vers le nord-ouest (haut-gauche)</td></tr>
+    <tr><td><code>'s-resize'</code></td><td>Redimensionner vers le sud (bas)</td></tr>
+    <tr><td><code>'se-resize'</code></td><td>Redimensionner vers le sud-est (bas-droite)</td></tr>
+    <tr><td><code>'sw-resize'</code></td><td>Redimensionner vers le sud-ouest (bas-gauche)</td></tr>
+    <tr><td><code>'w-resize'</code></td><td>Redimensionner vers l'ouest (gauche)</td></tr>
+    <tr><td><code>'ew-resize'</code></td><td>Redimensionner horizontalement (gauche-droite)</td></tr>
+    <tr><td><code>'ns-resize'</code></td><td>Redimensionner verticalement (haut-bas)</td></tr>
+    <tr><td><code>'nesw-resize'</code></td><td>Redimensionner en diagonale (haut-droite / bas-gauche)</td></tr>
+    <tr><td><code>'nwse-resize'</code></td><td>Redimensionner en diagonale (haut-gauche / bas-droite)</td></tr>
+    <tr><td><code>'col-resize'</code></td><td>Redimensionner une colonne</td></tr>
+    <tr><td><code>'row-resize'</code></td><td>Redimensionner une ligne</td></tr>
+    <tr><td><code>'all-scroll'</code></td><td>Défilement dans toutes les directions</td></tr>
+
+    <tr><td colspan="2" style="background:#f0f4ff; font-weight:bold; color:#3355aa;">Zoom</td></tr>
+    <tr><td><code>'zoom-in'</code></td><td>Zoom avant</td></tr>
+    <tr><td><code>'zoom-out'</code></td><td>Zoom arrière</td></tr>
+</table>
+
+<div class="note">
+    <strong>Curseur personnalisé :</strong> Il est aussi possible d'utiliser une image comme curseur via la syntaxe CSS :
+    <code>'url("mon-curseur.png"), auto'</code>. La taille recommandée est 32×32 px.
+    Le deuxième paramètre (<code>auto</code>) est le curseur de repli si l'image ne se charge pas.
+</div>
+
+<h2>Lire le curseur</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getCursor</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">texte | null</span></div>
+    <div class="method-description">Retourne le curseur CSS de l'objet, ou <code>null</code> si aucun curseur personnalisé n'est défini.</div>
+    <div class="method-return">Retourne: <span class="return-type">texte | null</span></div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getCursor</span>(<span class="var">objet</span>));  <span class="cmt">// 'pointer' ou null</span></pre>
+</div>
+
+<h2>Hit-test</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">hitTest</span><span class="sig-paren">(</span><span class="sig-param">canvasId, x, y</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre | null</span></div>
+    <div class="method-description">
+        Recherche l'objet le plus haut (z-order maximum) sous le point (x, y) sur un canevas.
+        Utilise la grille spatiale multi-niveaux pour des performances O(1) même avec 20 000+ objets.
+        Retourne l'ID de l'objet trouvé, ou <code>null</code> si aucun objet n'est sous ce point.
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X relative au canevas (pixels)</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y relative au canevas (pixels)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">nombre | null</span> — L'ID de l'objet ou <code>null</code>.</div>
+<pre><span class="kw">const</span> <span class="var">objectId</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">hitTest</span>(<span class="var">canvas</span>, <span class="num">150</span>, <span class="num">200</span>);
+<span class="kw">if</span> (<span class="var">objectId</span> !== <span class="kw">null</span>) {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Objet trouvé:'</span>, <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getName</span>(<span class="var">objectId</span>));
+}</pre>
+</div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

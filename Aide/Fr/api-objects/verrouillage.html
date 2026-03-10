@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Verrouillage — voh.objects</title>
+</head>
+<body>
+
+<h1>voh.objects — Verrouillage</h1>
+<p class="intro">Verrouiller un objet pour empêcher sa manipulation à la souris (le code reste opérationnel).</p>
+
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Verrouiller / Déverrouiller</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setLocked</span><span class="sig-paren">(</span><span class="sig-param">objectId, locked</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Verrouille (<code>true</code>) ou déverrouille (<code>false</code>) l'objet.
+        Un objet verrouillé ne peut pas être manipulé à la souris (déplacement, redimensionnement),
+        mais reste modifiable par le code (setX, setWidth, etc.).
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>locked</td><td>vrai/faux</td><td><code>true</code> = verrouillé, <code>false</code> = déverrouillé</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setLocked</span>(<span class="var">objet</span>, <span class="kw">true</span>);   <span class="cmt">// verrouille</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setLocked</span>(<span class="var">objet</span>, <span class="kw">false</span>);  <span class="cmt">// déverrouille</span></pre>
+</div>
+
+<h2>Lire l'état</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">isLocked</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux | null</span></div>
+    <div class="method-description">Retourne <code>true</code> si l'objet est verrouillé, <code>false</code> s'il ne l'est pas, ou <code>null</code> si l'objet n'existe pas.</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux | null</span></div>
+<pre><span class="kw">if</span> (<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">isLocked</span>(<span class="var">objet</span>)) {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'L\'objet est verrouillé.'</span>);
+}</pre></div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getLocked</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux | null</span></div>
+    <div class="method-description">Alias de <code>isLocked()</code>. Retourne la même valeur. Utile pour la cohérence avec les autres getters (<code>getName</code>, <code>getWidth</code>, etc.).</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux | null</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getLocked</span>(<span class="var">objet</span>);  <span class="cmt">// identique à isLocked()</span></pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

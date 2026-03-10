@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Drag souris — voh.objects</title>
+</head>
+<body>
+
+<h1>voh.objects — Drag souris</h1>
+<p class="intro">
+    Rendre un objet déplaçable à la souris. Deux modes sont disponibles:
+    <strong>direct</strong> (l'objet suit la souris en temps réel) et
+    <strong>preview</strong> (un fantôme suit la souris, l'objet saute à la position finale au relâchement).
+</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Activer / désactiver le drag</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setMouseDragEnabled</span><span class="sig-paren">(</span><span class="sig-param">objectId, isEnabled</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Active ou désactive le déplacement à la souris sur un objet.
+        Si un drag est en cours au moment de l'appel avec <code>false</code>, il est annulé immédiatement
+        (comportement identique à la touche Escape: l'objet retourne à sa position d'origine,
+        aucune entrée n'est ajoutée à l'historique).
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>isEnabled</td><td>vrai/faux</td><td><code>true</code> pour activer le drag</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragEnabled</span>(<span class="var">objet</span>, <span class="kw">true</span>);   <span class="cmt">// drag activé</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragEnabled</span>(<span class="var">objet</span>, <span class="kw">false</span>);  <span class="cmt">// drag désactivé (annule le drag en cours)</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getMouseDragEnabled</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Retourne <code>true</code> si le drag est activé sur l'objet.</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getMouseDragEnabled</span>(<span class="var">objet</span>));  <span class="cmt">// true ou false</span></pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Bouton souris</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setMouseDragButton</span><span class="sig-paren">(</span><span class="sig-param">objectId, button</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Définit le bouton souris qui déclenche le drag.
+        Si le bouton <code>'right'</code> est configuré, le menu contextuel du navigateur est automatiquement
+        bloqué quand la souris est sur cet objet.
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>button</td><td>texte</td><td><code>'left'</code> (défaut), <code>'middle'</code> ou <code>'right'</code></td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragButton</span>(<span class="var">objet</span>, <span class="str">'left'</span>);    <span class="cmt">// bouton gauche (défaut)</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragButton</span>(<span class="var">objet</span>, <span class="str">'right'</span>);   <span class="cmt">// bouton droit (menu contextuel bloqué)</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragButton</span>(<span class="var">objet</span>, <span class="str">'middle'</span>);  <span class="cmt">// molette enfoncée</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getMouseDragButton</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">texte</span></div>
+    <div class="method-description">Retourne le bouton souris configuré pour le drag (<code>'left'</code>, <code>'middle'</code> ou <code>'right'</code>).</div>
+    <div class="method-return">Retourne: <span class="return-type">texte</span></div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getMouseDragButton</span>(<span class="var">objet</span>));  <span class="cmt">// 'left', 'middle' ou 'right'</span></pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Mode de drag</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setMouseDragMode</span><span class="sig-paren">(</span><span class="sig-param">objectId, mode</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Définit le comportement visuel du drag.<br><br>
+        <strong>'direct'</strong> (défaut): l'objet se déplace en temps réel sous la souris pendant le drag.
+        <code>setX()</code> / <code>setY()</code> sont appelés à chaque mouvement.
+        L'historique enregistre <em>une seule entrée</em> par drag (position avant → position après),
+        pas un undo par pixel.<br><br>
+        <strong>'preview'</strong>: l'objet reste immobile pendant le drag.
+        Un sprite fantôme semi-transparent suit la souris.
+        Au relâchement du bouton, l'objet saute à la position finale.
+        Le fantôme est dessiné via <code>mouseDragPreviewCallback</code> (ou en pointillés bleus par défaut).
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>mode</td><td>texte</td><td><code>'direct'</code> (défaut) ou <code>'preview'</code></td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragMode</span>(<span class="var">objet</span>, <span class="str">'direct'</span>);   <span class="cmt">// l'objet suit la souris en temps réel</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragMode</span>(<span class="var">objet</span>, <span class="str">'preview'</span>);  <span class="cmt">// fantôme suit la souris, l'objet saute à la fin</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getMouseDragMode</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">texte</span></div>
+    <div class="method-description">Retourne le mode de drag de l'objet (<code>'direct'</code> ou <code>'preview'</code>).</div>
+    <div class="method-return">Retourne: <span class="return-type">texte</span></div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getMouseDragMode</span>(<span class="var">objet</span>));  <span class="cmt">// 'direct' ou 'preview'</span></pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Décalage du drag (offset)</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setMouseDragOffsetX</span><span class="sig-paren">(</span><span class="sig-param">objectId, value</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Définit le décalage horizontal du drag en pixels.<br>
+        Avec <code>0</code> (défaut), l'objet garde sa position relative sous le curseur au moment du clic.
+        Une valeur positive décale l'objet vers la droite au démarrage du drag.
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>value</td><td>nombre</td><td>Décalage X en pixels (0 = comportement naturel)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragOffsetX</span>(<span class="var">objet</span>, <span class="num">0</span>);   <span class="cmt">// comportement naturel (défaut)</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragOffsetX</span>(<span class="var">objet</span>, <span class="num">40</span>);  <span class="cmt">// décale l'objet de 40px vers la droite au démarrage</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getMouseDragOffsetX</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre</span></div>
+    <div class="method-description">Retourne le décalage X du drag en pixels.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre</span></div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getMouseDragOffsetX</span>(<span class="var">objet</span>));  <span class="cmt">// 0, 40, -20, etc.</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setMouseDragOffsetY</span><span class="sig-paren">(</span><span class="sig-param">objectId, value</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Définit le décalage vertical du drag en pixels.
+        Avec <code>0</code> (défaut), l'objet garde sa position relative sous le curseur.
+        Une valeur positive décale l'objet vers le bas.
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>value</td><td>nombre</td><td>Décalage Y en pixels (0 = comportement naturel)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragOffsetY</span>(<span class="var">objet</span>, <span class="num">0</span>);   <span class="cmt">// comportement naturel (défaut)</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragOffsetY</span>(<span class="var">objet</span>, <span class="num">20</span>);  <span class="cmt">// décale l'objet de 20px vers le bas au démarrage</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getMouseDragOffsetY</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre</span></div>
+    <div class="method-description">Retourne le décalage Y du drag en pixels.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre</span></div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getMouseDragOffsetY</span>(<span class="var">objet</span>));  <span class="cmt">// 0, 20, -10, etc.</span></pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Callback du fantôme (mode preview)</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setMouseDragPreviewCallback</span><span class="sig-paren">(</span><span class="sig-param">objectId, callback</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Définit la fonction de dessin du sprite fantôme utilisé en mode <code>'preview'</code>.
+        La signature est identique à <code>drawingCallback</code>:
+        <code>function(context, width, height, objectId)</code>.<br><br>
+        Passer <code>null</code> pour utiliser le dessin par défaut: rectangle en pointillés bleus semi-transparents.<br><br>
+        Ce changement est enregistré dans l'historique (Ctrl+Z fonctionne).
+        Il prend effet au prochain drag.
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>callback</td><td>fonction | null</td><td>Fonction de dessin ou <code>null</code> pour le fantôme par défaut</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="cmt">// Fantôme par défaut (pointillés bleus)</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragPreviewCallback</span>(<span class="var">objet</span>, <span class="kw">null</span>);
+
+<span class="cmt">// Fantôme personnalisé</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragPreviewCallback</span>(<span class="var">objet</span>, <span class="kw">function</span>(<span class="var">ctx</span>, <span class="var">w</span>, <span class="var">h</span>, <span class="var">objectId</span>) {
+    <span class="var">ctx</span>.<span class="var">strokeStyle</span> = <span class="str">'rgba(255, 100, 0, 0.8)'</span>;
+    <span class="var">ctx</span>.<span class="var">lineWidth</span> = <span class="num">2</span>;
+    <span class="var">ctx</span>.<span class="fn">setLineDash</span>([<span class="num">6</span>, <span class="num">3</span>]);
+    <span class="var">ctx</span>.<span class="fn">strokeRect</span>(<span class="num">1</span>, <span class="num">1</span>, <span class="var">w</span> - <span class="num">2</span>, <span class="var">h</span> - <span class="num">2</span>);
+    <span class="var">ctx</span>.<span class="fn">setLineDash</span>([]);
+    <span class="var">ctx</span>.<span class="var">fillStyle</span> = <span class="str">'rgba(255, 100, 0, 0.15)'</span>;
+    <span class="var">ctx</span>.<span class="fn">fillRect</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="var">w</span>, <span class="var">h</span>);
+});</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getMouseDragPreviewCallback</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">fonction | null</span></div>
+    <div class="method-description">Retourne le callback du fantôme, ou <code>null</code> si le dessin par défaut est utilisé.</div>
+    <div class="method-return">Retourne: <span class="return-type">fonction | null</span></div>
+<pre><span class="kw">const</span> <span class="var">cb</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getMouseDragPreviewCallback</span>(<span class="var">objet</span>);
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">cb</span> !== <span class="kw">null</span> ? <span class="str">'Fantôme personnalisé'</span> : <span class="str">'Fantôme par défaut'</span>);</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Multi-drag (déplacement en multi-sélection)</h2>
+
+<p>
+    Quand plusieurs objets sont sélectionnés et qu'on drag l'un d'eux, tous les sélectionnés bougent ensemble.
+    Par défaut, chaque objet utilise son propre <code>mouseDragMode</code>, mais on peut configurer un mode
+    différent pour le multi-drag avec les paramètres ci-dessous.
+</p>
+<p>
+    <strong>Chaîne de fallback:</strong><br>
+    Mode: <code>mouseDragMultiMode</code> → si <code>null</code> → <code>mouseDragMode</code><br>
+    Callback: <code>mouseDragMultiPreviewCallback</code> → si <code>null</code> → <code>mouseDragPreviewCallback</code> → si <code>null</code> → fantôme bleu par défaut
+</p>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setMouseDragMultiMode</span><span class="sig-paren">(</span><span class="sig-param">objectId, mode</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Définit le mode de déplacement de cet objet quand il est dragué en multi-sélection.
+        <code>null</code> (défaut): hérite de <code>mouseDragMode</code>.
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>mode</td><td>texte | null</td><td><code>'direct'</code>, <code>'preview'</code> ou <code>null</code> (hérite du solo)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="cmt">// En solo: direct. En multi: fantôme.</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragMode</span>(<span class="var">objet</span>, <span class="str">'direct'</span>);
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragMultiMode</span>(<span class="var">objet</span>, <span class="str">'preview'</span>);
+
+<span class="cmt">// Hériter du mode solo (comportement par défaut)</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragMultiMode</span>(<span class="var">objet</span>, <span class="kw">null</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getMouseDragMultiMode</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">texte | null</span></div>
+    <div class="method-description">Retourne le mode multi-drag, ou <code>null</code> si l'objet hérite du mode solo.</div>
+    <div class="method-return">Retourne: <span class="return-type">texte | null</span></div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getMouseDragMultiMode</span>(<span class="var">objet</span>));  <span class="cmt">// 'direct', 'preview' ou null</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setMouseDragMultiPreviewCallback</span><span class="sig-paren">(</span><span class="sig-param">objectId, callback</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Définit le callback de dessin du fantôme pour le mode multi-sélection.
+        <code>null</code> (défaut): hérite de <code>mouseDragPreviewCallback</code>.
+        Même signature: <code>function(context, width, height, objectId)</code>.
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>callback</td><td>fonction | null</td><td>Callback de dessin du fantôme multi, ou <code>null</code></td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="cmt">// Fantôme rouge en multi pour indiquer "non déplaçable en groupe"</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setMouseDragMultiPreviewCallback</span>(<span class="var">objet</span>, <span class="kw">function</span>(<span class="var">ctx</span>, <span class="var">w</span>, <span class="var">h</span>) {
+    <span class="var">ctx</span>.<span class="var">fillStyle</span> = <span class="str">'rgba(255, 0, 0, 0.15)'</span>;
+    <span class="var">ctx</span>.<span class="fn">fillRect</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="var">w</span>, <span class="var">h</span>);
+    <span class="var">ctx</span>.<span class="var">strokeStyle</span> = <span class="str">'rgba(255, 0, 0, 0.8)'</span>;
+    <span class="var">ctx</span>.<span class="var">lineWidth</span> = <span class="num">2</span>;
+    <span class="var">ctx</span>.<span class="fn">setLineDash</span>([<span class="num">6</span>, <span class="num">3</span>]);
+    <span class="var">ctx</span>.<span class="fn">strokeRect</span>(<span class="num">1</span>, <span class="num">1</span>, <span class="var">w</span> - <span class="num">2</span>, <span class="var">h</span> - <span class="num">2</span>);
+});</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getMouseDragMultiPreviewCallback</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">fonction | null</span></div>
+    <div class="method-description">Retourne le callback du fantôme multi, ou <code>null</code> si hérite du callback solo.</div>
+    <div class="method-return">Retourne: <span class="return-type">fonction | null</span></div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getMouseDragMultiPreviewCallback</span>(<span class="var">objet</span>));</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Événements du drag</h2>
+
+<p>Quatre événements sont émis pendant le cycle de vie d'un drag. En multi-drag, <code>isMultiDrag: true</code> est inclus dans les données. Voir <a href="../api-objects/evenements.html">Événements objet</a> pour le détail complet.</p>
+
+<table class="param-table">
+    <tr><th>Événement</th><th>Données reçues</th><th>Quand</th></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">dragstart</span></code></td><td>objectId, canvasId, x, y, button, originalEvent</td><td>Le drag commence</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">dragmove</span></code></td><td>objectId, canvasId, x, y, deltaX, deltaY, isMultiDrag, originalEvent</td><td>Chaque mouvement de souris pendant le drag</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">dragend</span></code></td><td>objectId, canvasId, x, y, previousX, previousY, isMultiDrag, originalEvent</td><td>Bouton relâché (position finale)</td></tr>
+    <tr><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">dragcancel</span></code></td><td>objectId, canvasId, originalX, originalY, isMultiDrag</td><td>Drag annulé (Escape ou setMouseDragEnabled(false))</td></tr>
+</table>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Comportements importants</h2>
+
+<div class="note">
+    <strong>Historique undo/redo:</strong> En mode <code>'direct'</code>, l'historique est mis en pause au
+    début du drag et reprend à la fin. Une seule entrée est créée par drag (position de départ → position finale),
+    même si l'objet a parcouru des centaines de pixels. Ctrl+Z annule tout le déplacement en une seule fois.
+</div>
+
+<div class="note">
+    <strong>Annulation avec Escape:</strong> Pendant un drag, appuyer sur Escape annule le déplacement.
+    L'objet retourne à sa position de départ. Aucune entrée n'est ajoutée à l'historique.
+    L'événement <code>object:dragcancel</code> est émis.
+    Appeler <code>setMouseDragEnabled(false)</code> pendant un drag produit le même effet.
+</div>
+
+<div class="note">
+    <strong>Menu contextuel:</strong> Si <code>mouseDragButton</code> vaut <code>'right'</code>,
+    le menu contextuel du navigateur est automatiquement bloqué sur cet objet,
+    y compris pendant un drag bouton droit en cours.
+</div>
+
+<div class="note">
+    <strong>Curseur pendant le drag:</strong> Le curseur de l'objet sous la souris est gelé pendant
+    toute la durée du drag — passer sur d'autres objets ne change pas le curseur.
+    Au relâchement, le curseur de l'objet se trouvant sous la souris à ce moment est appliqué.
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Exemple complet</h2>
+
+<pre><span class="kw">const</span> <span class="var">objet</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">create</span>(<span class="var">canvas</span>, {
+    <span class="var">name</span>: <span class="str">'Draggable'</span>,
+    <span class="var">x</span>: <span class="num">100</span>, <span class="var">y</span>: <span class="num">100</span>, <span class="var">width</span>: <span class="num">200</span>, <span class="var">height</span>: <span class="num">100</span>,
+    <span class="var">backgroundColor</span>: <span class="str">'#3478d7'</span>,
+    <span class="var">cursor</span>: <span class="str">'grab'</span>,
+    <span class="var">mouseDragEnabled</span>: <span class="kw">true</span>,
+    <span class="var">mouseDragButton</span>: <span class="str">'left'</span>,
+    <span class="var">mouseDragMode</span>: <span class="str">'direct'</span>
+});
+
+<span class="cmt">// Changer le curseur pendant le drag</span>
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:dragstart'</span>, (<span class="var">data</span>) => {
+    <span class="kw">if</span> (<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getCursor</span>(<span class="var">data</span>.<span class="var">objectId</span>) === <span class="str">'grab'</span>)
+        <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setCursor</span>(<span class="var">data</span>.<span class="var">objectId</span>, <span class="str">'grabbing'</span>);
+});
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:dragend'</span>, (<span class="var">data</span>) => {
+    <span class="kw">if</span> (<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getCursor</span>(<span class="var">data</span>.<span class="var">objectId</span>) === <span class="str">'grabbing'</span>)
+        <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setCursor</span>(<span class="var">data</span>.<span class="var">objectId</span>, <span class="str">'grab'</span>);
+});
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:dragcancel'</span>, (<span class="var">data</span>) => {
+    <span class="kw">if</span> (<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getCursor</span>(<span class="var">data</span>.<span class="var">objectId</span>) === <span class="str">'grabbing'</span>)
+        <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setCursor</span>(<span class="var">data</span>.<span class="var">objectId</span>, <span class="str">'grab'</span>);
+});
+
+<span class="cmt">// Logger la position finale</span>
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:dragend'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Déplacé de'</span>, <span class="var">data</span>.<span class="var">previousX</span>, <span class="var">data</span>.<span class="var">previousY</span>,
+                <span class="str">'→'</span>, <span class="var">data</span>.<span class="var">x</span>, <span class="var">data</span>.<span class="var">y</span>);
+});</pre>
+
+<div class="note">
+    <strong>Voir aussi:</strong> Le callback de dessin de <strong>l'objet lui-même</strong>
+    (<code>drawingCallback</code>) est documenté dans la page <a href="drawing-callback.html">Callback de dessin</a>.
+    Ne pas confondre avec <code>mouseDragPreviewCallback</code> qui dessine le fantôme pendant le drag.
+</div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

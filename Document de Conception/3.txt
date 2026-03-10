@@ -1,0 +1,271 @@
+## 8. Modernisation technique
+
+### 8.1 Modules ES
+
+Passer de classes globales à des modules ES :
+
+```javascript
+// v4 (global)
+class RenderEngine { ... }
+// → accessible partout, pas d'import explicite
+
+// v5 (modules ES)
+// Core/RenderEngine.js
+export class RenderEngine { ... }
+
+// Core/VisualObjectsHandler.js
+import { RenderEngine } from './RenderEngine.js';
+```
+
+Avantages : dépendances explicites, tree-shaking possible, meilleur support IDE, compatible bundlers (Webpack, Vite, Rollup).
+
+### 8.2 Structure de fichiers
+
+#### Structure actuelle (v5.1.0 — Phase API-first)
+
+```
+Visual Objects Handler - Code/
+├── index.html                    # Éditeur de code intégré (CodeMirror)
+├── runner.html                   # Exécution des scripts utilisateur
+├── voh-canvas-conception.md      # Document de conception du module Canvas
+├── Core/
+│   ├── Core-Main.js              # VisualObjectsHandler (classe principale, init, destroy)
+│   ├── Core-Zone.js              # ZoneManager (zones, grille zone, fond, bordure, viewport)
+│   └── Core-API.js               # Construction de l'API publique (voh.zone, etc.)
+├── Libraries/
+│   ├── CodeMirror/               # Éditeur de code
+│   ├── Pixi/                     # Pixi.js v8+ (prêt à intégrer)
+│   └── TypeScript/
+├── Medias/
+│   └── Images/                   # Ressources médias du projet
+├── Documentation/
+│   └── Fr/                       # Documentation en français
+└── Examples/
+    └── Fr/                       # Exemples en français
+```
+
+#### Structure cible (au fur et à mesure du développement)
+
+Les fichiers Core suivent le format `Core-NomDuModule.js` (PascalCase après le tiret). Les fichiers s'ajoutent au fur et à mesure des phases, pas tous en même temps.
+
+```
+Core/
+├── Core-Main.js                  # ✅ Classe principale VisualObjectsHandler
+├── Core-Zone.js                  # ✅ ZoneManager (zones)
+├── Core-API.js                   # ✅ Construction API publique (sous-objets)
+├── Core-Canvas.js                # 🔶 CanvasManager (canvas dans les zones, Pixi.js)
+├── Core-CanvasTitleBar.js        # 🔶 Barre de titre, boutons, icône déplacement
+├── Core-CanvasHandles.js         # 🔶 Poignées de redimensionnement des canvas
+├── Core-CanvasDocking.js         # ⬜ Docking des canvas entre eux
+├── Core-CanvasPage.js             # 🔶 PageManager (pages par canvas, fond, grille)
+├── Core-RenderEngine.js          # 🔶 Pipeline Pixi.js (5 layers, ticker hybride)
+├── Core-RenderGrid.js            # ⬜ Rendu grille (Graphics Pixi.js)
+├── Core-RenderObjects.js         # ⬜ Rendu objets (Sprites, Graphics Pixi.js)
+├── Core-RenderOverlay.js         # ⬜ Rendu poignées objets, ancres, sélection souris
+├── Core-RenderConnections.js     # ⬜ Rendu connexions/liaisons
+├── Core-ObjectManager.js         # ⬜ Gestion des objets
+├── Core-SelectionManager.js      # ⬜ Sélection d'objets
+├── Core-HistoryManager.js        # ⬜ Undo/redo par page
+├── Core-ClipboardManager.js      # ⬜ Couper/copier/coller
+├── Core-ConnectionManager.js     # ⬜ Connexions/liaisons entre objets
+├── Core-InteractionManager.js    # ⬜ Événements souris/clavier bruts
+├── Core-RuleEngine.js            # ⬜ Moteur de règles JSON (Phase 4)
+├── Core-EventEmitter.js          # ⬜ Pub/sub (89 lignes, simple et efficace)
+├── Core-BaseObject.js            # ⬜ Structure d'un objet graphique
+├── Core-TypeRegistry.js          # ⬜ Registre des formes (rectangle, cercle, etc.)
+├── Core-FileManager.js           # ⬜ Import fichiers + cache (wrapper desktop)
+├── Core-ProjectManager.js        # ⬜ Save/load projet (wrapper desktop)
+└── rules/
+    └── default-rules.json        # ⬜ Règles par défaut (Phase 4)
+```
+
+L'Editor (futur) suivra la même convention avec des fichiers `Editor-NomDuModule.js` et les fichiers d'infrastructure en kebab-case.
+
+```
+Editor/                           # ⬜ FUTUR — après que le Core soit mature
+├── index.html
+├── editor-app.js
+├── Editor-Properties.js
+├── Editor-Modals.js
+├── Editor-ContextMenu.js
+├── ...
+└── i18n/
+    ├── fr.js
+    ├── en.js
+    └── de.js
+```
+
+### 8.3 Bundler — Vite pour la distribution
+
+En développement, on travaille avec 50+ fichiers séparés. Pour distribuer VOH, Vite compile tout en fichiers optimisés. Pixi.js et pixi-filters sont inclus dans le bundle.
+
+```bash
+# En développement — fichiers séparés, rechargement instantané
+npm run dev
+
+# Pour distribuer — compile en fichiers optimisés
+npm run build
+# → dist/voh-core.min.js (~700 Ko) — Core + Pixi.js + pixi-filters (pour le SDK)
+# → dist/voh-editor.min.js — Core + Pixi.js + Editor (pour l'application éditeur)
+# → dist/voh-player.min.js — Core + Pixi.js + player.html (pour les projets compilés)
+```
+
+
+---
+
+
+## 9. Organisation du code — Règle des 1 500 lignes max
+
+### 9.1 Leçon de la v4
+
+La v4 a accumulé des fichiers monstrueux par manque de discipline initiale :
+
+| Fichier v4 | Lignes | Ce qu'il ne faut PAS refaire |
+|---------|--------|----------|
+| `Ui-Properties.js` | 14 458 | Tout mettre dans un seul fichier |
+| `Core-VisualObjectsHandler.js` | 11 968 | Façade API + logique + export dans un bloc |
+| `Ui-PropertyBindingControls.js` | 9 438 | Mélanger UI et logique métier |
+| `Core-RenderEngine.js` | 8 967 | Rendu de tout dans un fichier |
+| `Ui-i18n.js` | 6 464 | 3 langues dans un seul fichier |
+| `Core-InteractionManager.js` | 6 148 | Toute l'interaction en un bloc |
+| `Ui-Modals.js` | 4 452 | Toutes les modales ensemble |
+
+### 9.2 Règle pour la v5 : 1 fichier = 1 responsabilité, max ~1 500 lignes
+
+Puisqu'on repart d'une base propre, on applique cette règle dès le départ. Pas de refactoring a posteriori, le code est structuré correctement dès l'écriture.
+
+### 9.3 Structure cible
+
+La structure de fichiers de la section 8.2 reflète cette organisation. Chaque module a sa propre responsabilité :
+
+**Core — Managers** : un fichier par manager (ObjectManager, SelectionManager, PageManager, ConnectionManager, ClipboardManager, HistoryManager, ProjectManager, FileManager). Chacun ~500-1 500 lignes.
+
+**Core — Engine** : un fichier par mécanique (RenderEngine, RenderGrid, RenderObjects, RenderOverlay, RenderConnections, InteractionManager, RuleEngine, DragEngine, ResizeEngine, RotateEngine, HoverEngine). Chacun ~500-1 500 lignes.
+
+**Core — Code** : un fichier par type d'export (CodeGenerator, HTMLExporter, ImageExporter, CodeTranslations). Chacun ~800-1 500 lignes.
+
+**Editor — Propriétés** : un fichier par panneau (Ui-Props-Canvas, Ui-Props-Geometry, Ui-Props-Appearance, Ui-Props-Behavior, Ui-Props-Handles, Ui-Props-Labels, Ui-Props-Images, Ui-Props-UserData). Chacun ~800-1 500 lignes.
+
+**Editor — Modales** : une fichier par modale (Modal-Grid, Modal-About, Modal-Settings, Modal-NewProject, Modal-Export, Modal-Compiler). Chacun ~200-800 lignes.
+
+**Editor — i18n** : un fichier par langue (fr.js, en.js, de.js). Le système i18n dans un fichier séparé (~200 lignes).
+
+Si un fichier dépasse ~1 500 lignes pendant le développement, c'est un signal qu'il faut le découper immédiatement.
+
+
+---
+
+
+## 10. Couche PureBasic — Pont bidirectionnel (PB Bridge)
+
+Le PB Bridge permet la communication bidirectionnelle entre JavaScript et PureBasic via WebViewGadget. C'est un composant prévu dès le départ dans l'architecture et développé en parallèle des autres phases.
+
+### 10.1 Architecture
+
+```
+Application PureBasic
+    ↓
+WebViewGadget (Chromium intégré)
+    ↓
+VOH Core + Pixi.js + PBBridge.js
+```
+
+Communication bidirectionnelle :
+
+- PureBasic → JavaScript : `WebViewExecuteScript()` envoie des commandes JS
+- JavaScript → PureBasic : `BindWebViewCallback()` reçoit des événements
+
+### 10.2 PBBridge.js
+
+Le fichier `bridge/PBBridge.js` dans le Core :
+
+- Détecte automatiquement si VOH tourne dans un environnement PureBasic (WebViewGadget)
+- Connecte les événements VOH aux callbacks PureBasic
+- Expose une API simplifiée pour PB
+
+### 10.3 Développement
+
+Le PB Bridge est développé en parallèle des phases principales. L'architecture le prépare dès le départ (fichier PBBridge.js, détection d'environnement, événements standardisés). Le wrapper PureBasic (VOH.pbi), les exemples PB et la documentation PB seront développés progressivement au fur et à mesure que le Core se stabilise.
+
+
+---
+
+
+## 11. Architecture multi-couches (Zone + Canvas + Interface)
+
+### 11.1 Concept — Architecture en 7 couches empilées
+
+VOH utilise une architecture à 7 couches empilées : Zone (1) | Canvas (5) | UI (1).
+
+```
+┌──────────────────────────────────────────────┐
+│              Vue utilisateur                 │
+│                                              │
+│  ┌────────────────────────────────────────┐  │
+│  │  COUCHE 7 — Interface HTML (UI)       │  │  ← Contrôles HTML au-dessus du canvas
+│  │  Boutons, inputs, sliders, labels     │  │     (InterfaceBuilder)
+│  ├────────────────────────────────────────┤  │
+│  │  COUCHE 2-6 — Canvas Pixi.js         │  │  ← 1 seul canvas WebGL contenant :
+│  │  ┌──── 5 Containers Pixi.js ───────┐ │  │
+│  │  │ 6. Overlay (poignées, ancres,   │ │  │
+│  │  │    rectangle de sélection)       │ │  │
+│  │  │ 5. Objects (formes visuelles)    │ │  │
+│  │  │ 4. Grid (grille / snap)         │ │  │
+│  │  │ 3. Background image             │ │  │
+│  │  │ 2. Background couleur           │ │  │
+│  │  └─────────────────────────────────┘ │  │
+│  ├────────────────────────────────────────┤  │
+│  │  COUCHE 1 — Zone (conteneur)          │  │  ← Fond, grille zone, bordure,
+│  │  Viewport avec scroll + zoom          │  │     viewport scroll+zoom
+│  └────────────────────────────────────────┘  │
+│                                              │
+│  Application (Editor) autour                 │  ← Panneaux, menus, barres d'outils
+└──────────────────────────────────────────────┘
+```
+
+Chaque canvas VOH dans une zone est un seul élément `<canvas>` WebGL géré par une instance Pixi.js Application. Les 5 layers sont des Containers Pixi.js empilés logiquement dans ce canvas unique.
+
+### 11.2 Multi-canvas — Deux niveaux
+
+Il y a deux niveaux de "multi-canvas" :
+
+**Niveau 1 — Plusieurs canvas dans une zone (MDI)** : C'est le cas principal. Une zone contient plusieurs canvas qui se comportent comme des fenêtres MDI (voir document de conception Canvas). Un seul est éditable à la fois, chacun a ses propres pages, objets, sélection, undo/redo. Le clipboard est partagé entre eux.
+
+```javascript
+const voh = new VisualObjectsHandler(document.getElementById('monDiv'));
+await voh.init();
+const zoneId = voh.zone.create({ name: 'Ma zone' });
+
+// Plusieurs canvas dans la même zone
+const canvas1 = voh.canvas.create({ zone: zoneId, name: 'Canvas A', x: 0, y: 0, width: 600, height: 400 });
+const canvas2 = voh.canvas.create({ zone: zoneId, name: 'Canvas B', x: 620, y: 0, width: 600, height: 400 });
+// → Chacun a ses propres objets, pages, sélection, undo/redo
+// → Le clipboard est partagé (copier d'un canvas, coller dans l'autre)
+```
+
+**Niveau 2 — Plusieurs instances VOH** : Cas avancé. Deux instances complètement séparées dans des conteneurs HTML différents. Chacune a ses propres zones, canvas, et sa propre instance Pixi.js.
+
+```javascript
+const voh1 = new VisualObjectsHandler(document.getElementById('div1'));
+await voh1.init();
+const voh2 = new VisualObjectsHandler(document.getElementById('div2'));
+await voh2.init();
+// → voh1 et voh2 sont totalement indépendants
+```
+
+Règle fondamentale pour les deux niveaux : zéro singleton, tout en instances.
+
+Checklist multi-canvas :
+
+- Aucune variable globale partagée entre instances VOH
+- Aucun `document.querySelector()` sans contexte
+- Chaque canvas crée ses propres 5 Containers Pixi.js
+- Les événements clavier/souris sont liés au container HTML, pas au document
+- Le HistoryManager est par page (dans un canvas)
+- Le clipboard est partagé entre canvas d'une même instance VOH
+- Les traductions (i18n) sont globales (OK)
+- Le FileManager peut être partagé OU par instance (option)
+
+
+---
+

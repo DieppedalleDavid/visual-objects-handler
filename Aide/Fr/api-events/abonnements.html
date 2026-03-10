@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Abonnements — Événements</title>
+</head>
+<body>
+
+<h1>Événements — Abonnements</h1>
+<p class="intro">S'abonner, écouter une fois, se désabonner, et inspecter les listeners des événements VOH.</p>
+
+<div class="note">
+    Le système d'événements fonctionne sur le principe <strong>pub/sub</strong> (publication/souscription).
+    Chaque action dans VOH (créer une zone, modifier une propriété, supprimer un objet…) émet un événement.
+    Vous pouvez vous abonner à ces événements pour réagir automatiquement.
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Écoute permanente</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh</span><span class="sig-sep">.</span><span class="sig-fn">on</span><span class="sig-paren">(</span><span class="sig-param">eventName, callback</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">voh</span></div>
+    <div class="method-description">
+        Abonne un callback à un événement. Le callback sera appelé <strong>à chaque émission</strong> de cet événement,
+        jusqu'à ce qu'on se désabonne avec <code>voh.off()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>eventName</td><td>texte</td><td>Nom de l'événement (ex: <code>'zone:created'</code>, <code>'zone:resized'</code>)</td></tr>
+        <tr><td>callback</td><td>fonction</td><td>Fonction appelée à chaque émission. Reçoit un objet <code>data</code> avec les détails</td></tr>
+    </table>
+
+    <div class="method-return">Retourne: <span class="return-type">voh</span> — L'instance VOH, ce qui permet le chaînage.</div>
+
+<pre><span class="cmt">// Écouter la création de zones</span>
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:created'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Zone créée:'</span>, <span class="var">data</span>.<span class="var">zoneId</span>, <span class="var">data</span>.<span class="var">name</span>);
+});
+
+<span class="cmt">// Écouter les changements de zoom</span>
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:zoomChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Zoom:'</span>, <span class="var">data</span>.<span class="var">zoom</span>, <span class="str">'(avant:'</span>, <span class="var">data</span>.<span class="var">previousZoom</span> + <span class="str">')'</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Écoute ponctuelle</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh</span><span class="sig-sep">.</span><span class="sig-fn">once</span><span class="sig-paren">(</span><span class="sig-param">eventName, callback</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">voh</span></div>
+    <div class="method-description">
+        Comme <code>voh.on()</code>, mais le callback n'est appelé <strong>qu'une seule fois</strong>.
+        Après la première émission, il est automatiquement désabonné — pas besoin d'appeler <code>voh.off()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>eventName</td><td>texte</td><td>Nom de l'événement</td></tr>
+        <tr><td>callback</td><td>fonction</td><td>Fonction appelée une seule fois</td></tr>
+    </table>
+
+    <div class="method-return">Retourne: <span class="return-type">voh</span> — L'instance VOH, ce qui permet le chaînage.</div>
+
+<pre><span class="cmt">// Attendre la première activation d'une zone</span>
+<span class="var">voh</span>.<span class="fn">once</span>(<span class="str">'zone:activated'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Première zone activée:'</span>, <span class="var">data</span>.<span class="var">zoneId</span>);
+    <span class="cmt">// Ce callback ne sera plus jamais appelé</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Désabonnement</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh</span><span class="sig-sep">.</span><span class="sig-fn">off</span><span class="sig-paren">(</span><span class="sig-param">eventName, callback</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">voh</span></div>
+    <div class="method-description">
+        Retire un callback spécifique d'un événement. Il faut passer <strong>exactement la même référence</strong>
+        de fonction que celle utilisée avec <code>voh.on()</code>.
+        C'est pourquoi il faut stocker le callback dans une variable si on prévoit de se désabonner.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>eventName</td><td>texte</td><td>Nom de l'événement</td></tr>
+        <tr><td>callback</td><td>fonction</td><td>La même référence de fonction passée à <code>on()</code></td></tr>
+    </table>
+
+    <div class="method-return">Retourne: <span class="return-type">voh</span> — L'instance VOH, ce qui permet le chaînage.</div>
+
+<pre><span class="cmt">// 1. Stocker le callback dans une variable</span>
+<span class="kw">const</span> <span class="var">onGridChanged</span> = (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Grille modifiée:'</span>, <span class="var">data</span>.<span class="var">property</span>);
+};
+
+<span class="cmt">// 2. S'abonner</span>
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:gridChanged'</span>, <span class="var">onGridChanged</span>);
+
+<span class="cmt">// 3. Plus tard, se désabonner</span>
+<span class="var">voh</span>.<span class="fn">off</span>(<span class="str">'zone:gridChanged'</span>, <span class="var">onGridChanged</span>);</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Désabonnement global</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh</span><span class="sig-sep">.</span><span class="sig-fn">removeAllListeners</span><span class="sig-paren">(</span><span class="sig-param">eventName?</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">voh</span></div>
+    <div class="method-description">
+        Retire <strong>tous</strong> les listeners d'un événement donné.
+        Si aucun nom n'est fourni, retire <strong>tous les listeners de tous les événements</strong> d'un coup.
+        Utile pour un nettoyage complet sans avoir à se souvenir de chaque callback.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>eventName</td><td>texte</td><td>(Optionnel) Nom de l'événement. Si omis, tous les listeners de tous les événements sont retirés</td></tr>
+    </table>
+
+    <div class="method-return">Retourne: <span class="return-type">voh</span> — L'instance VOH, ce qui permet le chaînage.</div>
+
+<pre><span class="cmt">// Retirer tous les listeners de 'zone:created'</span>
+<span class="var">voh</span>.<span class="fn">removeAllListeners</span>(<span class="str">'zone:created'</span>);
+
+<span class="cmt">// Retirer TOUS les listeners de TOUS les événements</span>
+<span class="var">voh</span>.<span class="fn">removeAllListeners</span>();</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Inspection des listeners</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh</span><span class="sig-sep">.</span><span class="sig-fn">getListenerCount</span><span class="sig-paren">(</span><span class="sig-param">eventName?</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">number</span></div>
+    <div class="method-description">
+        Retourne le nombre de listeners abonnés à un événement donné.
+        Si aucun nom n'est fourni, retourne le nombre <strong>total</strong> de listeners sur tous les événements.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>eventName</td><td>texte</td><td>(Optionnel) Nom de l'événement. Si omis, compte tous les listeners</td></tr>
+    </table>
+
+    <div class="method-return">Retourne: <span class="return-type">number</span> — Nombre de listeners.</div>
+
+<pre><span class="cmt">// Combien de listeners sur 'object:moved' ?</span>
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="fn">getListenerCount</span>(<span class="str">'object:moved'</span>)); <span class="cmt">// ex: 3</span>
+
+<span class="cmt">// Combien de listeners au total ?</span>
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="fn">getListenerCount</span>()); <span class="cmt">// ex: 12</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh</span><span class="sig-sep">.</span><span class="sig-fn">getEventNames</span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">Array&lt;string&gt;</span></div>
+    <div class="method-description">
+        Retourne la liste des noms d'événements qui ont <strong>au moins un listener</strong> abonné.
+        Utile pour le debug — permet de voir rapidement quels événements sont écoutés.
+    </div>
+
+    <div class="method-return">Retourne: <span class="return-type">Array&lt;string&gt;</span> — Liste des noms d'événements actifs.</div>
+
+<pre><span class="cmt">// Quels événements sont écoutés ?</span>
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="fn">getEventNames</span>());
+<span class="cmt">// ex: ['zone:created', 'object:moved', 'page:added']</span></pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Chaînage</h2>
+
+<p>
+    Les méthodes <code>on</code>, <code>once</code>, <code>off</code> et <code>removeAllListeners</code>
+    retournent l'instance VOH, ce qui permet de chaîner plusieurs abonnements en une seule expression.
+</p>
+
+<pre><span class="var">voh</span>
+    .<span class="fn">on</span>(<span class="str">'zone:created'</span>,  (<span class="var">d</span>) => <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Créée:'</span>,  <span class="var">d</span>.<span class="var">name</span>))
+    .<span class="fn">on</span>(<span class="str">'zone:deleted'</span>,  (<span class="var">d</span>) => <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Supprimée:'</span>, <span class="var">d</span>.<span class="var">name</span>))
+    .<span class="fn">on</span>(<span class="str">'zone:resized'</span>,  (<span class="var">d</span>) => <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Taille:'</span>, <span class="var">d</span>.<span class="var">width</span>, <span class="str">'×'</span>, <span class="var">d</span>.<span class="var">height</span>))
+    .<span class="fn">on</span>(<span class="str">'zone:renamed'</span>,  (<span class="var">d</span>) => <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Renommée:'</span>, <span class="var">d</span>.<span class="var">name</span>));</pre>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Format des noms d'événements</h2>
+
+<p>
+    Tous les événements suivent le format <code>domaine:action</code> avec deux-points comme séparateur.
+    Le domaine indique la catégorie (zone, canvas, object…) et l'action décrit ce qui s'est passé.
+</p>
+
+<table>
+    <tr><th>Domaine</th><th>Description</th><th>Exemples</th></tr>
+    <tr><td><code>zone</code></td><td>Événements liés aux zones</td><td><code><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">created</span></code>, <code>zone:resized</code></td></tr>
+    <tr><td><code>canvas</code></td><td>Événements liés aux canvas (y compris sélection)</td><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">created</span></code>, <code>canvas:selectionStarted</code></td></tr>
+    <tr><td><code>object</code></td><td>Événements liés aux objets</td><td><code><span class="event-domain">object</span><span class="event-sep">:</span><span class="event-action">created</span></code>, <code>object:moved</code></td></tr>
+    <tr><td><code>page</code></td><td>Événements liés aux pages (y compris undo/redo)</td><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">added</span></code>, <code>page:undone</code></td></tr>
+    <tr><td><code>connection</code></td><td>Événements de connexions <em>(à venir)</em></td><td><code><span class="event-domain">connection</span><span class="event-sep">:</span><span class="event-action">created</span></code>, <code>connection:deleted</code></td></tr>
+</table>
+
+<div class="note">
+    <strong>Voir aussi:</strong> La liste complète des événements zone est disponible dans la page
+    <em>Événements zone</em> du menu.</div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Opacité — voh.objects</title>
+</head>
+<body>
+
+<h1>voh.objects — Opacité</h1>
+<p class="intro">Gérer la transparence progressive d'un objet (0.0 à 1.0).</p>
+
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Définir l'opacité</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setOpacity</span><span class="sig-paren">(</span><span class="sig-param">objectId, opacity</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Définit l'opacité de l'objet. La valeur est automatiquement bornée entre <code>0.0</code> (totalement transparent) et <code>1.0</code> (totalement opaque).
+        Contrairement à <code>setVisible()</code> qui est tout ou rien, l'opacité permet une transparence graduelle.
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>opacity</td><td>nombre</td><td>Opacité de 0.0 à 1.0</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setOpacity</span>(<span class="var">objet</span>, <span class="num">0.5</span>);  <span class="cmt">// semi-transparent</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setOpacity</span>(<span class="var">objet</span>, <span class="num">1.0</span>);  <span class="cmt">// opaque</span></pre>
+</div>
+
+<h2>Lire l'opacité</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getOpacity</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre | null</span></div>
+    <div class="method-description">Retourne l'opacité actuelle de l'objet (entre 0.0 et 1.0).</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre | null</span></div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getOpacity</span>(<span class="var">objet</span>));  <span class="cmt">// 1.0</span></pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

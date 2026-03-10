@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Événements zone — VOH Documentation</title>
+</head>
+<body>
+
+<h1>Événements — Zone</h1>
+<p class="intro">Les 12 types d'événements émis par les zones. Chaque modification émet un événement capté par <code>voh.on()</code>.</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Liste des événements</h2>
+
+<table class="param-table">
+    <tr><th>Événement</th><th>Données reçues</th><th>Quand</th></tr>
+    <tr><td><code><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">created</span></code></td><td>zoneId, name</td><td>Une zone est créée</td></tr>
+    <tr><td><code><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">deleted</span></code></td><td>zoneId, name</td><td>Une zone est supprimée</td></tr>
+    <tr><td><code><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">activated</span></code></td><td>zoneId, previousZoneId</td><td>Une zone devient active</td></tr>
+    <tr><td><code><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">resized</span></code></td><td>zoneId, width, height</td><td>La largeur ou hauteur change</td></tr>
+    <tr><td><code><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">renamed</span></code></td><td>zoneId, name</td><td>Le nom change</td></tr>
+    <tr><td><code><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">backgroundChanged</span></code></td><td>zoneId, property, value</td><td>Le fond change (couleur, image, opacité image)</td></tr>
+    <tr><td><code><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">gridChanged</span></code></td><td>zoneId, property, value</td><td>La grille change (taille, couleur, opacité, visibilité)</td></tr>
+    <tr><td><code><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">zoomChanged</span></code></td><td>zoneId, zoom, previousZoom</td><td>Le niveau de zoom change</td></tr>
+    <tr><td><code><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">scrollChanged</span></code></td><td>zoneId, scrollX, scrollY</td><td>La position de scroll change</td></tr>
+    <tr><td><code><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">borderChanged</span></code></td><td>zoneId, property, value</td><td>La bordure change (couleur, épaisseur)</td></tr>
+    <tr><td><code><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">scrollbarVisibleChanged</span></code></td><td>zoneId, visible</td><td>La visibilité des scrollbars change</td></tr>
+    <tr><td><code><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">bringCanvasToFrontOnActivationChanged</span></code></td><td>zoneId, enabled</td><td>L'option de mise au premier plan auto change</td></tr>
+</table>
+
+<div class="note">
+    <strong>22 émissions au total</strong> — chaque appel de setter émet un seul événement.
+    Les événements ne sont émis que si la valeur change réellement (pas de doublon).
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">created</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand une nouvelle zone est créée avec <code>voh.zone.create()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone créée</td></tr>
+        <tr><td>name</td><td>texte</td><td>Le nom de la zone</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:created'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="var">data</span>.<span class="var">zoneId</span>);  <span class="cmt">// 1</span>
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="var">data</span>.<span class="var">name</span>);    <span class="cmt">// "Ma zone"</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">deleted</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand une zone est supprimée avec <code>voh.zone.delete()</code>.
+        Le nom est capturé avant la suppression pour être disponible dans l'événement.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone supprimée</td></tr>
+        <tr><td>name</td><td>texte</td><td>Le nom de la zone (avant suppression)</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:deleted'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Zone supprimée:'</span>, <span class="var">data</span>.<span class="var">name</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">activated</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand on change de zone active avec <code>voh.zone.setActive()</code>.
+        Également émis automatiquement lors de la création de la première zone
+        ou après la suppression de la zone active.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la nouvelle zone active</td></tr>
+        <tr><td>previousZoneId</td><td>nombre ou null</td><td>L'ID de la zone précédemment active. <code>null</code> si c'est la première activation</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:activated'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Active:'</span>, <span class="var">data</span>.<span class="var">zoneId</span>);
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Précédente:'</span>, <span class="var">data</span>.<span class="var">previousZoneId</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">resized</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la taille d'une zone change avec <code>voh.zone.setWidth()</code> ou <code>voh.zone.setHeight()</code>.
+        Les deux dimensions sont toujours fournies dans l'événement.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone redimensionnée</td></tr>
+        <tr><td>width</td><td>nombre ou null</td><td>Largeur en pixels. <code>null</code> = 100%</td></tr>
+        <tr><td>height</td><td>nombre ou null</td><td>Hauteur en pixels. <code>null</code> = 100%</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:resized'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Taille:'</span>, <span class="var">data</span>.<span class="var">width</span>, <span class="str">'×'</span>, <span class="var">data</span>.<span class="var">height</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">renamed</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand le nom d'une zone est modifié avec <code>voh.zone.setName()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone renommée</td></tr>
+        <tr><td>name</td><td>texte</td><td>Le nouveau nom</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:renamed'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Nouveau nom:'</span>, <span class="var">data</span>.<span class="var">name</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">backgroundChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand une propriété du fond change:
+        <code>voh.zone.setBackgroundColor()</code>,
+        <code>voh.zone.setBackgroundImage()</code> ou
+        <code>voh.zone.setBackgroundImageOpacity()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone modifiée</td></tr>
+        <tr><td>property</td><td>texte</td><td>Nom de la propriété modifiée (voir ci-dessous)</td></tr>
+        <tr><td>value</td><td>variable</td><td>La nouvelle valeur</td></tr>
+    </table>
+
+    <h3>Valeurs possibles de property</h3>
+    <table>
+        <tr><th>property</th><th>Déclencheur</th><th>Type de value</th></tr>
+        <tr><td><code>backgroundColor</code></td><td><code>setBackgroundColor()</code></td><td>couleur</td></tr>
+        <tr><td><code>backgroundImage</code></td><td><code>setBackgroundImage()</code></td><td>texte (URL)</td></tr>
+        <tr><td><code>backgroundImageOpacity</code></td><td><code>setBackgroundImageOpacity()</code></td><td>nombre (0.0 → 1.0)</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:backgroundChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="var">data</span>.<span class="var">property</span>, <span class="str">'='</span>, <span class="var">data</span>.<span class="var">value</span>);
+    <span class="cmt">// "backgroundColor" = "rgba(30, 60, 100, 1.0)"</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">gridChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand une propriété de la grille change:
+        <code>setGridWidth()</code>,
+        <code>setGridHeight()</code>,
+        <code>setGridColor()</code>,
+        <code>setGridOpacity()</code> ou
+        <code>setGridVisible()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone modifiée</td></tr>
+        <tr><td>property</td><td>texte</td><td>Nom de la propriété modifiée (voir ci-dessous)</td></tr>
+        <tr><td>value</td><td>variable</td><td>La nouvelle valeur</td></tr>
+    </table>
+
+    <h3>Valeurs possibles de property</h3>
+    <table>
+        <tr><th>property</th><th>Déclencheur</th><th>Type de value</th></tr>
+        <tr><td><code>gridWidth</code></td><td><code>setGridWidth()</code></td><td>nombre (pixels)</td></tr>
+        <tr><td><code>gridHeight</code></td><td><code>setGridHeight()</code></td><td>nombre (pixels)</td></tr>
+        <tr><td><code>gridColor</code></td><td><code>setGridColor()</code></td><td>couleur</td></tr>
+        <tr><td><code>gridOpacity</code></td><td><code>setGridOpacity()</code></td><td>nombre (0.0 → 1.0)</td></tr>
+        <tr><td><code>gridIsVisible</code></td><td><code>setGridVisible()</code></td><td>vrai/faux</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:gridChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="var">data</span>.<span class="var">property</span>, <span class="str">'='</span>, <span class="var">data</span>.<span class="var">value</span>);
+    <span class="cmt">// "gridWidth" = 50</span>
+    <span class="cmt">// "gridIsVisible" = true</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">zoomChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand le niveau de zoom change avec <code>voh.zone.setZoom()</code>.
+        Également déclenché par <code>zoomIn()</code>, <code>zoomOut()</code> et <code>resetZoom()</code>
+        qui appellent <code>setZoom()</code> en interne.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone</td></tr>
+        <tr><td>zoom</td><td>nombre</td><td>Le nouveau niveau de zoom (1.0 = 100%)</td></tr>
+        <tr><td>previousZoom</td><td>nombre</td><td>Le niveau de zoom précédent</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:zoomChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Zoom:'</span>, <span class="var">data</span>.<span class="var">zoom</span>);          <span class="cmt">// 1.5</span>
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Avant:'</span>, <span class="var">data</span>.<span class="var">previousZoom</span>);  <span class="cmt">// 1</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">scrollChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la position de scroll change avec
+        <code>voh.zone.setScrollX()</code>,
+        <code>voh.zone.setScrollY()</code> ou
+        <code>voh.zone.scrollToCenter()</code>.
+        Les deux coordonnées sont toujours fournies.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone</td></tr>
+        <tr><td>scrollX</td><td>nombre</td><td>Position horizontale du scroll en pixels</td></tr>
+        <tr><td>scrollY</td><td>nombre</td><td>Position verticale du scroll en pixels</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:scrollChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Scroll:'</span>, <span class="var">data</span>.<span class="var">scrollX</span>, <span class="var">data</span>.<span class="var">scrollY</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">borderChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand une propriété de la bordure change:
+        <code>voh.zone.setBorderColor()</code> ou
+        <code>voh.zone.setBorderThickness()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone modifiée</td></tr>
+        <tr><td>property</td><td>texte</td><td><code>'borderColor'</code> ou <code>'borderThickness'</code></td></tr>
+        <tr><td>value</td><td>variable</td><td>La nouvelle valeur</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:borderChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="var">data</span>.<span class="var">property</span>, <span class="str">'='</span>, <span class="var">data</span>.<span class="var">value</span>);
+    <span class="cmt">// "borderColor" = "rgba(255, 200, 0, 1.0)"</span>
+    <span class="cmt">// "borderThickness" = 4</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">scrollbarVisibleChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la visibilité des scrollbars change avec <code>voh.zone.setScrollbarVisible()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone modifiée</td></tr>
+        <tr><td>visible</td><td>vrai/faux</td><td><code>true</code> = scrollbars visibles</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:scrollbarVisibleChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Scrollbars:'</span>, <span class="var">data</span>.<span class="var">visible</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">zone</span><span class="event-sep">:</span><span class="event-action">bringCanvasToFrontOnActivationChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand l'option de mise au premier plan automatique change avec
+        <code>voh.zone.setBringCanvasToFrontOnActivation()</code>.<br><br>
+        Quand cette option est activée, activer un canvas dans la zone le place automatiquement
+        devant tous les autres (z-order maximum), comme le comportement des fenêtres de bureau.
+        Quand elle est désactivée (par défaut), activer un canvas ne modifie pas les z-orders.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone modifiée</td></tr>
+        <tr><td>enabled</td><td>vrai/faux</td><td><code>true</code> = mise au premier plan automatique activée</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'zone:bringCanvasToFrontOnActivationChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Auto premier plan:'</span>, <span class="var">data</span>.<span class="var">enabled</span>);
+});</pre>
+</div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

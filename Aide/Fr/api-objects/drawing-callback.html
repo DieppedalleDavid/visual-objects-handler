@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Callback de dessin — voh.objects</title>
+</head>
+<body>
+
+<h1>voh.objects — Callback de dessin</h1>
+<p class="intro">Personnaliser entièrement l'apparence d'un objet avec une procédure de dessin. Équivalent de <em>SetObjectDrawingCallback()</em> dans <a href="../demarrage/presentation.html">Editors Factory</a>.</p>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Le principe</h2>
+
+<p>
+    Par défaut, un objet VOH est un simple rectangle coloré (couleur définie par
+    <code>backgroundColor</code>). Le <strong>callback de dessin</strong> permet de remplacer
+    ce rendu par défaut par votre propre procédure de dessin: vous décidez exactement
+    ce qui est affiché à l'intérieur de l'objet.
+</p>
+
+<p>
+    C'est exactement le même concept que <code>SetObjectDrawingCallback()</code> dans
+    Editors Factory: vous écrivez une procédure de dessin, et VOH l'appelle automatiquement
+    chaque fois que l'objet doit être redessiné (redimensionnement, déplacement, etc.).
+</p>
+
+<div class="note">
+    <strong>Comparaison avec <a href="../demarrage/presentation.html">Editors Factory</a> (PureBasic):</strong><br>
+    Dans EF, vous créiez une procédure séparée (<code>Runtime Procedure MyDrawing(...)</code>)
+    puis vous la liiez à l'objet par son nom en texte (<code>SetObjectDrawingCallback(Object, "MyDrawing")</code>).<br>
+    Dans VOH v2, vous créez une fonction JavaScript et vous la passez directement
+    (pas de nom en texte, pas de <code>Runtime</code>). Le reste fonctionne pareil.
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Les 4 paramètres de la procédure de dessin</h2>
+
+<p>
+    Votre procédure de dessin reçoit toujours 4 paramètres dans cet ordre:
+</p>
+
+<table class="param-table">
+    <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+    <tr><td>context</td><td>CanvasRenderingContext2D</td><td>Le « pinceau » — c'est avec lui que vous dessinez. Toutes les commandes de dessin passent par ce contexte (<code>fillRect</code>, <code>fillText</code>, <code>arc</code>, <code>strokeRect</code>, etc.).</td></tr>
+    <tr><td>width</td><td>nombre</td><td>Largeur actuelle de l'objet en pixels. Cette valeur change si l'objet est redimensionné.</td></tr>
+    <tr><td>height</td><td>nombre</td><td>Hauteur actuelle de l'objet en pixels. Cette valeur change si l'objet est redimensionné.</td></tr>
+    <tr><td>objectId</td><td>nombre</td><td>L'ID unique de l'objet. Utile si vous utilisez la même procédure pour dessiner plusieurs objets différemment.</td></tr>
+</table>
+
+<div class="note">
+    <strong>Espace de dessin:</strong> Votre procédure dessine toujours dans un espace qui va de
+    <code>(0, 0)</code> (coin haut-gauche) à <code>(width, height)</code> (coin bas-droit).
+    Vous n'avez pas à vous soucier de la position de l'objet sur le canevas — VOH gère ça pour vous.
+    C'est comme dans EF: vous dessiniez à partir de (0, 0) dans la zone de l'objet.
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Deux façons d'écrire la procédure</h2>
+
+<p>
+    JavaScript offre deux façons d'écrire votre procédure de dessin. Les deux font exactement
+    la même chose — c'est une question de style.
+</p>
+
+<h3>Style 1 — Procédure séparée (comme dans EF)</h3>
+
+<p>
+    Vous déclarez la fonction en dehors, avec un nom, puis vous la passez à l'objet.
+    C'est la même logique que <code>Runtime Procedure</code> dans EF.
+</p>
+
+<pre><span class="cmt">// 1. Déclarer la procédure de dessin (comme dans EF)</span>
+<span class="kw">function</span> <span class="fn">dessinerBouton</span>(<span class="var">context</span>, <span class="var">width</span>, <span class="var">height</span>, <span class="var">objectId</span>) {
+    <span class="var">context</span>.<span class="var">fillStyle</span> = <span class="str">'#4a90d9'</span>;
+    <span class="var">context</span>.<span class="fn">fillRect</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="var">width</span>, <span class="var">height</span>);
+    <span class="var">context</span>.<span class="var">fillStyle</span> = <span class="str">'white'</span>;
+    <span class="var">context</span>.<span class="var">font</span> = <span class="str">'bold 16px Arial'</span>;
+    <span class="var">context</span>.<span class="var">textAlign</span> = <span class="str">'center'</span>;
+    <span class="var">context</span>.<span class="var">textBaseline</span> = <span class="str">'middle'</span>;
+    <span class="var">context</span>.<span class="fn">fillText</span>(<span class="str">'Mon bouton'</span>, <span class="var">width</span> / <span class="num">2</span>, <span class="var">height</span> / <span class="num">2</span>);
+}
+
+<span class="cmt">// 2. L'attacher à l'objet (par référence, pas par nom en texte)</span>
+<span class="kw">const</span> <span class="var">bouton</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">create</span>(<span class="var">canvas</span>, {
+    <span class="var">drawingCallback</span>: <span class="var">dessinerBouton</span>   <span class="cmt">// ← on passe la fonction directement</span>
+});</pre>
+
+<div class="note">
+    <strong>Avantage:</strong> La même procédure peut être réutilisée pour plusieurs objets.
+    Utilisez le paramètre <code>objectId</code> pour les différencier si nécessaire.
+</div>
+
+<h3>Style 2 — Procédure en ligne (spécifique à JavaScript)</h3>
+
+<p>
+    Vous écrivez la fonction directement dans le paramètre, sans lui donner de nom.
+    C'est plus compact mais la procédure ne peut pas être réutilisée pour un autre objet.
+</p>
+
+<pre><span class="kw">const</span> <span class="var">bouton</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">create</span>(<span class="var">canvas</span>, {
+    <span class="var">drawingCallback</span>: <span class="kw">function</span>(<span class="var">context</span>, <span class="var">width</span>, <span class="var">height</span>, <span class="var">objectId</span>) {
+        <span class="var">context</span>.<span class="var">fillStyle</span> = <span class="str">'#4a90d9'</span>;
+        <span class="var">context</span>.<span class="fn">fillRect</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="var">width</span>, <span class="var">height</span>);
+        <span class="var">context</span>.<span class="var">fillStyle</span> = <span class="str">'white'</span>;
+        <span class="var">context</span>.<span class="var">font</span> = <span class="str">'bold 16px Arial'</span>;
+        <span class="var">context</span>.<span class="var">textAlign</span> = <span class="str">'center'</span>;
+        <span class="var">context</span>.<span class="var">textBaseline</span> = <span class="str">'middle'</span>;
+        <span class="var">context</span>.<span class="fn">fillText</span>(<span class="str">'Mon bouton'</span>, <span class="var">width</span> / <span class="num">2</span>, <span class="var">height</span> / <span class="num">2</span>);
+    }
+});</pre>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Comparaison côte à côte avec <a href="../demarrage/presentation.html" style="color: inherit; text-decoration: underline;">Editors Factory</a></h2>
+
+<table>
+    <tr><th></th><th>EF (PureBasic)</th><th>VOH v2 (JavaScript)</th></tr>
+    <tr>
+        <td><strong>Déclarer la procédure</strong></td>
+        <td><code>Runtime Procedure MyDrawing(Obj, W, H, Data)</code></td>
+        <td><code>function myDrawing(ctx, w, h, id) { }</code></td>
+    </tr>
+    <tr>
+        <td><strong>L'attacher à un objet</strong></td>
+        <td><code>SetObjectDrawingCallback(Obj, "MyDrawing")</code></td>
+        <td><code>voh.objects.setDrawingCallback(obj, myDrawing)</code></td>
+    </tr>
+    <tr>
+        <td><strong>Passage de la procédure</strong></td>
+        <td>Par nom en texte (<code>"MyDrawing"</code>)</td>
+        <td>Par référence directe (<code>myDrawing</code>)</td>
+    </tr>
+    <tr>
+        <td><strong>Coordonnées de dessin</strong></td>
+        <td>À partir de (0, 0) dans l'espace de l'objet</td>
+        <td>Identique: (0, 0) → (width, height)</td>
+    </tr>
+    <tr>
+        <td><strong>Commande « remplir un rectangle »</strong></td>
+        <td><code>Box(0, 0, W, H, RGB(200, 200, 255))</code></td>
+        <td><code>ctx.fillStyle = '#c8c8ff'; ctx.fillRect(0, 0, w, h);</code></td>
+    </tr>
+    <tr>
+        <td><strong>Commande « écrire du texte »</strong></td>
+        <td><code>DrawText(x, y, "Texte", RGB(0, 0, 0))</code></td>
+        <td><code>ctx.fillStyle = '#000'; ctx.fillText('Texte', x, y);</code></td>
+    </tr>
+    <tr>
+        <td><strong>Supprimer le callback</strong></td>
+        <td><code>SetObjectDrawingCallback(Obj, "")</code></td>
+        <td><code>voh.objects.setDrawingCallback(obj, null)</code></td>
+    </tr>
+    <tr>
+        <td><strong>Redessin automatique</strong></td>
+        <td>Oui (resize, déplacement)</td>
+        <td>Identique + <code>redraw()</code> pour les données externes</td>
+    </tr>
+</table>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Utiliser des données externes dans le callback</h2>
+
+<p>
+    Un avantage majeur de VOH v2 par rapport à EF: votre procédure de dessin peut accéder
+    directement aux variables de votre script. Dans EF, vous deviez passer les données
+    via le paramètre <code>iData</code>. Ici, la fonction JavaScript « voit » naturellement
+    les variables qui l'entourent.
+</p>
+
+<pre><span class="kw">let</span> <span class="var">progression</span> = <span class="num">0.65</span>;   <span class="cmt">// 65% — variable externe</span>
+
+<span class="kw">function</span> <span class="fn">dessinerJauge</span>(<span class="var">context</span>, <span class="var">width</span>, <span class="var">height</span>) {
+    <span class="cmt">// Fond gris (barre vide)</span>
+    <span class="var">context</span>.<span class="var">fillStyle</span> = <span class="str">'#e0e0e0'</span>;
+    <span class="var">context</span>.<span class="fn">fillRect</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="var">width</span>, <span class="var">height</span>);
+
+    <span class="cmt">// Barre de progression (verte) — utilise la variable externe</span>
+    <span class="var">context</span>.<span class="var">fillStyle</span> = <span class="str">'#4CAF50'</span>;
+    <span class="var">context</span>.<span class="fn">fillRect</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="var">width</span> * <span class="var">progression</span>, <span class="var">height</span>);
+
+    <span class="cmt">// Texte du pourcentage</span>
+    <span class="var">context</span>.<span class="var">fillStyle</span> = <span class="str">'#333'</span>;
+    <span class="var">context</span>.<span class="var">font</span> = <span class="str">'bold 14px Arial'</span>;
+    <span class="var">context</span>.<span class="var">textAlign</span> = <span class="str">'center'</span>;
+    <span class="var">context</span>.<span class="var">textBaseline</span> = <span class="str">'middle'</span>;
+    <span class="var">context</span>.<span class="fn">fillText</span>(Math.<span class="fn">round</span>(<span class="var">progression</span> * <span class="num">100</span>) + <span class="str">'%'</span>, <span class="var">width</span> / <span class="num">2</span>, <span class="var">height</span> / <span class="num">2</span>);
+}
+
+<span class="kw">const</span> <span class="var">jauge</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">create</span>(<span class="var">canvas</span>, {
+    <span class="var">drawingCallback</span>: <span class="var">dessinerJauge</span>
+});
+
+<span class="cmt">// Plus tard, quand la progression change:</span>
+<span class="var">progression</span> = <span class="num">0.90</span>;
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">redraw</span>(<span class="var">jauge</span>);  <span class="cmt">// ← force le redessin avec la nouvelle valeur</span></pre>
+
+<div class="note">
+    <strong>Important:</strong> Quand une variable externe change, VOH ne le sait pas
+    automatiquement. Vous devez appeler <code>voh.objects.redraw(objectId)</code> pour forcer
+    le redessin. Le callback est rappelé et il lit la nouvelle valeur de la variable.
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Partager une procédure entre plusieurs objets</h2>
+
+<p>
+    Comme dans EF, vous pouvez utiliser la même procédure pour dessiner plusieurs objets.
+    Le paramètre <code>objectId</code> permet de savoir quel objet est en train d'être dessiné
+    et d'adapter le contenu.
+</p>
+
+<pre><span class="kw">function</span> <span class="fn">dessinerEtiquette</span>(<span class="var">context</span>, <span class="var">width</span>, <span class="var">height</span>, <span class="var">objectId</span>) {
+    <span class="var">context</span>.<span class="var">fillStyle</span> = <span class="str">'#f0f0f0'</span>;
+    <span class="var">context</span>.<span class="fn">fillRect</span>(<span class="num">0</span>, <span class="num">0</span>, <span class="var">width</span>, <span class="var">height</span>);
+    <span class="var">context</span>.<span class="var">fillStyle</span> = <span class="str">'#333'</span>;
+    <span class="var">context</span>.<span class="var">font</span> = <span class="str">'12px Arial'</span>;
+    <span class="var">context</span>.<span class="fn">fillText</span>(<span class="str">'Objet #'</span> + <span class="var">objectId</span>, <span class="num">10</span>, <span class="num">20</span>);
+}
+
+<span class="cmt">// La même procédure est utilisée pour 3 objets</span>
+<span class="kw">const</span> <span class="var">obj1</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">create</span>(<span class="var">canvas</span>, { <span class="var">drawingCallback</span>: <span class="var">dessinerEtiquette</span> });
+<span class="kw">const</span> <span class="var">obj2</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">create</span>(<span class="var">canvas</span>, { <span class="var">drawingCallback</span>: <span class="var">dessinerEtiquette</span> });
+<span class="kw">const</span> <span class="var">obj3</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">create</span>(<span class="var">canvas</span>, { <span class="var">drawingCallback</span>: <span class="var">dessinerEtiquette</span> });</pre>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Commandes de dessin courantes</h2>
+
+<p>
+    Voici les commandes Canvas 2D les plus utilisées dans un callback de dessin, avec
+    leur équivalent PureBasic pour les utilisateurs venant d'Editors Factory.
+</p>
+
+<table>
+    <tr><th>Action</th><th>PureBasic (EF)</th><th>JavaScript (VOH v2)</th></tr>
+    <tr>
+        <td>Rectangle plein</td>
+        <td><code>Box(x, y, w, h, couleur)</code></td>
+        <td><code>ctx.fillStyle = couleur; ctx.fillRect(x, y, w, h);</code></td>
+    </tr>
+    <tr>
+        <td>Rectangle vide (bordure)</td>
+        <td><code>—</code></td>
+        <td><code>ctx.strokeStyle = couleur; ctx.strokeRect(x, y, w, h);</code></td>
+    </tr>
+    <tr>
+        <td>Écrire du texte</td>
+        <td><code>DrawText(x, y, "texte", couleur)</code></td>
+        <td><code>ctx.fillStyle = couleur; ctx.font = '14px Arial'; ctx.fillText('texte', x, y);</code></td>
+    </tr>
+    <tr>
+        <td>Cercle plein</td>
+        <td><code>Circle(x, y, r, couleur)</code></td>
+        <td><code>ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = couleur; ctx.fill();</code></td>
+    </tr>
+    <tr>
+        <td>Ligne</td>
+        <td><code>Line(x1, y1, x2, y2, couleur)</code></td>
+        <td><code>ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.strokeStyle = couleur; ctx.stroke();</code></td>
+    </tr>
+    <tr>
+        <td>Changer l'épaisseur</td>
+        <td><code>—</code></td>
+        <td><code>ctx.lineWidth = 2;</code></td>
+    </tr>
+    <tr>
+        <td>Centrer le texte horizontalement</td>
+        <td>Calcul manuel</td>
+        <td><code>ctx.textAlign = 'center';</code></td>
+    </tr>
+    <tr>
+        <td>Centrer le texte verticalement</td>
+        <td>Calcul manuel</td>
+        <td><code>ctx.textBaseline = 'middle';</code></td>
+    </tr>
+</table>
+
+<div class="note">
+    Pour la référence complète des commandes Canvas 2D, consultez la documentation MDN:
+    <a href="https://developer.mozilla.org/fr/docs/Web/API/CanvasRenderingContext2D" target="_blank">
+    CanvasRenderingContext2D — MDN</a>.
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Méthodes API</h2>
+
+<h3>Définir le callback</h3>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setDrawingCallback</span><span class="sig-paren">(</span><span class="sig-param">objectId, callback</span><span class="sig-paren">)</span></div>
+    <div class="method-description">
+        Définit ou remplace la procédure de dessin d'un objet. L'objet est immédiatement
+        redessiné avec le nouveau callback. Passer <code>null</code> pour supprimer le
+        callback et revenir au rendu par défaut (rectangle <code>backgroundColor</code>).
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>callback</td><td>fonction | null</td><td>Procédure de dessin, ou <code>null</code> pour le rendu par défaut</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">boolean</span> — <code>true</code> si l'objet existe, <code>false</code> sinon</div>
+</div>
+
+<h3>Lire le callback</h3>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getDrawingCallback</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Retourne la procédure de dessin actuellement attachée à l'objet, ou <code>null</code> si l'objet utilise le rendu par défaut.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">Function | null</span></div>
+</div>
+
+<h3>Forcer un redessin</h3>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">redraw</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">
+        Force le redessin immédiat de l'objet. Indispensable quand votre callback dépend
+        de données externes (variables, compteurs, état du jeu) qui ont changé.
+        Sans cet appel, l'objet continue d'afficher l'ancien dessin.
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet à redessiner</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">boolean</span> — <code>true</code> si l'objet existe, <code>false</code> sinon</div></div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Quand le callback est-il appelé automatiquement ?</h2>
+
+<table>
+    <tr><th>Situation</th><th>Redessin auto ?</th></tr>
+    <tr><td>L'objet est créé avec un <code>drawingCallback</code></td><td>Oui</td></tr>
+    <tr><td>L'objet est redimensionné (code ou souris)</td><td>Oui</td></tr>
+    <tr><td><code>setDrawingCallback()</code> est appelé</td><td>Oui</td></tr>
+    <tr><td><code>setBackgroundColor()</code> est appelé (et pas de callback)</td><td>Oui</td></tr>
+    <tr><td>Une variable externe change</td><td>Non — appeler <code>redraw()</code></td></tr>
+</table>
+
+
+<div class="note">
+    <strong>Voir aussi:</strong> Les callbacks de dessin du <strong>fantôme de drag</strong>
+    (<code>mouseDragPreviewCallback</code> et <code>mouseDragMultiPreviewCallback</code>)
+    sont documentés dans la page <a href="drag-souris.html">Drag souris</a>.
+    Ces callbacks ont la même signature <code>function(ctx, w, h)</code> mais dessinent
+    le fantôme pendant le déplacement, pas l'objet lui-même.
+</div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

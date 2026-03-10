@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>voh.canvas.pages.dimensions — Dimensions par page</title>
+</head>
+<body>
+
+<h1>voh.canvas.pages.dimensions — Dimensions par page</h1>
+<p class="intro">Chaque page peut avoir ses propres dimensions. Les dimensions sont stockées par page mais le rendu visuel (scroll) sera implémenté dans une prochaine version.</p>
+
+<p class="note">
+    <strong>Règle fondamentale:</strong> sans <code>pageId</code> = page active du canvas.
+    Avec <code>pageId</code> = page ciblée. La Page 1 est créée automatiquement avec chaque canvas.
+    Il doit toujours rester au moins une page.
+</p>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Largeur</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.pages.dimensions</span><span class="sig-sep">.</span><span class="sig-fn">setWidth</span><span class="sig-paren">(</span><span class="sig-param">canvasId, width, pageId?</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit la largeur d'une page en pixels.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>ID du canvas</td></tr>
+        <tr><td>width</td><td>nombre</td><td>La valeur à définir</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>ID de la page (optionnel, défaut: page active)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si canvas/page inexistant.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">pages</span>.<span class="var">dimensions</span>.<span class="fn">setWidth</span>(<span class="var">canvas</span>, <span class="num">1200</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.pages.dimensions</span><span class="sig-sep">.</span><span class="sig-fn">getWidth</span><span class="sig-paren">(</span><span class="sig-param">canvasId, pageId?</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre | null</span></div>
+    <div class="method-description">Retourne la largeur.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>ID du canvas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>ID de la page (optionnel)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">nombre | null</span> — la valeur, ou <code>null</code> si canvas/page inexistant.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">pages</span>.<span class="var">dimensions</span>.<span class="fn">getWidth</span>(<span class="var">canvas</span>));</pre>
+</div>
+
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Hauteur</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.pages.dimensions</span><span class="sig-sep">.</span><span class="sig-fn">setHeight</span><span class="sig-paren">(</span><span class="sig-param">canvasId, height, pageId?</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit la hauteur d'une page en pixels.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>ID du canvas</td></tr>
+        <tr><td>height</td><td>nombre</td><td>La valeur à définir</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>ID de la page (optionnel, défaut: page active)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si canvas/page inexistant.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">pages</span>.<span class="var">dimensions</span>.<span class="fn">setHeight</span>(<span class="var">canvas</span>, <span class="num">900</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.pages.dimensions</span><span class="sig-sep">.</span><span class="sig-fn">getHeight</span><span class="sig-paren">(</span><span class="sig-param">canvasId, pageId?</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre | null</span></div>
+    <div class="method-description">Retourne la hauteur.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>ID du canvas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>ID de la page (optionnel)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">nombre | null</span> — la valeur, ou <code>null</code> si canvas/page inexistant.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">pages</span>.<span class="var">dimensions</span>.<span class="fn">getHeight</span>(<span class="var">canvas</span>));</pre>
+</div>
+
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

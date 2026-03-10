@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles/doc-style.css">
+    <title>Accueil — VOH Documentation</title>
+</head>
+<body>
+
+<h1>Visual Objects Handler — API Core v2</h1>
+<p class="intro">
+    Documentation de référence de l'API publique du moteur VOH.<br>
+    Le Core est 100% autonome — il fonctionne seul dans n'importe quel navigateur.
+</p>
+
+<p>Utilisez la navigation à gauche pour explorer la documentation. Voici un aperçu des sections disponibles :</p>
+
+<div class="welcome-grid">
+    <div class="welcome-card" data-page="demarrage/demarrage-rapide.html">
+        <h3>🚀 Démarrage rapide</h3>
+        <p>Inclure les fichiers, créer une instance, et initialiser le moteur en 3 étapes.</p>
+    </div>
+    <div class="welcome-card" data-page="demarrage/architecture.html">
+        <h3>🏗️ Architecture</h3>
+        <p>Les 7 couches du moteur et l'organisation de l'API en sous-objets.</p>
+    </div>
+    <div class="welcome-card" data-page="demarrage/structure-projet.html">
+        <h3>📁 Structure du projet</h3>
+        <p>L'arborescence des fichiers et le rôle de chaque dossier.</p>
+    </div>
+    <div class="welcome-card" data-page="demarrage/editeur-execution.html">
+        <h3>✏️ Éditeur et exécution</h3>
+        <p>Comment écrire du code et l'exécuter avec l'éditeur intégré et le runner.</p>
+    </div>
+    <div class="welcome-card" data-page="demarrage/utilisation-standalone.html">
+        <h3>🔧 Utilisation standalone</h3>
+        <p>Utiliser VOH dans votre propre page HTML, sans l'éditeur intégré.</p>
+    </div>
+    <div class="welcome-card" data-page="editeur/fonctionnalites.html">
+        <h3>💻 Éditeur de code</h3>
+        <p>Autocomplétion, barre d'info API, thèmes, recherche, minimap et raccourcis clavier.</p>
+    </div>
+    <div class="welcome-card" data-page="api-zone/creation.html">
+        <h3>📦 voh.zone</h3>
+        <p>Créer, configurer et gérer les zones — conteneurs de premier niveau.</p>
+    </div>
+    <div class="welcome-card" data-page="api-canvas/creation.html">
+        <h3>🖼️ voh.canvas</h3>
+        <p>Créer et manipuler les canevas — surfaces de travail dans les zones.</p>
+    </div>
+    <div class="welcome-card" data-page="api-objects/creation.html">
+        <h3>🔷 voh.objects</h3>
+        <p>Créer, déplacer, redimensionner et styliser les objets visuels sur les canevas.</p>
+    </div>
+    <div class="welcome-card" data-page="api-events/abonnements.html">
+        <h3>⚡ Événements</h3>
+        <p>S'abonner aux événements de zones, canevas et objets avec on / once / off.</p>
+    </div>
+    <div class="welcome-card" data-page="reference/constantes.html">
+        <h3>📚 Référence</h3>
+        <p>Constantes du moteur et valeurs par défaut.</p>
+    </div>
+</div>
+
+<div class="note" style="margin-top: 30px;">
+    <strong>Deux lignes obligatoires</strong> au début de chaque script :<br>
+    <code>const voh = new VisualObjectsHandler(document.getElementById('container'));</code> crée le moteur.<br>
+    <code>await voh.init();</code> l'initialise. Sans ça, rien ne fonctionne.
+</div>
+
+<script src="scripts/doc-nav.js"></script>
+</body>
+</html>

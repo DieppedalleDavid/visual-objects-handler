@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Événements page — VOH Documentation</title>
+</head>
+<body>
+
+<h1>Événements — Page</h1>
+<p class="intro">Les 15 types d'événements émis par les pages de canevas. Chaque modification émet un événement capté par <code>voh.on()</code>.</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Liste des événements</h2>
+
+<table class="param-table">
+    <tr><th>Événement</th><th>Données reçues</th><th>Quand</th></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">added</span></code></td><td>canvasId, pageId, name</td><td>Une page est ajoutée</td></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">removed</span></code></td><td>canvasId, pageId, name</td><td>Une page est supprimée</td></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">activated</span></code></td><td>canvasId, pageId, previousPageId</td><td>La page active change</td></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">renamed</span></code></td><td>canvasId, pageId, name, previousName</td><td>Le nom de la page change</td></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">moved</span></code></td><td>canvasId, pageId, index</td><td>L'ordre de la page change</td></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">duplicated</span></code></td><td>canvasId, sourcePageId, newPageId</td><td>Une page est dupliquée</td></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">resized</span></code></td><td>canvasId, pageId, property, value</td><td>Les dimensions changent</td></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">backgroundChanged</span></code></td><td>canvasId, pageId, property, value</td><td>Le fond change</td></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">borderChanged</span></code></td><td>canvasId, pageId, property, value</td><td>La bordure change</td></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">gridChanged</span></code></td><td>canvasId, pageId, property, value</td><td>La grille change</td></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">cursorChanged</span></code></td><td>canvasId, pageId, cursor</td><td>Le curseur change</td></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">selectionStyleChanged</span></code></td><td>canvasId, pageId, property, value</td><td>Le style de sélection change</td></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">undone</span></code></td><td>canvasId, pageId, action</td><td>Une action est annulée</td></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">redone</span></code></td><td>canvasId, pageId, action</td><td>Une action est refaite</td></tr>
+    <tr><td><code><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">historyCleared</span></code></td><td>canvasId, pageId</td><td>L'historique est vidé</td></tr>
+</table>
+
+<div class="note">
+    <strong>Note:</strong> Les événements ne sont émis que si la valeur change réellement (pas de doublon).
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">added</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand une page est ajoutée au canevas avec <code>voh.canvas.pages.add()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>L'ID de la nouvelle page</td></tr>
+        <tr><td>name</td><td>texte</td><td>Le nom de la page</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:added'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Nouvelle page:'</span>, <span class="var">data</span>.<span class="var">pageId</span>, <span class="var">data</span>.<span class="var">name</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">removed</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand une page est supprimée avec <code>voh.canvas.pages.remove()</code>.
+        Le nom est capturé avant la suppression pour être disponible dans l'événement.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>L'ID de la page supprimée</td></tr>
+        <tr><td>name</td><td>texte</td><td>Le nom de la page (avant suppression)</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:removed'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Page supprimée:'</span>, <span class="var">data</span>.<span class="var">name</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">activated</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la page active change avec <code>setActive()</code>, <code>next()</code>, <code>previous()</code> ou <code>goTo()</code>.
+        Également émis automatiquement lors de l'ajout de la première page ou après la suppression de la page active.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>L'ID de la nouvelle page active</td></tr>
+        <tr><td>previousPageId</td><td>nombre ou null</td><td>L'ID de la page précédemment active. <code>null</code> si première activation</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:activated'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Page active:'</span>, <span class="var">data</span>.<span class="var">pageId</span>);
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Précédente:'</span>, <span class="var">data</span>.<span class="var">previousPageId</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">renamed</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand le nom d'une page est modifié avec <code>voh.canvas.pages.setName()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>L'ID de la page</td></tr>
+        <tr><td>name</td><td>texte</td><td>Le nouveau nom</td></tr>
+        <tr><td>previousName</td><td>texte</td><td>L'ancien nom</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:renamed'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="var">data</span>.<span class="var">previousName</span>, <span class="str">'→'</span>, <span class="var">data</span>.<span class="var">name</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">moved</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand l'ordre d'une page change avec <code>moveUp()</code>, <code>moveDown()</code> ou <code>moveTo()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>L'ID de la page déplacée</td></tr>
+        <tr><td>index</td><td>nombre</td><td>Nouvel index (position) dans la liste</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:moved'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Page'</span>, <span class="var">data</span>.<span class="var">pageId</span>, <span class="str">'→ index'</span>, <span class="var">data</span>.<span class="var">index</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">duplicated</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand une page est dupliquée avec <code>voh.canvas.pages.duplicate()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>sourcePageId</td><td>nombre</td><td>L'ID de la page source</td></tr>
+        <tr><td>newPageId</td><td>nombre</td><td>L'ID de la nouvelle page créée</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:duplicated'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Page'</span>, <span class="var">data</span>.<span class="var">sourcePageId</span>, <span class="str">'→ copie'</span>, <span class="var">data</span>.<span class="var">newPageId</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">resized</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand les dimensions d'une page changent avec <code>setWidth()</code> ou <code>setHeight()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>L'ID de la page</td></tr>
+        <tr><td>property</td><td>texte</td><td><code>'width'</code> ou <code>'height'</code></td></tr>
+        <tr><td>value</td><td>nombre</td><td>La nouvelle valeur en pixels</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:resized'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="var">data</span>.<span class="var">property</span>, <span class="str">'='</span>, <span class="var">data</span>.<span class="var">value</span>);
+    <span class="cmt">// "width" = 1024</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">backgroundChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand le fond d'une page change: couleur, image ou opacité de l'image.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>L'ID de la page</td></tr>
+        <tr><td>property</td><td>texte</td><td><code>'color'</code>, <code>'image'</code> ou <code>'imageOpacity'</code></td></tr>
+        <tr><td>value</td><td>variable</td><td>La nouvelle valeur</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:backgroundChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="var">data</span>.<span class="var">property</span>, <span class="str">'='</span>, <span class="var">data</span>.<span class="var">value</span>);
+    <span class="cmt">// "color" = "#1a1a2e"</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">borderChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la bordure d'une page change: couleur, épaisseur, style, arrondi ou visibilité.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>L'ID de la page</td></tr>
+        <tr><td>property</td><td>texte</td><td>La propriété modifiée (ex: <code>'borderColor'</code>, <code>'borderThickness'</code>)</td></tr>
+        <tr><td>value</td><td>variable</td><td>La nouvelle valeur</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:borderChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="var">data</span>.<span class="var">property</span>, <span class="str">'='</span>, <span class="var">data</span>.<span class="var">value</span>);
+    <span class="cmt">// "borderColor" = "rgba(0, 0, 0, 0.5)"</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">gridChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la grille d'une page change: taille de cellule, couleur, opacité, épaisseur, style, visibilité ou snap.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>L'ID de la page</td></tr>
+        <tr><td>property</td><td>texte</td><td>La propriété modifiée (ex: <code>'gridCellWidth'</code>, <code>'gridIsVisible'</code>)</td></tr>
+        <tr><td>value</td><td>variable</td><td>La nouvelle valeur</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:gridChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="var">data</span>.<span class="var">property</span>, <span class="str">'='</span>, <span class="var">data</span>.<span class="var">value</span>);
+    <span class="cmt">// "gridCellWidth" = 50</span>
+    <span class="cmt">// "gridIsVisible" = true</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">cursorChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand le curseur d'une page change avec <code>voh.canvas.pages.cursor.set()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>L'ID de la page</td></tr>
+        <tr><td>cursor</td><td>texte</td><td>Le nouveau curseur CSS (ex: <code>'crosshair'</code>)</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:cursorChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Curseur:'</span>, <span class="var">data</span>.<span class="var">cursor</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">selectionStyleChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand le style de sélection souris d'une page change: activation, bouton, couleurs ou bordure.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>L'ID de la page</td></tr>
+        <tr><td>property</td><td>texte</td><td>La propriété modifiée (ex: <code>'selectionEnabled'</code>, <code>'selectionBorderColor'</code>)</td></tr>
+        <tr><td>value</td><td>variable</td><td>La nouvelle valeur</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:selectionStyleChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="var">data</span>.<span class="var">property</span>, <span class="str">'='</span>, <span class="var">data</span>.<span class="var">value</span>);
+    <span class="cmt">// "selectionEnabled" = true</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">undone</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand une action est annulée sur cette page avec <code>voh.canvas.pages.history.undo()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>L'ID de la page</td></tr>
+        <tr><td>action</td><td>texte</td><td>Description de l'action annulée</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:undone'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Annulé:'</span>, <span class="var">data</span>.<span class="var">action</span>);
+    <span class="cmt">// "Annulé: backgroundColor: #fff → #1a1a2e"</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">redone</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand une action est refaite sur cette page avec <code>voh.canvas.pages.history.redo()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>L'ID de la page</td></tr>
+        <tr><td>action</td><td>texte</td><td>Description de l'action refaite</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:redone'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Refait:'</span>, <span class="var">data</span>.<span class="var">action</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">page</span><span class="event-sep">:</span><span class="event-action">historyCleared</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand l'historique undo/redo d'une page est vidé avec <code>voh.canvas.pages.history.clear()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>L'ID de la page</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'page:historyCleared'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Historique vidé pour page'</span>, <span class="var">data</span>.<span class="var">pageId</span>);
+});</pre>
+</div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

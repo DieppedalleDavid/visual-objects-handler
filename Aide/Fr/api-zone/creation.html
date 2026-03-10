@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Création / Suppression — voh.zone</title>
+</head>
+<body>
+
+<h1>voh.zone — Création / Suppression</h1>
+<p class="intro">Créer de nouvelles zones et les supprimer.</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Créer une zone</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">create</span><span class="sig-paren">(</span><span class="sig-param">options</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre</span></div>
+    <div class="method-description">
+        Crée une nouvelle zone et retourne son <strong>ID</strong> (un nombre unique).
+        Cet ID est ensuite utilisé dans toutes les autres fonctions pour désigner cette zone.
+        Tous les paramètres sont optionnels — si on ne précise rien, la zone utilise les valeurs par défaut.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>name</td><td>texte</td><td>Nom de la zone (pour l'identifier)</td></tr>
+        <tr><td>width</td><td>nombre ou null</td><td>Largeur en pixels. <code>null</code> = prend toute la place</td></tr>
+        <tr><td>height</td><td>nombre ou null</td><td>Hauteur en pixels. <code>null</code> = prend toute la place</td></tr>
+        <tr><td>backgroundColor</td><td>couleur</td><td>Couleur de fond (ex: <code>'rgba(45, 45, 45, 1.0)'</code>)</td></tr>
+        <tr><td>backgroundImage</td><td>texte</td><td>Image de fond (URL ou data:URI)</td></tr>
+        <tr><td>backgroundImageOpacity</td><td>nombre</td><td>Opacité de l'image: <code>0.0</code> = invisible → <code>1.0</code> = opaque</td></tr>
+        <tr><td>borderColor</td><td>couleur</td><td>Couleur de la bordure</td></tr>
+        <tr><td>borderThickness</td><td>nombre</td><td>Épaisseur de la bordure en pixels (<code>0</code> = pas de bordure)</td></tr>
+        <tr><td>gridWidth</td><td>nombre</td><td>Espacement horizontal de la grille en pixels</td></tr>
+        <tr><td>gridHeight</td><td>nombre</td><td>Espacement vertical de la grille en pixels</td></tr>
+        <tr><td>gridColor</td><td>couleur</td><td>Couleur des lignes de la grille</td></tr>
+        <tr><td>gridOpacity</td><td>nombre</td><td>Opacité de la grille: <code>0.0</code> → <code>1.0</code></td></tr>
+        <tr><td>gridIsVisible</td><td>vrai/faux</td><td><code>true</code> = grille affichée, <code>false</code> = masquée</td></tr>
+        <tr><td>scrollbarIsVisible</td><td>vrai/faux</td><td><code>true</code> = scrollbars visibles</td></tr>
+        <tr><td>zoom</td><td>nombre</td><td>Niveau de zoom: <code>1.0</code> = 100%</td></tr>
+    </table>
+
+    <div class="method-return">Retourne: <span class="return-type">nombre</span> — L'ID de la zone créée (nombre ≥ 1). La création réussit toujours.</div>
+
+<pre><span class="cmt">// Zone simple avec fond bleu</span>
+<span class="kw">const</span> <span class="var">zone</span> = <span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">create</span>({
+    <span class="var">name</span>: <span class="str">'Ma zone'</span>,
+    <span class="var">backgroundColor</span>: <span class="str">'rgba(40, 80, 120, 1.0)'</span>
+});
+
+<span class="cmt">// Zone complète avec grille, taille fixe et bordure</span>
+<span class="kw">const</span> <span class="var">zone2</span> = <span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">create</span>({
+    <span class="var">name</span>: <span class="str">'Éditeur principal'</span>,
+    <span class="var">width</span>: <span class="num">2000</span>,
+    <span class="var">height</span>: <span class="num">1500</span>,
+    <span class="var">backgroundColor</span>: <span class="str">'rgba(30, 30, 30, 1.0)'</span>,
+    <span class="var">borderColor</span>: <span class="str">'rgba(255, 0, 0, 1.0)'</span>,
+    <span class="var">borderThickness</span>: <span class="num">2</span>,
+    <span class="var">gridWidth</span>: <span class="num">25</span>,
+    <span class="var">gridHeight</span>: <span class="num">25</span>,
+    <span class="var">gridColor</span>: <span class="str">'rgba(255, 255, 255, 1.0)'</span>,
+    <span class="var">gridOpacity</span>: <span class="num">0.15</span>,
+    <span class="var">gridIsVisible</span>: <span class="kw">true</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Supprimer une zone</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">delete</span><span class="sig-paren">(</span><span class="sig-param">zoneId, options</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Supprime une zone. Si c'était la zone active (celle affichée à l'écran), VOH bascule automatiquement sur une autre zone.
+        Si c'était la dernière, il n'y a plus rien d'affiché.
+        Par défaut, les canvas contenus dans la zone sont aussi supprimés.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone à supprimer</td></tr>
+        <tr><td>options.deleteCanvases</td><td>vrai/faux</td><td><code>true</code> = supprime aussi les canvas de la zone (par défaut: <code>true</code>). <code>false</code> = les canvas restent en mémoire (utile pour migration)</td></tr>
+    </table>
+
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si la zone a été supprimée, <code>false</code> si la zone n'existe pas.</div>
+
+<pre><span class="cmt">// Suppression standard (les canvas sont aussi supprimés)</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">delete</span>(<span class="var">zone</span>);
+
+<span class="cmt">// Garder les canvas en mémoire pour les migrer</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">delete</span>(<span class="var">zone</span>, { <span class="var">deleteCanvases</span>: <span class="kw">false</span> });</pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

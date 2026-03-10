@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Fonctionnalités de l'éditeur — VOH Documentation</title>
+</head>
+<body>
+
+<h1>Fonctionnalités de l'éditeur</h1>
+<p class="intro">Guide complet des outils d'assistance au développement intégrés dans l'éditeur de code.</p>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Autocomplétion API</h2>
+
+<p>
+    L'éditeur propose une autocomplétion intelligente pour toute l'API VOH.
+    Le menu déroulant se déclenche automatiquement quand vous commencez à taper un chemin API.
+</p>
+
+<h3>Comment ça marche</h3>
+
+<p>
+    L'autocomplétion fonctionne sur 3 niveaux, en suivant la hiérarchie de l'API :
+</p>
+
+<div class="method">
+    <div class="method-name">Niveau 1 — Racine</div>
+    <div class="method-description">
+        Tapez <code>v</code>, <code>vo</code> ou <code>voh</code> → le menu propose <code>voh</code>.
+        En validant, un point est ajouté automatiquement et le niveau suivant s'ouvre.
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">Niveau 2 — Sous-modules</div>
+    <div class="method-description">
+        Après <code>voh.</code> → le menu propose <code>init</code>, <code>zone</code>,
+        <code>canvas</code>, <code>objects</code>. Vous pouvez taper pour filtrer
+        (ex: <code>voh.z</code> → filtre sur <code>zone</code>).
+        En validant un sous-module, un point est ajouté et les méthodes s'affichent.
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">Niveau 3 — Méthodes</div>
+    <div class="method-description">
+        Après <code>voh.objects.</code> → le menu propose toutes les méthodes disponibles
+        (<code>create</code>, <code>delete</code>, <code>setName</code>, etc.).
+        Tapez pour filtrer (ex: <code>voh.objects.set</code> → filtre sur les setters).
+    </div>
+</div>
+
+<h3>Validation d'une proposition</h3>
+
+<p>
+    Quand vous validez une méthode (avec <code>Entrée</code>, <code>Tab</code> ou un clic),
+    la signature complète est insérée avec les noms des paramètres :
+</p>
+
+<pre><span class="cmt">// Vous tapez: voh.objects.setN → validez "setName"</span>
+<span class="cmt">// Résultat inséré:</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setName</span>(objectId, name)</pre>
+
+<h3>Templates pour les fonctions create</h3>
+
+<p>
+    Les trois fonctions <code>create</code> (zone, canvas, objects) insèrent un template
+    multi-lignes complet avec tous les paramètres acceptés et leurs valeurs par défaut :
+</p>
+
+<pre><span class="cmt">// Vous validez "create" dans voh.zone → résultat:</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">create</span>({
+    <span class="var">name</span>: <span class="str">'Ma zone'</span>,
+    <span class="var">width</span>: <span class="num">1500</span>, <span class="var">height</span>: <span class="num">1000</span>,
+    <span class="var">backgroundColor</span>: <span class="str">'rgba(40, 40, 50, 1.0)'</span>,
+    <span class="var">backgroundImage</span>: <span class="kw">null</span>,
+    <span class="var">backgroundImageOpacity</span>: <span class="num">1.0</span>,
+    <span class="var">borderColor</span>: <span class="str">'rgba(80, 80, 100, 1.0)'</span>,
+    <span class="var">borderThickness</span>: <span class="num">2</span>,
+    <span class="var">gridWidth</span>: <span class="num">25</span>,
+    <span class="var">gridHeight</span>: <span class="num">25</span>,
+    <span class="var">gridColor</span>: <span class="str">'rgba(255, 255, 255, 0.15)'</span>,
+    <span class="var">gridOpacity</span>: <span class="num">1.0</span>,
+    <span class="var">gridIsVisible</span>: <span class="kw">true</span>,
+    <span class="var">scrollbarIsVisible</span>: <span class="kw">true</span>,
+    <span class="var">zoom</span>: <span class="num">1.0</span>,
+    <span class="var">bringCanvasToFrontOnActivation</span>: <span class="kw">false</span>
+})</pre>
+
+<p>
+    L'indentation du template s'adapte automatiquement à la position du curseur dans le code.
+    Supprimez simplement les paramètres que vous ne souhaitez pas modifier (ils gardent
+    leur valeur par défaut).
+</p>
+
+<h3>Suppression et filtrage en direct</h3>
+
+<p>
+    L'autocomplétion réagit aussi quand vous supprimez des caractères avec
+    <code>Retour arrière</code>. Par exemple, si vous tapez <code>voh.objects.cr</code>
+    puis supprimez le <code>r</code>, la liste se re-filtre sur toutes les méthodes
+    commençant par <code>c</code>.
+</p>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Barre d'information API</h2>
+
+<p>
+    Une barre d'information fixe est positionnée entre l'éditeur et la barre de statut.
+    Elle s'affiche automatiquement quand le curseur texte est positionné sur un nom de
+    fonction API.
+</p>
+
+<div class="method">
+    <div class="method-name">Contenu affiché</div>
+    <div class="method-description">
+        <strong>Ligne 1 :</strong> icône <code>ƒ</code>, signature complète de la fonction
+        (ex: <code>voh.objects.setName(objectId, name)</code>), type de retour à droite
+        (ex: <code>→ boolean</code>), et un bouton <code>?</code> pour ouvrir la documentation.<br><br>
+        <strong>Ligne 2 :</strong> description de la fonction, suivie des paramètres avec leur
+        nom (en orange) et leur description (en gris), séparés par des points médians.
+    </div>
+</div>
+
+<h3>Lien vers la documentation</h3>
+
+<p>
+    Le bouton <code>?</code> à droite de la barre d'info ouvre la page de documentation
+    correspondante dans un nouvel onglet. Le raccourci <code>F1</code> fait la même chose.
+    La sidebar de l'aide se synchronise automatiquement sur la bonne page.
+</p>
+
+<div class="note">
+    La barre d'info est basée sur le curseur texte, pas sur la souris. Placez simplement
+    le curseur sur n'importe quel mot d'un chemin API (par exemple sur <code>create</code>
+    dans <code>voh.zone.create</code>) pour voir les informations s'afficher instantanément.
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Rechercher et remplacer</h2>
+
+<p>
+    Le panneau de recherche s'ouvre avec <code>Ctrl+F</code> (recherche seule) ou
+    <code>Ctrl+H</code> (recherche et remplacement).
+</p>
+
+<div class="method">
+    <div class="method-name">Options de recherche</div>
+    <div class="method-description">
+        <strong>Respecter la casse :</strong> distingue les majuscules et minuscules.<br><br>
+        <strong>Mot entier seulement :</strong> ne trouve que les mots complets
+        (ex: chercher <code>name</code> ne trouvera pas <code>setName</code>).<br><br>
+        <strong>Expression régulière :</strong> permet d'utiliser des expressions régulières
+        JavaScript dans le champ de recherche (ex: <code>\d+</code> pour trouver les nombres).
+    </div>
+</div>
+
+<p>
+    Le compteur d'occurrences s'affiche en temps réel à côté du champ de recherche
+    (ex: <code>3 / 12</code> = 3ème occurrence sur 12 trouvées). Le remplacement peut
+    se faire occurrence par occurrence ou en une seule fois avec <strong>Tout remplacer</strong>.
+</p>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Thèmes de coloration syntaxique</h2>
+
+<p>
+    L'éditeur propose 31 thèmes de coloration syntaxique, plus un thème entièrement personnalisable.
+    Le choix se fait dans <strong>Options → Préférences → Thème</strong>.
+</p>
+
+<h3>Thèmes clairs (12)</h3>
+<p>
+    Neo (par défaut), Eclipse, Elegant, Neat, IDEA, XQ Light, Duotone Light,
+    MDN Like, Paraiso Light, Yeti, Juejin, 3024 Day.
+</p>
+
+<h3>Thèmes sombres (19)</h3>
+<p>
+    Monokai, Dracula, Material, Material Darker, Material Ocean, Material Palenight,
+    Cobalt, Nord, Solarized, Ayu Dark, Ayu Mirage, Oceanic Next, Gruvbox Dark,
+    Tomorrow Night, Blackboard, MBO, Seti, Zenburn, 3024 Night.
+</p>
+
+<h3>Thème personnalisé</h3>
+<p>
+    En sélectionnant <strong>✎ Personnalisé...</strong>, une fenêtre s'ouvre avec 14 couleurs
+    ajustables : fond, texte, curseur, sélection, numéros de ligne, mots-clés, chaînes,
+    nombres, commentaires, fonctions, variables, opérateurs, propriétés et balises.
+    Le résultat est visible en temps réel dans l'éditeur.
+</p>
+
+<div class="note">
+    Le thème choisi est sauvegardé automatiquement dans le navigateur et restauré
+    à chaque ouverture de l'éditeur.
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Minimap</h2>
+
+<p>
+    La minimap est un aperçu réduit du code affiché à droite de l'éditeur.
+    Elle permet de visualiser la structure globale du fichier et de naviguer rapidement
+    en cliquant sur la zone souhaitée.
+</p>
+
+<p>
+    La largeur de la minimap est ajustable en glissant le bord gauche avec la souris.
+    La position de la zone visible est indiquée par un rectangle semi-transparent qui suit
+    le défilement de l'éditeur.
+</p>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Taille de police</h2>
+
+<p>
+    La taille de police est ajustable de 11px à 16px dans
+    <strong>Options → Préférences → Taille de police</strong>.
+    La valeur par défaut est 13px. Le choix est sauvegardé automatiquement.
+</p>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Support des langages</h2>
+
+<p>
+    L'éditeur supporte deux langages, sélectionnables dans le menu déroulant en haut à gauche :
+</p>
+
+<div class="method">
+    <div class="method-name">JavaScript (par défaut)</div>
+    <div class="method-description">
+        Le code est exécuté directement. L'autocomplétion et la barre d'info API
+        sont disponibles.
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">TypeScript</div>
+    <div class="method-description">
+        Le compilateur TypeScript est intégré dans le projet
+        (<code>Libraries/TypeScript/TypeScript.js</code>). Le code TypeScript est
+        automatiquement compilé en JavaScript avant l'exécution, sans aucune
+        installation supplémentaire. L'autocomplétion et la barre d'info API
+        fonctionnent de la même manière.
+    </div>
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Menu contextuel</h2>
+
+<p>
+    Un clic droit dans l'éditeur ouvre un menu contextuel avec les actions suivantes :
+</p>
+
+<table>
+    <tr><th>Action</th><th>Raccourci équivalent</th></tr>
+    <tr><td>Annuler</td><td><code>Ctrl+Z</code></td></tr>
+    <tr><td>Couper</td><td><code>Ctrl+X</code></td></tr>
+    <tr><td>Copier</td><td><code>Ctrl+C</code></td></tr>
+    <tr><td>Coller</td><td><code>Ctrl+V</code></td></tr>
+    <tr><td>Tout sélectionner</td><td><code>Ctrl+A</code></td></tr>
+    <tr><td>Rechercher</td><td><code>Ctrl+F</code></td></tr>
+    <tr><td>Remplacer</td><td><code>Ctrl+H</code></td></tr>
+    <tr><td>Reformater le code</td><td><code>Ctrl+Shift+F</code></td></tr>
+</table>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

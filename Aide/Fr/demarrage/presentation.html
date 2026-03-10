@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Présentation — VOH Documentation</title>
+</head>
+<body>
+
+<h1>Présentation</h1>
+<p class="intro">Visual Objects Handler (VOH) — un moteur graphique JavaScript pour créer des éditeurs visuels interactifs.</p>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Qu'est-ce que VOH ?</h2>
+
+<p>
+    <strong>Visual Objects Handler</strong> (VOH) est un moteur graphique JavaScript qui permet de créer
+    des éditeurs visuels interactifs dans le navigateur. Il gère des objets sur un canevas: les positionner,
+    les redimensionner, les sélectionner, les déplacer à la souris, organiser des pages, gérer un historique
+    undo/redo, et bien plus.
+</p>
+<p>
+    VOH est conçu pour servir de fondation à des applications comme des éditeurs de diagrammes,
+    des constructeurs d'interfaces, des éditeurs de niveaux de jeu, ou tout outil nécessitant
+    de manipuler des éléments visuels sur une surface de travail.
+</p>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>L'histoire du projet</h2>
+
+<h3>Editors Factory (PureBasic)</h3>
+
+<p>
+    Tout a commencé avec <strong>Editors Factory</strong> (EF), un projet initié par
+    <strong>David Dieppedalle</strong> (ShadowStorm) et codé en <strong>PureBasic</strong> par
+    <strong>STARGÅTE</strong> (Martin Guttmann), développeur allemand reconnu dans la communauté PureBasic.
+    David apportait la vision, les spécifications et la documentation. STARGÅTE codait le moteur.
+    Editors Factory était un module permettant de créer des éditeurs visuels sous Windows,
+    avec des objets manipulables sur un canevas (déplacement, redimensionnement, poignées de base,
+    callbacks de dessin personnalisables).
+</p>
+<p>
+    Malgré un accueil sceptique sur le forum PureBasic
+    (on lui avait prédit « 0,2% de chances de voir le jour »),
+    la première version publique est sortie en janvier 2021.
+    Mais plusieurs obstacles se sont accumulés:
+    PureBasic est une niche dans une niche — la communauté est petite, l'audience potentielle minuscule.
+    La rotation d'objets était déclarée « impossible » par STARGÅTE sans refonte complète.
+    La licence CC BY-NC 4.0 bloquait l'usage professionnel.
+    David dépendait entièrement de STARGÅTE — qui a fini par déclarer
+    n'avoir « ni le temps ni l'envie » de continuer.
+    La tentative de créer une DLL avait échoué, forçant la distribution en code source (.pbi).
+
+    Après de longues discussions avec STARGÅTE sur la licence à adopter, David a pris la décision
+    de donner gracieusement l'intégralité du projet à la communauté PureBasic en open source,
+    sous licence CC BY-NC 4.0 (usage non-commercial).
+    Son choix était clair: il était totalement contre le fait que quelqu'un puisse gagner de l'argent
+    à ses dépens. Mais cette décision a provoqué des critiques et des tensions dans la communauté —
+    des membres reprochaient à David de bloquer l'adoption professionnelle avec cette restriction.
+    Malgré les pressions, David n'a pas cédé.
+</p>
+
+<h3>L'impasse, le choix du web et l'arrivée de Claude</h3>
+
+<p>
+    David s'est retrouvé coincé: il avait la vision et le concept, mais pas de codeur.
+    Personne ne voulait reprendre le développement, et engager un développeur professionnel
+    était hors budget. Le projet était dans une impasse.
+</p>
+<p>
+    L'idée de passer au web a germé progressivement. David a d'abord envisagé d'utiliser
+    le WebViewGadget de PureBasic (un navigateur Chromium embarqué dans une fenêtre PureBasic),
+    mais les tests étaient frustrants — crashs, limitations non documentées.
+</p>
+<p>
+    Fin 2025, David découvre <strong>Claude</strong> (Anthropic) et réalise qu'avec un assistant IA,
+    il peut faire ce que personne ne voulait faire pour lui. Mais quel langage utiliser ?
+    David ne code pas — il fallait trouver le langage avec lequel Claude saurait le mieux coder.
+    Après discussion, Python a été envisagé, mais Claude a recommandé <strong>JavaScript</strong>
+    pour plusieurs raisons: c'est le langage natif du navigateur (zéro couche intermédiaire),
+    le Canvas 2D HTML5 supporte nativement les transformations matricielles
+    (ce qui rend enfin la rotation possible — celle-là même déclarée « impossible » en PureBasic),
+    JavaScript tourne sur tous les systèmes d'exploitation,
+    l'écosystème est immense comparé à la petite communauté PureBasic,
+    Python aurait nécessité Pyodide (~20 Mo) comme couche supplémentaire dans le navigateur,
+    et des frameworks comme Neutralinojs ou Tauri permettent de transformer une application
+    web en exécutable desktop.
+</p>
+<p>
+    Pour vérifier que ça pouvait marcher, David a demandé à <strong>Claude Sonnet</strong> de créer
+    un prototype. Celui-ci allait bien au-delà de simples objets qui bougent: personnalisation
+    des objets, déplacement, redimensionnement, rotation, sélection multiple, et opérations
+    multiples (déplacement, redimensionnement et rotation de plusieurs objets en même temps).
+    La preuve de concept a fonctionné — tout tournait dans le navigateur. Convaincu, David est ensuite reparti
+    de zéro avec <strong>Claude Opus</strong> (le modèle le plus avancé) pour construire le vrai projet.
+    Le modèle de collaboration est le même qu'avec STARGÅTE: David est le cerveau,
+    celui qui donne les directives. Claude est le développeur technique.
+    La différence: David a le contrôle total, pas de dépendance vis-à-vis d'un tiers,
+    et un rythme de travail intensif.
+</p>
+
+<h3>VOH v1 — Le portage web</h3>
+
+<p>
+    La <strong>v1</strong> est le portage d'Editors Factory en JavaScript, développé par David
+    en collaboration avec <strong>Claude</strong> (Anthropic). C'est la première version
+    web du moteur, qui a considérablement étendu les fonctionnalités par rapport à l'original PureBasic.
+    En plus de 100 000 lignes de code et 290 méthodes API, la v1 a ajouté de nombreuses capacités
+    absentes d'Editors Factory: rotation avec pivot (celle-là même que STARGÅTE avait déclarée « impossible »),
+    11 types de poignées, système de connexions entre objets, multi-pages, dégradés, labels BBCode,
+    tooltips enrichis, sérialisation JSON, format projet ZIP (.voh), et bien plus.
+</p>
+
+<h3>VOH v2 — La refonte complète</h3>
+
+<p>
+    La v1 est impressionnante — mais David voit plus loin et voit les problèmes.
+    Après des dizaines de sessions de développement — parfois très difficiles, car travailler
+    avec une IA ne veut pas dire que c'est facile: Claude fait parfois des erreurs,
+    produit du code bancal, et David ne peut pas vérifier le code lui-même puisqu'il ne
+    code pas en JavaScript. Chaque livraison doit être testée manuellement, chaque bug
+    traqué à l'usage. C'est un travail de direction et de contrôle qualité permanent.
+</p>
+<p>
+    Malgré tout, les limitations structurelles de la v1 deviennent évidentes:
+    le rendu est uniquement statique (pas de GIF animés, pas de vidéo, pas d'animations fluides),
+    les comportements sont codés en dur (impossible de personnaliser les réactions aux clics ou au drag
+    sans modifier le code source), l'API a grandi de manière organique avec des
+    incohérences de nommage, et certains fichiers dépassent les 14 000 lignes.
+    David le dit lui-même: « Y'a des tonnes de trucs à revoir ! »
+</p>
+<p>
+    La v1 est devenue un cahier des charges vivant — la preuve que le concept fonctionne.
+    Mais pour en faire un produit professionnel, extensible et vendable, il fallait reprendre les fondations.
+    Ce n'est pas repartir de zéro: les algorithmes, les concepts et la logique métier sont conservés.
+    C'est l'architecture qui est repensée de A à Z. Et cette fois, David contrôle l'API dès le départ:
+    la v2 adopte une approche <strong>API-first</strong> — on construit et on teste le moteur
+    module par module via des scripts avant de créer l'éditeur visuel. David définit chaque
+    nom de fonction, chaque paramètre, chaque comportement. L'API n'est plus quelque chose
+    qui grandit de manière organique — c'est une conception dirigée.
+</p>
+<p>
+    La <strong>v2</strong> (version actuelle) est donc cette refonte complète,
+    avec une approche <strong>web-first</strong> qui tire parti des technologies web modernes:
+</p>
+
+<div class="method">
+    <div class="method-name">Pixi.js (rendu GPU)</div>
+    <div class="method-description">
+        Le rendu utilise <strong>Pixi.js</strong>, un moteur 2D accéléré par le GPU via WebGL.
+        Là où la v1 utilisait le DOM et des canvas 2D classiques, la v2 dessine à 60 FPS
+        même avec des milliers d'objets.
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">API repensée</div>
+    <div class="method-description">
+        L'API est organisée en sous-objets (<code>voh.zone</code>, <code>voh.canvas</code>,
+        <code>voh.objects</code>, etc.) avec des getters/setters qui déclenchent automatiquement
+        le rendu, l'historique et les événements. Plus besoin d'appeler manuellement des fonctions
+        de rafraîchissement — le moteur gère tout.
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">Multi-plateforme</div>
+    <div class="method-description">
+        VOH tourne sur Windows, macOS, Linux, et même sur tablette — partout où il y a un navigateur.
+        Un wrapper desktop (Electron, Tauri ou autre) pourra être ajouté plus tard pour
+        l'accès au système de fichiers et la compilation en application standalone.
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">Core open source</div>
+    <div class="method-description">
+        Le Core est autonome et fonctionnera seul, sans éditeur, sans wrapper desktop.
+        L'Éditeur (futur) ajoutera l'interface utilisateur
+        (panneaux de propriétés, treeview, modales) par-dessus le Core.
+    </div>
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Chronologie</h2>
+
+<table>
+    <tr><th>Version</th><th>Technologie</th><th>Description</th></tr>
+    <tr><td>Editors Factory</td><td>PureBasic (Windows)</td><td>Le projet original par David Dieppedalle et STARGÅTE (Martin Guttmann)</td></tr>
+    <tr><td>VOH v1</td><td>JavaScript (DOM + Canvas 2D)</td><td>Portage web par David en collaboration avec Claude (Anthropic) + extensions majeures</td></tr>
+    <tr><td>VOH v2</td><td>JavaScript (Pixi.js / WebGL)</td><td>Refonte complète par David en collaboration avec Claude — architecture web-first, rendu GPU</td></tr>
+</table>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>Pour les utilisateurs d'Editors Factory</h2>
+
+<p>
+    Si vous venez d'Editors Factory (PureBasic), voici les principales différences avec VOH v2:
+</p>
+
+<table>
+    <tr><th>Concept</th><th>Editors Factory (PureBasic)</th><th>VOH v2 (JavaScript)</th></tr>
+    <tr><td>Langage</td><td>PureBasic</td><td>JavaScript (ou TypeScript)</td></tr>
+    <tr><td>Rendu</td><td>GDI+ (CPU)</td><td>Pixi.js / WebGL (GPU)</td></tr>
+    <tr><td>Plateforme</td><td>Windows uniquement</td><td>Tout navigateur moderne</td></tr>
+    <tr><td>API</td><td>Fonctions globales (<code>SetObjectX(id, x)</code>)</td><td>Sous-objets (<code>voh.objects.setX(id, x)</code>)</td></tr>
+    <tr><td>Callback dessin</td><td><code>Runtime Procedure</code></td><td><code>function(ctx, w, h)</code></td></tr>
+    <tr><td>Rendu</td><td>Appeler <code>RedrawObject()</code></td><td>Automatique (chaque setter déclenche le rendu)</td></tr>
+</table>
+
+<div class="note">
+    La page <a href="../api-objects/drawing-callback.html">Callback de dessin</a> contient un tableau
+    de correspondance détaillé entre les fonctions de dessin PureBasic et leurs équivalents JavaScript.
+</div>
+
+
+<!-- ════════════════════════════════════════ -->
+<h2>État actuel (v2)</h2>
+
+<p>
+    VOH v2 est en développement actif. La phase actuelle est <strong>API-first</strong>:
+    on construit et teste le Core module par module via des scripts dans l'éditeur de code intégré,
+    avant de créer l'éditeur visuel complet.
+</p>
+<p>
+    Les modules implémentés:
+    zones, canevas, multi-pages, historique undo/redo, grille/snap,
+    objets, interaction souris (hit-test, drag, curseurs),
+    sélection d'objets, déplacement multiple, diagnostic.
+</p>
+<p>
+    Les modules à venir:
+    connexions entre objets, poignées de redimensionnement/rotation,
+    labels, tooltips, groupes, export/import, et l'éditeur visuel complet.
+</p>
+
+<div class="note">
+    <strong>L'histoire complète</strong> du projet (des origines à aujourd'hui, avec tous les détails)
+    est disponible sur <a href="https://voh-histoire.netlify.app/" target="_blank">voh-histoire.netlify.app</a>.
+</div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

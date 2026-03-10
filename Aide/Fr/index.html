@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VOH v2 — Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            display: flex; height: 100vh; overflow: hidden;
+            background-color: #ffffff;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           SIDEBAR — Navigation avec arborescence
+           ═══════════════════════════════════════════════════════════ */
+        .sidebar {
+            width: 280px;
+            background-color: #f5f5f5;
+            border-right: 1px solid #d0d0d0;
+            overflow-y: auto;
+            flex-shrink: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        /* ── En-tête sidebar ── */
+        .sidebar-header {
+            padding: 16px 16px 12px;
+            border-bottom: 1px solid #d0d0d0;
+            margin-bottom: 8px;
+        }
+        .sidebar-logo {
+            font-size: 18px; font-weight: 700; color: #1d75b3;
+        }
+        .sidebar-logo span {
+            color: #75787b; font-weight: 400; font-size: 13px;
+        }
+        .sidebar-version {
+            font-size: 11px; color: #75787b; margin-top: 3px;
+        }
+
+        /* ── Dossier (catégorie repliable) ── */
+        .tree-folder {
+            cursor: pointer;
+            padding: 5px 12px;
+            display: flex; align-items: center; gap: 6px;
+            font-size: 13px; font-weight: 600;
+            color: #2e383c;
+            transition: background-color 0.15s;
+        }
+        .tree-folder:hover {
+            background-color: #eaeaea;
+        }
+        .tree-folder-icon {
+            font-size: 15px;
+            width: 20px; text-align: center;
+            flex-shrink: 0;
+        }
+
+        /* ── Contenu d'un dossier ── */
+        .tree-children {
+            overflow: hidden;
+            transition: max-height 0.25s ease;
+        }
+        .tree-children.tree-children-hidden {
+            max-height: 0 !important;
+        }
+
+        /* ── Sous-dossier (indentation niveau 2) ── */
+        .tree-children .tree-folder {
+            padding-left: 28px;
+            font-weight: 500;
+        }
+        .tree-children .tree-children .tree-folder {
+            padding-left: 44px;
+        }
+
+        /* ── Page (lien cliquable) ── */
+        .tree-page {
+            display: flex; align-items: center; gap: 6px;
+            padding: 4px 12px 4px 28px;
+            font-size: 12px; color: #2e383c;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.15s;
+            border-left: 2px solid transparent;
+        }
+        .tree-page:hover {
+            background-color: #eaeaea;
+            color: #1d75b3;
+            border-left-color: #1d75b3;
+        }
+        .tree-page.tree-page-active {
+            background-color: #e0eef7;
+            color: #1d75b3;
+            border-left-color: #1d75b3;
+            font-weight: 600;
+        }
+        .tree-page-icon {
+            font-size: 13px;
+            width: 20px; text-align: center;
+            flex-shrink: 0;
+        }
+
+        /* ── Indentation pages dans sous-dossier ── */
+        .tree-children .tree-page {
+            padding-left: 28px;
+        }
+        .tree-children .tree-children .tree-page {
+            padding-left: 44px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           CONTENU — iframe
+           ═══════════════════════════════════════════════════════════ */
+        .content-frame {
+            flex: 1;
+            border: none;
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<nav class="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-logo">VOH <span>Documentation</span></div>
+        <div class="sidebar-version">Core API — v2.26.00</div>
+    </div>
+
+    <!-- ── Accueil ── -->
+    <a class="tree-page tree-page-active" data-page="accueil.html" onclick="_navigateTo(this)">
+        <span class="tree-page-icon">🏠</span> Accueil
+    </a>
+
+    <!-- ── Démarrage ── -->
+    <div class="tree-folder" onclick="_toggleFolder(this)">
+        <span class="tree-folder-icon">📂</span> Démarrage
+    </div>
+    <div class="tree-children">
+        <a class="tree-page" data-page="demarrage/presentation.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Présentation
+        </a>
+        <a class="tree-page" data-page="demarrage/demarrage-rapide.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Démarrage rapide
+        </a>
+        <a class="tree-page" data-page="demarrage/architecture.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Architecture
+        </a>
+        <a class="tree-page" data-page="demarrage/structure-projet.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Structure du projet
+        </a>
+        <a class="tree-page" data-page="demarrage/editeur-execution.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Éditeur et exécution
+        </a>
+        <a class="tree-page" data-page="demarrage/utilisation-standalone.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Utilisation standalone
+        </a>
+    </div>
+
+    <!-- ── Éditeur de code ── -->
+    <div class="tree-folder" onclick="_toggleFolder(this)">
+        <span class="tree-folder-icon">📂</span> Éditeur de code
+    </div>
+    <div class="tree-children">
+        <a class="tree-page" data-page="editeur/fonctionnalites.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Fonctionnalités
+        </a>
+        <a class="tree-page" data-page="editeur/raccourcis.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Raccourcis clavier
+        </a>
+    </div>
+
+    <!-- ── voh.zone ── -->
+    <div class="tree-folder" onclick="_toggleFolder(this)">
+        <span class="tree-folder-icon">📂</span> voh.zone
+    </div>
+    <div class="tree-children">
+        <a class="tree-page" data-page="api-zone/creation.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Création / Suppression
+        </a>
+        <a class="tree-page" data-page="api-zone/zone-active.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Zone active
+        </a>
+        <a class="tree-page" data-page="api-zone/informations.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Informations
+        </a>
+        <a class="tree-page" data-page="api-zone/dimensions.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Dimensions
+        </a>
+        <a class="tree-page" data-page="api-zone/nom.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Nom
+        </a>
+        <a class="tree-page" data-page="api-zone/fond.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Fond
+        </a>
+        <a class="tree-page" data-page="api-zone/grille.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Grille
+        </a>
+        <a class="tree-page" data-page="api-zone/viewport.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Viewport (Scroll)
+        </a>
+        <a class="tree-page" data-page="api-zone/zoom.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Zoom
+        </a>
+        <a class="tree-page" data-page="api-zone/bordure.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Bordure
+        </a>
+    </div>
+
+    <!-- ── voh.canvas ── -->
+    <div class="tree-folder" onclick="_toggleFolder(this)">
+        <span class="tree-folder-icon">📂</span> voh.canvas
+    </div>
+    <div class="tree-children">
+        <a class="tree-page" data-page="api-canvas/creation.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Création / Suppression
+        </a>
+        <a class="tree-page" data-page="api-canvas/canvas-actif.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Canvas actif
+        </a>
+        <a class="tree-page" data-page="api-canvas/informations.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Informations
+        </a>
+        <a class="tree-page" data-page="api-canvas/nom.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Nom
+        </a>
+        <a class="tree-page" data-page="api-canvas/position.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Position
+        </a>
+        <a class="tree-page" data-page="api-canvas/dimensions.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Dimensions
+        </a>
+        <a class="tree-page" data-page="api-canvas/z-order.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Z-order
+        </a>
+        <a class="tree-page" data-page="api-canvas/verrouillage.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Verrouillage
+        </a>
+        <a class="tree-page" data-page="api-canvas/visibilite.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Visibilité
+        </a>
+        <a class="tree-page" data-page="api-canvas/opacite.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Opacité
+        </a>
+        <a class="tree-page" data-page="api-canvas/fond-rendu.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Fond et rendu
+        </a>
+        <a class="tree-page" data-page="api-canvas/selection.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Sélection
+        </a>
+        <a class="tree-page" data-page="api-canvas/historique.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Historique (Undo/Redo)
+        </a>
+    </div>
+
+    <!-- ── voh.canvas.pages ── -->
+    <div class="tree-folder" onclick="_toggleFolder(this)">
+        <span class="tree-folder-icon">📂</span> voh.canvas.pages
+    </div>
+    <div class="tree-children">
+        <a class="tree-page" data-page="api-canvas/pages.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Gestion des pages
+        </a>
+        <a class="tree-page" data-page="api-canvas/pages-dimensions.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Dimensions
+        </a>
+        <a class="tree-page" data-page="api-canvas/pages-fond.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Fond
+        </a>
+        <a class="tree-page" data-page="api-canvas/pages-bordure.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Bordure
+        </a>
+        <a class="tree-page" data-page="api-canvas/pages-grille.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Grille / Snap
+        </a>
+        <a class="tree-page" data-page="api-canvas/pages-selection.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Sélection souris
+        </a>
+        <a class="tree-page" data-page="api-canvas/pages-curseur.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Curseur
+        </a>
+        <a class="tree-page" data-page="api-canvas/pages-historique.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Historique (Undo/Redo)
+        </a>
+    </div>
+
+    <!-- ── voh.objects ── -->
+    <div class="tree-folder" onclick="_toggleFolder(this)">
+        <span class="tree-folder-icon">📂</span> voh.objects
+    </div>
+    <div class="tree-children">
+        <a class="tree-page" data-page="api-objects/creation.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Création / Suppression
+        </a>
+        <a class="tree-page" data-page="api-objects/informations.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Informations
+        </a>
+        <a class="tree-page" data-page="api-objects/nom.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Nom
+        </a>
+        <a class="tree-page" data-page="api-objects/position.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Position
+        </a>
+        <a class="tree-page" data-page="api-objects/dimensions.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Dimensions
+        </a>
+        <a class="tree-page" data-page="api-objects/z-order.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Z-order
+        </a>
+        <a class="tree-page" data-page="api-objects/verrouillage.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Verrouillage
+        </a>
+        <a class="tree-page" data-page="api-objects/visibilite.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Visibilité
+        </a>
+        <a class="tree-page" data-page="api-objects/opacite.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Opacité
+        </a>
+        <a class="tree-page" data-page="api-objects/couleur-fond.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Couleur de fond
+        </a>
+        <a class="tree-page" data-page="api-objects/drawing-callback.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Callback de dessin
+        </a>
+        <a class="tree-page" data-page="api-objects/curseur.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Curseur et hit-test
+        </a>
+        <a class="tree-page" data-page="api-objects/drag-souris.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Drag souris
+        </a>
+        <a class="tree-page" data-page="api-objects/selection.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Sélection d'objets
+        </a>
+    </div>
+
+    <!-- ── voh.history ── -->
+    <div class="tree-folder" onclick="_toggleFolder(this)">
+        <span class="tree-folder-icon">📂</span> voh.history
+    </div>
+    <div class="tree-children">
+        <a class="tree-page" data-page="api-history/a-venir.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> À venir
+        </a>
+    </div>
+
+    <!-- ── voh.grid ── -->
+    <div class="tree-folder" onclick="_toggleFolder(this)">
+        <span class="tree-folder-icon">📂</span> voh.grid
+    </div>
+    <div class="tree-children">
+        <a class="tree-page" data-page="api-grid/a-venir.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> À venir
+        </a>
+    </div>
+
+    <!-- ── voh.connections ── -->
+    <div class="tree-folder" onclick="_toggleFolder(this)">
+        <span class="tree-folder-icon">📂</span> voh.connections
+    </div>
+    <div class="tree-children">
+        <a class="tree-page" data-page="api-connections/a-venir.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> À venir
+        </a>
+    </div>
+
+    <!-- ── Événements ── -->
+    <div class="tree-folder" onclick="_toggleFolder(this)">
+        <span class="tree-folder-icon">📂</span> Événements
+    </div>
+    <div class="tree-children">
+        <a class="tree-page" data-page="api-events/abonnements.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Abonnements (on / once / off)
+        </a>
+        <a class="tree-page" data-page="api-events/evenements-zone.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Événements zone
+        </a>
+        <a class="tree-page" data-page="api-canvas/evenements.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Événements canvas
+        </a>
+        <a class="tree-page" data-page="api-canvas/evenements-pages.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Événements page
+        </a>
+        <a class="tree-page" data-page="api-objects/evenements.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Événements objet
+        </a>
+    </div>
+
+    <!-- ── voh.diagnostics ── -->
+    <div class="tree-folder" onclick="_toggleFolder(this)">
+        <span class="tree-folder-icon">📂</span> voh.diagnostics
+    </div>
+    <div class="tree-children">
+        <a class="tree-page" data-page="api-diagnostics/diagnostics.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Diagnostic et rapport
+        </a>
+    </div>
+
+    <!-- ── Référence ── -->
+    <div class="tree-folder" onclick="_toggleFolder(this)">
+        <span class="tree-folder-icon">📂</span> Référence
+    </div>
+    <div class="tree-children">
+        <a class="tree-page" data-page="reference/api-complete.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Référence API complète
+        </a>
+        <a class="tree-page" data-page="reference/constantes.html" onclick="_navigateTo(this)">
+            <span class="tree-page-icon">📄</span> Constantes
+        </a>
+    </div>
+</nav>
+
+<!-- ═══ CONTENU (iframe) ═══ -->
+<iframe class="content-frame" id="content-frame" src="accueil.html"></iframe>
+
+<!-- ═══ SCRIPT ═══ -->
+<script>
+    /**
+     * Ouvre/ferme un dossier dans l'arborescence.
+     * Change l'icône: 📂 (ouvert) ↔ 📁 (fermé).
+     */
+    function _toggleFolder(folderElement) {
+        const children = folderElement.nextElementSibling;
+        if (!children || !children.classList.contains('tree-children')) return;
+
+        const icon = folderElement.querySelector('.tree-folder-icon');
+        const isHidden = children.classList.contains('tree-children-hidden');
+
+        if (isHidden) {
+            /* Ouvrir le dossier */
+            children.classList.remove('tree-children-hidden');
+            children.style.maxHeight = children.scrollHeight + 'px';
+            icon.textContent = '📂';
+            setTimeout(() => { children.style.maxHeight = 'none'; }, 250);
+        } else {
+            /* Fermer le dossier */
+            children.style.maxHeight = children.scrollHeight + 'px';
+            children.offsetHeight; /* Force reflow */
+            children.classList.add('tree-children-hidden');
+            icon.textContent = '📁';
+        }
+    }
+
+    /**
+     * Navigue vers une page de contenu dans l'iframe.
+     * Met à jour la page active dans la sidebar.
+     */
+    function _navigateTo(pageElement) {
+        const page = pageElement.getAttribute('data-page');
+        if (!page) return;
+
+        /* Charger la page dans l'iframe */
+        document.getElementById('content-frame').src = page;
+
+        /* Mettre à jour la page active dans la sidebar */
+        document.querySelectorAll('.tree-page-active').forEach(el => {
+            el.classList.remove('tree-page-active');
+        });
+        pageElement.classList.add('tree-page-active');
+    }
+
+    /**
+     * Navigue vers une page depuis l'iframe (appelé par les cartes de la page d'accueil).
+     * Met aussi à jour la page active dans la sidebar.
+     */
+    function _navigateToPage(page) {
+        document.getElementById('content-frame').src = page;
+
+        /* Synchroniser la sidebar avec la nouvelle page. */
+        _syncSidebar(page);
+    }
+
+    /**
+     * Synchronise la sidebar quand une page change dans l'iframe.
+     * Met à jour la sélection active et ouvre le dossier parent si nécessaire.
+     * @param {string} page — Chemin relatif (ex: 'api-objects/opacite.html').
+     */
+    function _syncSidebar(page) {
+        const matchingLink = document.querySelector('.tree-page[data-page="' + page + '"]');
+        if (!matchingLink) return;
+
+        /* Si ce lien est déjà actif, ne rien faire. */
+        if (matchingLink.classList.contains('tree-page-active')) return;
+
+        /* Retirer la sélection précédente. */
+        document.querySelectorAll('.tree-page-active').forEach(el => {
+            el.classList.remove('tree-page-active');
+        });
+        matchingLink.classList.add('tree-page-active');
+
+        /* Ouvrir le dossier parent si fermé. */
+        const parentChildren = matchingLink.closest('.tree-children');
+        if (parentChildren && parentChildren.classList.contains('tree-children-hidden')) {
+            const folder = parentChildren.previousElementSibling;
+            if (folder) _toggleFolder(folder);
+        }
+
+        /* S'assurer que l'élément est visible dans la sidebar (scroll). */
+        matchingLink.scrollIntoView({ block: 'nearest' });
+    }
+
+    /**
+     * Normalise un chemin en résolvant les segments '..' et '.'.
+     * Ex: 'demarrage/../api-zone/creation.html' → 'api-zone/creation.html'
+     */
+    function _normalizePath(path) {
+        const parts = path.split('/');
+        const result = [];
+        for (const part of parts) {
+            if (part === '..') { result.pop(); }
+            else if (part !== '.' && part !== '') { result.push(part); }
+        }
+        return result.join('/');
+    }
+
+    /**
+     * Synchronise la sidebar et intercepte les clics sur les liens internes
+     * dans le contenu de l'iframe, pour que toute navigation passe par
+     * _navigateToPage (qui met à jour sidebar + iframe en même temps).
+     */
+    document.getElementById('content-frame').addEventListener('load', function() {
+        try {
+            const iframeDoc = this.contentDocument || this.contentWindow.document;
+            const iframeUrl = this.contentWindow.location.href;
+
+            /* Calculer le chemin de base (sans query string). */
+            const cleanUrl = window.location.href.split('?')[0];
+            const baseUrl  = cleanUrl.replace(/[^/]*$/, '');
+
+            /* Chemin relatif de la page courante dans l'iframe. */
+            let relativePath = iframeUrl.replace(baseUrl, '').split('?')[0].split('#')[0];
+
+            /* Synchroniser la sidebar avec la page courante. */
+            _syncSidebar(relativePath);
+
+            /* ── Intercepter les clics sur les liens <a href> dans l'iframe ──
+               Quand l'utilisateur clique un lien interne dans une page de doc,
+               on empêche la navigation directe et on passe par _navigateToPage
+               qui met à jour la sidebar ET change la page dans l'iframe. */
+            iframeDoc.addEventListener('click', function(event) {
+                const link = event.target.closest('a[href]');
+                if (!link) return;
+
+                const href = link.getAttribute('href');
+                /* Ignorer: liens externes, ancres, mailto, javascript. */
+                if (!href || href.startsWith('http') || href.startsWith('#') ||
+                    href.startsWith('mailto') || href.startsWith('javascript')) return;
+
+                event.preventDefault();
+
+                /* Résoudre le href relatif par rapport au dossier de la page courante.
+                   Ex: page = 'editeur/raccourcis.html', href = 'fonctionnalites.html'
+                   → currentDir = 'editeur/', resolvedPath = 'editeur/fonctionnalites.html' */
+                const currentDir = relativePath.replace(/[^/]*$/, '');
+                const resolvedPath = _normalizePath(currentDir + href);
+
+                _navigateToPage(resolvedPath);
+            });
+        } catch (e) {
+            /* Ignorer les erreurs cross-origin (file:// dans certains navigateurs). */
+        }
+    });
+
+    /* ── Navigation directe via paramètre URL ── */
+    /* Si l'URL contient ?page=api-objects/creation.html, naviguer vers cette page.
+       Utilisé par le lien doc et F1 depuis l'éditeur principal (Index.html). */
+    /* ── Écouter les messages postMessage des pages de contenu ──
+       Les pages de contenu (dans l'iframe) envoient des messages pour:
+       - 'voh-doc-sync': notifier que la page a été chargée (sync sidebar)
+       - 'voh-doc-nav':  demander une navigation vers une autre page */
+    window.addEventListener('message', function(event) {
+        if (!event.data || typeof event.data !== 'object') return;
+        if (event.data.type === 'voh-doc-nav') {
+            _navigateToPage(event.data.page);
+        } else if (event.data.type === 'voh-doc-sync') {
+            _syncSidebar(event.data.page);
+        }
+    });
+
+    const _urlParams = new URLSearchParams(window.location.search);
+    const _targetPage = _urlParams.get('page');
+    if (_targetPage) {
+        _navigateToPage(_targetPage);
+    }
+</script>
+
+</body>
+</html>

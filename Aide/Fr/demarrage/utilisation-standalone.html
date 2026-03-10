@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Utilisation standalone — VOH Documentation</title>
+</head>
+<body>
+
+<h1>Utilisation standalone</h1>
+<p class="intro">Comment utiliser VOH dans votre propre page HTML, sans l'éditeur intégré.</p>
+
+<div class="note">
+    L'éditeur intégré (<code>index.html</code>) et le runner (<code>runner.html</code>) sont des outils
+    de développement fournis pour faciliter les tests. Mais le Core VOH est <strong>100% autonome</strong> —
+    vous pouvez l'intégrer dans n'importe quelle page HTML.
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Ce qu'il faut</h2>
+
+<p>Pour faire tourner VOH, il vous faut au minimum 3 choses :</p>
+
+<div class="method">
+    <div class="method-name">1. Pixi.js — Moteur de rendu</div>
+    <div class="method-description">
+        Le fichier <code>Libraries/Pixi/Pixi.js</code>. C'est le moteur graphique GPU
+        utilisé par VOH pour dessiner sur le canvas. Obligatoire.
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">2. Les fichiers Core</div>
+    <div class="method-description">
+        Les 14 fichiers du dossier <code>Core/</code>, chargés dans l'ordre défini par <code>runner.html</code>.
+        <code>Core-Main.js</code> doit toujours être chargé en dernier.
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">3. Un conteneur HTML</div>
+    <div class="method-description">
+        Un <code>&lt;div&gt;</code> dans votre page qui servira de conteneur pour le rendu.
+        VOH prend automatiquement toute la taille de ce <code>&lt;div&gt;</code>.
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Exemple complet minimal</h2>
+
+<p>Voici une page HTML complète qui utilise VOH sans l'éditeur :</p>
+
+<pre><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="var">lang</span>=<span class="str">"fr"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="var">charset</span>=<span class="str">"UTF-8"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span>Mon application VOH<span class="tag">&lt;/title&gt;</span>
+    <span class="tag">&lt;style&gt;</span>
+        <span class="cmt">/* Le conteneur prend toute la page */</span>
+        * { <span class="var">margin</span>: <span class="num">0</span>; <span class="var">padding</span>: <span class="num">0</span>; }
+        <span class="fn">#container</span> { <span class="var">width</span>: <span class="num">100vw</span>; <span class="var">height</span>: <span class="num">100vh</span>; }
+    <span class="tag">&lt;/style&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+
+    <span class="cmt">&lt;!-- Conteneur pour le rendu VOH --&gt;</span>
+    <span class="tag">&lt;div</span> <span class="var">id</span>=<span class="str">"container"</span><span class="tag">&gt;&lt;/div&gt;</span>
+
+    <span class="cmt">&lt;!-- 1. Charger Pixi.js --&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Libraries/Pixi/Pixi.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+
+    <span class="cmt">&lt;!-- 2. Charger le Core VOH (dans cet ordre !) --&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Diagnostics.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-EventEmitter.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-API.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Zone.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-CanvasSelection.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-CanvasHistory.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-CanvasPage.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-RenderEngine.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Canvas.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Objects.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-ObjectSelection.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-SpatialGrid.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-ObjectInteraction.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+    <span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Main.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+
+    <span class="cmt">&lt;!-- 3. Votre script --&gt;</span>
+    <span class="tag">&lt;script&gt;</span>
+    (<span class="kw">async</span> () => {
+
+        <span class="cmt">// Créer et initialiser le moteur</span>
+        <span class="kw">const</span> <span class="var">voh</span> = <span class="kw">new</span> <span class="fn">VisualObjectsHandler</span>(
+            <span class="var">document</span>.<span class="fn">getElementById</span>(<span class="str">'container'</span>)
+        );
+        <span class="kw">await</span> <span class="var">voh</span>.<span class="fn">init</span>();
+
+        <span class="cmt">// Créer une zone</span>
+        <span class="kw">const</span> <span class="var">zone</span> = <span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">create</span>({
+            <span class="var">name</span>: <span class="str">'Ma zone'</span>,
+            <span class="var">backgroundColor</span>: <span class="str">'rgba(30, 30, 50, 1.0)'</span>,
+            <span class="var">gridIsVisible</span>: <span class="kw">true</span>,
+            <span class="var">gridColor</span>: <span class="str">'rgba(255, 255, 255, 1.0)'</span>,
+            <span class="var">gridOpacity</span>: <span class="num">0.1</span>
+        });
+
+        <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'VOH prêt, zone:'</span>, <span class="var">zone</span>);
+
+    })();
+    <span class="tag">&lt;/script&gt;</span>
+
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></pre>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Points importants</h2>
+
+<div class="method">
+    <div class="method-name">Pourquoi async / await ?</div>
+    <div class="method-description">
+        <code>voh.init()</code> est une fonction asynchrone (elle prépare des ressources internes).
+        Pour pouvoir utiliser <code>await</code>, votre code doit être dans une fonction <code>async</code>.
+        C'est pourquoi on enveloppe tout dans <code>(async () => { ... })();</code>.<br><br>
+        Dans l'éditeur intégré, le runner fait ça automatiquement pour vous — c'est pour ça que vous
+        pouvez écrire <code>await voh.init();</code> directement dans un script.
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">Chemins des fichiers</div>
+    <div class="method-description">
+        Les chemins <code>src="Core/Core-API.js"</code> sont relatifs à votre page HTML.
+        Si votre page est dans un sous-dossier, ajustez les chemins en conséquence.<br><br>
+        Exemple : si votre page est dans <code>MonProjet/app.html</code> et les fichiers Core
+        dans <code>MonProjet/Core/</code>, les chemins restent les mêmes. Mais si votre page est dans
+        <code>MonProjet/pages/app.html</code>, il faudrait écrire <code>src="../Core/Core-API.js"</code>.
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">Taille du conteneur</div>
+    <div class="method-description">
+        VOH prend la taille du <code>&lt;div&gt;</code> conteneur. Si le conteneur fait 500×300 pixels,
+        la zone VOH fera 500×300. Si vous voulez que VOH prenne toute la page, donnez au conteneur
+        <code>width: 100vw; height: 100vh;</code>.
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">Pas besoin de CodeMirror ni TypeScript</div>
+    <div class="method-description">
+        Pour une utilisation standalone, seuls <strong>Pixi.js</strong> et les fichiers <strong>Core</strong>
+        sont nécessaires. CodeMirror et TypeScript ne sont utilisés que par l'éditeur intégré.
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Exemple avec un fichier script séparé</h2>
+
+<p>Vous pouvez aussi mettre votre code dans un fichier <code>.js</code> séparé :</p>
+
+<pre><span class="cmt">&lt;!-- Dans votre page HTML --&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Libraries/Pixi/Pixi.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Diagnostics.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-EventEmitter.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-API.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Zone.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-CanvasSelection.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-CanvasHistory.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-CanvasPage.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-RenderEngine.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Canvas.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Objects.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-ObjectSelection.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-SpatialGrid.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-ObjectInteraction.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Main.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"mon-script.js"</span><span class="tag">&gt;&lt;/script&gt;</span></pre>
+
+<p>Et dans <code>mon-script.js</code> :</p>
+
+<pre><span class="cmt">// mon-script.js</span>
+(<span class="kw">async</span> () => {
+    <span class="kw">const</span> <span class="var">voh</span> = <span class="kw">new</span> <span class="fn">VisualObjectsHandler</span>(
+        <span class="var">document</span>.<span class="fn">getElementById</span>(<span class="str">'container'</span>)
+    );
+    <span class="kw">await</span> <span class="var">voh</span>.<span class="fn">init</span>();
+
+    <span class="cmt">// Votre code ici...</span>
+})();</pre>
+
+<div class="note">
+    <strong>Attention :</strong> Si vous utilisez un fichier <code>.js</code> séparé, vous devez
+    envelopper votre code dans <code>(async () => { ... })();</code> pour pouvoir utiliser
+    <code>await</code>. Dans l'éditeur intégré, le runner fait ça automatiquement.
+</div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

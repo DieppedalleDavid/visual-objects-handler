@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Sélection d'objets — voh.objects.selection</title>
+</head>
+<body>
+
+<h1>voh.objects.selection — Sélection d'objets</h1>
+<p class="intro">
+    La sélection d'objets est gérée par canevas. Chaque canevas maintient sa propre liste d'objets sélectionnés.
+    La sélection est vidée automatiquement au changement de page active.
+</p>
+
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Comportement interactif (automatique)</h2>
+<p>
+    Quand un canevas a des objets avec <code>mouseDragEnabled: true</code>, la sélection interactive est automatique:
+</p>
+<ul>
+    <li><strong>Clic gauche</strong> sur un objet → sélection exclusive (désélectionne les autres)</li>
+    <li><strong>Ctrl+clic</strong> sur un objet → bascule (ajouter/retirer de la sélection)</li>
+    <li><strong>Clic gauche sur le fond</strong> → désélectionner tous les objets</li>
+    <li><strong>Rectangle de sélection</strong> → sélectionne tous les objets intersectés</li>
+    <li><strong>Ctrl + rectangle</strong> → ajoute les objets intersectés à la sélection existante</li>
+</ul>
+
+<h2>Sélectionner / Désélectionner</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects.selection</span><span class="sig-sep">.</span><span class="sig-fn">select</span><span class="sig-paren">(</span><span class="sig-param">canvasId, objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Ajoute un objet à la sélection. Si l'objet est déjà sélectionné, ne fait rien. L'objet doit être visible et sur la page active.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet à sélectionner</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si l'objet a été ajouté</div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="var">selection</span>.<span class="fn">select</span>(<span class="var">canvas</span>, <span class="var">objet</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects.selection</span><span class="sig-sep">.</span><span class="sig-fn">deselect</span><span class="sig-paren">(</span><span class="sig-param">canvasId, objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Retire un objet de la sélection. Si l'objet n'est pas sélectionné, ne fait rien.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet à désélectionner</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si l'objet a été retiré</div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="var">selection</span>.<span class="fn">deselect</span>(<span class="var">canvas</span>, <span class="var">objet</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects.selection</span><span class="sig-sep">.</span><span class="sig-fn">toggle</span><span class="sig-paren">(</span><span class="sig-param">canvasId, objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Bascule la sélection d'un objet : le sélectionne s'il ne l'est pas, le désélectionne s'il l'est. C'est le comportement du <strong>Ctrl+clic</strong>.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si l'état a changé</div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="var">selection</span>.<span class="fn">toggle</span>(<span class="var">canvas</span>, <span class="var">objet</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects.selection</span><span class="sig-sep">.</span><span class="sig-fn">selectOnly</span><span class="sig-paren">(</span><span class="sig-param">canvasId, objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Sélectionne un seul objet en désélectionnant tous les autres. C'est le comportement du <strong>clic simple</strong> (sans Ctrl).</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet à sélectionner</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si la sélection a changé</div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="var">selection</span>.<span class="fn">selectOnly</span>(<span class="var">canvas</span>, <span class="var">objet3</span>);
+<span class="cmt">// Seul objet3 est maintenant sélectionné</span></pre>
+</div>
+
+<h2>Tout sélectionner / Tout désélectionner</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects.selection</span><span class="sig-sep">.</span><span class="sig-fn">selectAll</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Sélectionne tous les objets visibles de la page active du canevas.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si au moins un objet a été ajouté</div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="var">selection</span>.<span class="fn">selectAll</span>(<span class="var">canvas</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects.selection</span><span class="sig-sep">.</span><span class="sig-fn">deselectAll</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Désélectionne tous les objets du canevas. Émet <code>selection:cleared</code> en plus de <code>selection:changed</code>.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si des objets ont été désélectionnés</div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="var">selection</span>.<span class="fn">deselectAll</span>(<span class="var">canvas</span>);</pre>
+</div>
+
+<h2>Interroger la sélection</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects.selection</span><span class="sig-sep">.</span><span class="sig-fn">getSelectedIds</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre[]</span></div>
+    <div class="method-description">Retourne un tableau contenant les IDs de tous les objets sélectionnés du canevas. Tableau vide si aucun.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre[]</span></div>
+<pre><span class="kw">const</span> <span class="var">ids</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="var">selection</span>.<span class="fn">getSelectedIds</span>(<span class="var">canvas</span>);
+<span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Sélectionnés:'</span>, <span class="var">ids</span>);  <span class="cmt">// ex: [2, 5, 8]</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects.selection</span><span class="sig-sep">.</span><span class="sig-fn">getSelectedCount</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre</span></div>
+    <div class="method-description">Retourne le nombre d'objets sélectionnés dans le canevas.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre</span></div>
+<pre><span class="kw">const</span> <span class="var">n</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="var">selection</span>.<span class="fn">getSelectedCount</span>(<span class="var">canvas</span>);
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">n</span> + <span class="str">' objet(s) sélectionné(s)'</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects.selection</span><span class="sig-sep">.</span><span class="sig-fn">isSelected</span><span class="sig-paren">(</span><span class="sig-param">canvasId, objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Vérifie si un objet est sélectionné dans un canevas donné.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="kw">if</span> (<span class="var">voh</span>.<span class="var">objects</span>.<span class="var">selection</span>.<span class="fn">isSelected</span>(<span class="var">canvas</span>, <span class="var">objet</span>)) {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'L\'objet est sélectionné'</span>);
+}</pre>
+</div>
+
+<h2>Raccourci</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">isSelected</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Raccourci qui retrouve automatiquement le canevas de l'objet. Pratique quand on a l'ID de l'objet mais pas celui du canevas.</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="kw">if</span> (<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">isSelected</span>(<span class="var">objet</span>)) {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Sélectionné !'</span>);
+}</pre>
+</div>
+
+<h2>Événements</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">selection:changed</span></div>
+    <div class="method-description">
+        Émis chaque fois que la composition de la sélection change (ajout, retrait, remplacement).
+    </div>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'selection:changed'</span>, <span class="kw">function</span>(<span class="var">data</span>) {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Canvas:'</span>,     <span class="var">data</span>.<span class="var">canvasId</span>);
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Sélectionnés:'</span>, <span class="var">data</span>.<span class="var">selectedIds</span>);   <span class="cmt">// tous les IDs après le changement</span>
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Ajoutés:'</span>,      <span class="var">data</span>.<span class="var">addedIds</span>);      <span class="cmt">// IDs ajoutés dans cette action</span>
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Retirés:'</span>,      <span class="var">data</span>.<span class="var">removedIds</span>);    <span class="cmt">// IDs retirés dans cette action</span>
+});</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">selection:cleared</span></div>
+    <div class="method-description">
+        Émis quand la sélection est entièrement vidée (en plus de <code>selection:changed</code>).
+        Pratique pour réinitialiser un panneau de propriétés.
+    </div>
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'selection:cleared'</span>, <span class="kw">function</span>(<span class="var">data</span>) {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Sélection vidée sur canvas'</span>, <span class="var">data</span>.<span class="var">canvasId</span>);
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Anciens IDs:'</span>, <span class="var">data</span>.<span class="var">previousIds</span>);
+});</pre>
+</div>
+
+<h2>Contour visuel (configurable par objet)</h2>
+
+<p>Chaque objet sélectionné affiche un contour rectangulaire autour de lui. L'apparence est configurable individuellement.</p>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setSelectionBorderColor</span><span class="sig-paren">(</span><span class="sig-param">objectId, color</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit la couleur du contour de sélection. Défaut: <code>'rgba(0, 120, 215, 0.9)'</code> (bleu).</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>color</td><td>texte</td><td>Couleur CSS (rgba, hex, rgb)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setSelectionBorderColor</span>(<span class="var">objet</span>, <span class="str">'rgba(255, 0, 0, 0.9)'</span>);  <span class="cmt">// contour rouge</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setSelectionBorderColor</span>(<span class="var">objet</span>, <span class="str">'#00ff00'</span>);                <span class="cmt">// contour vert</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setSelectionBorderThickness</span><span class="sig-paren">(</span><span class="sig-param">objectId, thickness</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit l'épaisseur du contour de sélection en pixels. Défaut: <code>1</code>.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>thickness</td><td>nombre</td><td>Épaisseur en pixels</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setSelectionBorderThickness</span>(<span class="var">objet</span>, <span class="num">3</span>);  <span class="cmt">// contour plus épais</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setSelectionBorderOffset</span><span class="sig-paren">(</span><span class="sig-param">objectId, offset</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit l'espace entre l'objet et son contour de sélection en pixels. Défaut: <code>0</code> (contour collé à l'extérieur de l'objet). Une valeur positive éloigne le contour, une valeur négative le fait rentrer par-dessus l'objet.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>offset</td><td>nombre</td><td>Espace en pixels (positif = extérieur, 0 = collé, négatif = par-dessus l'objet)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setSelectionBorderOffset</span>(<span class="var">objet</span>, <span class="num">5</span>);   <span class="cmt">// contour avec 5px d'espace</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setSelectionBorderOffset</span>(<span class="var">objet</span>, <span class="num">0</span>);   <span class="cmt">// contour collé à l'extérieur (défaut)</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setSelectionBorderOffset</span>(<span class="var">objet</span>, <span class="num">-3</span>);  <span class="cmt">// contour par-dessus l'objet (rentre de 3px)</span></pre>
+</div>
+
+<div class="note">
+    <strong>Paramètres à la création:</strong> Les propriétés de contour peuvent aussi être passées
+    directement à <code>voh.objects.create()</code>:
+    <code>selectionBorderColor</code>, <code>selectionBorderThickness</code>, <code>selectionBorderOffset</code>, <code>selectionBorderStyle</code>.
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setSelectionBorderStyle</span><span class="sig-paren">(</span><span class="sig-param">objectId, style</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit le style du contour de sélection. Défaut: <code>'solid'</code>.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>style</td><td>texte</td><td><code>'solid'</code> (défaut), <code>'dashed'</code> ou <code>'dotted'</code></td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setSelectionBorderStyle</span>(<span class="var">objet</span>, <span class="str">'solid'</span>);   <span class="cmt">// trait continu (défaut)</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setSelectionBorderStyle</span>(<span class="var">objet</span>, <span class="str">'dashed'</span>);  <span class="cmt">// tirets</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setSelectionBorderStyle</span>(<span class="var">objet</span>, <span class="str">'dotted'</span>);  <span class="cmt">// pointillés</span></pre>
+</div>
+
+<h2>Mode de sélection par rectangle (par objet)</h2>
+
+<p>
+    Chaque objet peut définir comment il réagit au rectangle de sélection:
+    il doit être entièrement englobé (<code>'enclosed'</code>) ou juste touché (<code>'intersect'</code>).
+</p>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setSelectionMode</span><span class="sig-paren">(</span><span class="sig-param">objectId, mode</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit le mode de sélection par rectangle pour cet objet.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>mode</td><td>texte | null</td><td>
+            <code>'enclosed'</code> (défaut) = l'objet doit être entièrement dans le rectangle<br>
+            <code>'intersect'</code> = l'objet est sélectionné dès qu'il touche le rectangle<br>
+            <code>null</code> = converti automatiquement en <code>'enclosed'</code>
+        </td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="cmt">// Petit objet: sélectionné dès qu'il est touché</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setSelectionMode</span>(<span class="var">bouton</span>, <span class="str">'intersect'</span>);
+
+<span class="cmt">// Grand objet de fond: sélectionné uniquement si entièrement englobé</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setSelectionMode</span>(<span class="var">fond</span>, <span class="str">'enclosed'</span>);
+
+<span class="cmt">// Remettre au défaut: null est accepté et converti en 'enclosed'</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setSelectionMode</span>(<span class="var">objet</span>, <span class="kw">null</span>);
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getSelectionMode</span>(<span class="var">objet</span>));  <span class="cmt">// 'enclosed' (jamais null)</span></pre>
+</div>
+
+<div class="note">
+    <strong>Paramètre à la création:</strong> Peut aussi être passé à <code>voh.objects.create()</code>
+    via <code>selectionMode: 'intersect'</code>.
+</div>
+
+<h2>Comportements automatiques</h2>
+<ul>
+    <li><strong>Changement de page</strong> — La sélection est vidée automatiquement quand on change de page active (<code>voh.canvas.pages.setActive</code>).</li>
+    <li><strong>Objet supprimé</strong> — Un objet supprimé (<code>voh.objects.delete</code>) est retiré silencieusement de la sélection.</li>
+    <li><strong>Objet rendu invisible</strong> — Un objet rendu invisible (<code>voh.objects.setVisible(id, false)</code>) est désélectionné (avec événement).</li>
+    <li><strong>Canvas supprimé</strong> — Les données de sélection du canevas sont nettoyées.</li>
+</ul>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

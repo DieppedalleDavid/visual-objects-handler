@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Diagnostic — voh.diagnostics</title>
+</head>
+<body>
+
+<h1>voh.diagnostics — Système de diagnostic</h1>
+<p class="intro">
+    Le système de diagnostic capture automatiquement les erreurs JavaScript, les avertissements,
+    les appels API et les événements émis. Il permet de générer un rapport complet pour comprendre
+    d'où vient un problème sans avoir à l'expliquer manuellement.
+</p>
+
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Ce que le rapport contient</h2>
+<p>
+    Le rapport de diagnostic inclut automatiquement :
+    la version du Core et l'identifiant de l'instance,
+    les informations système (navigateur, OS, écran, mémoire, support WebGL),
+    l'état du projet au moment du rapport (zones, canevas, objets avec leurs compteurs),
+    les 100 dernières erreurs JavaScript capturées (avec stack trace et numéro de ligne),
+    les 100 derniers avertissements console,
+    les 200 derniers appels API (méthode, arguments, résultat, durée en ms),
+    et les 200 derniers événements émis.
+</p>
+
+<h2>Comment l'utiliser</h2>
+<p>
+    Ajoutez un appel à <code>voh.diagnostics.showReport()</code> ou
+    <code>voh.diagnostics.downloadReport()</code> dans votre script
+    pour afficher ou télécharger le rapport. Vous pouvez aussi utiliser
+    le raccourci clavier <strong>Ctrl+Shift+D</strong> dans la fenêtre d'exécution (F5),
+    ou cliquer sur le bouton <strong>Rapport de diagnostic</strong> dans la barre d'erreur
+    quand une erreur se produit.
+</p>
+
+<pre><span class="cmt">// Afficher le rapport dans une fenêtre (avec boutons Copier et Télécharger)</span>
+<span class="var">voh</span>.<span class="var">diagnostics</span>.<span class="fn">showReport</span>();
+
+<span class="cmt">// Télécharger le rapport en fichier .txt</span>
+<span class="var">voh</span>.<span class="var">diagnostics</span>.<span class="fn">downloadReport</span>();
+
+<span class="cmt">// Copier le rapport dans le presse-papiers</span>
+<span class="key">await</span> <span class="var">voh</span>.<span class="var">diagnostics</span>.<span class="fn">copyReportToClipboard</span>();</pre>
+
+<h2>Méthodes</h2>
+
+<!-- ── showReport ── -->
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.diagnostics</span><span class="sig-sep">.</span><span class="sig-fn">showReport</span><span class="sig-paren">(</span><span class="sig-paren">)</span></div>
+    <div class="method-description">
+        Affiche le rapport de diagnostic dans une fenêtre flottante en lecture seule.
+        La fenêtre contient un bouton <strong>Copier</strong> pour copier le rapport dans le presse-papiers,
+        un bouton <strong>Télécharger</strong> pour le sauvegarder en fichier .txt,
+        et un bouton <strong>✕</strong> pour fermer. On peut aussi fermer avec la touche Échap
+        ou en cliquant en dehors de la fenêtre.
+    </div>
+<pre><span class="var">voh</span>.<span class="var">diagnostics</span>.<span class="fn">showReport</span>();</pre>
+</div>
+
+<!-- ── downloadReport ── -->
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.diagnostics</span><span class="sig-sep">.</span><span class="sig-fn">downloadReport</span><span class="sig-paren">(</span><span class="sig-paren">)</span></div>
+    <div class="method-description">
+        Génère le rapport et propose le téléchargement en fichier <code>.txt</code>.
+        Le nom du fichier inclut la date et l'heure (ex: <code>VOH-Diagnostic-2026-03-06_14h30.txt</code>).
+    </div>
+<pre><span class="var">voh</span>.<span class="var">diagnostics</span>.<span class="fn">downloadReport</span>();</pre>
+</div>
+
+<!-- ── copyReportToClipboard ── -->
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.diagnostics</span><span class="sig-sep">.</span><span class="sig-fn">copyReportToClipboard</span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">Promise&lt;vrai/faux&gt;</span></div>
+    <div class="method-description">
+        Copie le rapport de diagnostic dans le presse-papiers du système.
+        Retourne <code>true</code> si la copie a réussi, <code>false</code> si elle a échoué
+        (par exemple si le navigateur refuse l'accès au presse-papiers).
+    </div>
+<pre><span class="key">const</span> <span class="var">copié</span> = <span class="key">await</span> <span class="var">voh</span>.<span class="var">diagnostics</span>.<span class="fn">copyReportToClipboard</span>();
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">copié</span> ? <span class="str">'Rapport copié !'</span> : <span class="str">'Échec de la copie'</span>);</pre>
+</div>
+
+<!-- ── generateReport ── -->
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.diagnostics</span><span class="sig-sep">.</span><span class="sig-fn">generateReport</span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">objet</span></div>
+    <div class="method-description">
+        Génère le rapport complet sous forme d'objet JavaScript (JSON).
+        Utile si vous voulez traiter les données du rapport dans votre code
+        (par exemple les envoyer à un serveur ou les afficher dans votre propre interface).
+    </div>
+<pre><span class="key">const</span> <span class="var">rapport</span> = <span class="var">voh</span>.<span class="var">diagnostics</span>.<span class="fn">generateReport</span>();
+<span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Erreurs:'</span>, <span class="var">rapport</span>.<span class="var">statistics</span>.<span class="var">totalErrors</span>);
+<span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Appels API:'</span>, <span class="var">rapport</span>.<span class="var">statistics</span>.<span class="var">totalApiCalls</span>);</pre>
+</div>
+
+<!-- ── generateReportAsText ── -->
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.diagnostics</span><span class="sig-sep">.</span><span class="sig-fn">generateReportAsText</span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">texte</span></div>
+    <div class="method-description">
+        Génère le rapport formaté en texte lisible (le même contenu que le fichier .txt téléchargé).
+    </div>
+<pre><span class="key">const</span> <span class="var">texte</span> = <span class="var">voh</span>.<span class="var">diagnostics</span>.<span class="fn">generateReportAsText</span>();
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">texte</span>);</pre>
+</div>
+
+<!-- ── getSummary ── -->
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.diagnostics</span><span class="sig-sep">.</span><span class="sig-fn">getSummary</span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">objet</span></div>
+    <div class="method-description">
+        Retourne un résumé rapide sans générer le rapport complet.
+        L'objet retourné contient : <code>errors</code> (nombre d'erreurs),
+        <code>warnings</code> (nombre d'avertissements),
+        <code>apiCalls</code> (nombre d'appels API),
+        <code>events</code> (nombre d'événements émis).
+    </div>
+<pre><span class="key">const</span> <span class="var">résumé</span> = <span class="var">voh</span>.<span class="var">diagnostics</span>.<span class="fn">getSummary</span>();
+<span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Erreurs:'</span>, <span class="var">résumé</span>.<span class="var">errors</span>);     <span class="cmt">// ex: 2</span>
+<span class="var">console</span>.<span class="fn">log</span>(<span class="str">'API:'</span>, <span class="var">résumé</span>.<span class="var">apiCalls</span>);       <span class="cmt">// ex: 47</span></pre>
+</div>
+
+<!-- ── clear ── -->
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.diagnostics</span><span class="sig-sep">.</span><span class="sig-fn">clear</span><span class="sig-paren">(</span><span class="sig-paren">)</span></div>
+    <div class="method-description">
+        Vide tous les journaux de diagnostic (erreurs, avertissements, appels API, événements).
+        Les compteurs sont remis à zéro. Utile pour repartir sur un état propre avant de tester
+        un scénario précis.
+    </div>
+<pre><span class="var">voh</span>.<span class="var">diagnostics</span>.<span class="fn">clear</span>();
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">diagnostics</span>.<span class="fn">getSummary</span>()); <span class="cmt">// { errors: 0, warnings: 0, apiCalls: 0, events: 0 }</span></pre>
+</div>
+
+<h2>Capture automatique</h2>
+<p>
+    Le système de diagnostic capture automatiquement, sans aucun code à écrire :
+</p>
+<p>
+    <strong>Les erreurs JavaScript</strong> — toute erreur non capturée (exception, TypeError, ReferenceError, etc.)
+    et les Promises rejetées non gérées. Chaque erreur est enregistrée avec son message,
+    le fichier source, le numéro de ligne, la colonne et la stack trace.
+</p>
+<p>
+    <strong>Les avertissements</strong> — tout appel à <code>console.warn()</code> est intercepté et enregistré.
+    Le message apparaît toujours dans la console du navigateur comme d'habitude.
+</p>
+<p>
+    <strong>Les appels API</strong> — chaque appel à une méthode VOH (ex: <code>voh.zone.create()</code>,
+    <code>voh.objects.setX()</code>) est enregistré avec les arguments, la valeur de retour,
+    la durée d'exécution en millisecondes, et l'erreur éventuelle.
+</p>
+<p>
+    <strong>Les événements</strong> — chaque événement émis par le moteur (ex: <code>zone:created</code>,
+    <code>object:moved</code>) est enregistré avec ses données.
+</p>
+
+<h2>Raccourci clavier</h2>
+<p>
+    <strong>Ctrl+Shift+D</strong> dans la fenêtre d'exécution (F5) télécharge immédiatement
+    le rapport de diagnostic sans avoir besoin d'ajouter du code.
+</p>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

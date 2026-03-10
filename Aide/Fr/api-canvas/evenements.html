@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Événements canvas — VOH Documentation</title>
+</head>
+<body>
+
+<h1>Événements — Canvas</h1>
+<p class="intro">Les 29 types d'événements émis par les canvas. Chaque modification émet un événement capté par <code>voh.on()</code>.</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Événements de propriétés</h2>
+
+<table class="param-table">
+    <tr><th>Événement</th><th>Données reçues</th><th>Quand</th></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">created</span></code></td><td>canvasId, zoneId, name</td><td>Un canvas est créé</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">deleted</span></code></td><td>canvasId, zoneId, name</td><td>Un canvas est supprimé</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">activated</span></code></td><td>canvasId, previousCanvasId</td><td>Un canvas devient actif</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">deactivated</span></code></td><td>canvasId</td><td>Un canvas perd le focus</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">moved</span></code></td><td>canvasId, x, y</td><td>La position change</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">resized</span></code></td><td>canvasId, width, height</td><td>La taille change</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">locked</span></code></td><td>canvasId</td><td>Le canvas est verrouillé</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">unlocked</span></code></td><td>canvasId</td><td>Le canvas est déverrouillé</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">shown</span></code></td><td>canvasId</td><td>Le canvas est rendu visible</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">hidden</span></code></td><td>canvasId</td><td>Le canvas est masqué</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">opacityChanged</span></code></td><td>canvasId, opacity</td><td>L'opacité change</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">backgroundColorChanged</span></code></td><td>canvasId, backgroundColor</td><td>La couleur de fond change</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">nameChanged</span></code></td><td>canvasId, name</td><td>Le nom change</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">zOrderChanged</span></code></td><td>canvasId, zOrder</td><td>L'ordre d'affichage change</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionStarted</span></code></td><td>canvasId, x, y</td><td>Tracé d'un rectangle de sélection commencé</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionEnded</span></code></td><td>canvasId, x, y, width, height</td><td>Tracé d'un rectangle de sélection terminé</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionEnabledChanged</span></code></td><td>canvasId, enabled</td><td>Activation de la sélection modifiée</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionMouseButtonChanged</span></code></td><td>canvasId, mouseButton</td><td>Bouton souris de sélection modifié</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionBackgroundColorChanged</span></code></td><td>canvasId, backgroundColor</td><td>Couleur de fond du rectangle modifiée</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionBorderColorChanged</span></code></td><td>canvasId, borderColor</td><td>Couleur de bordure du rectangle modifiée</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionBorderThicknessChanged</span></code></td><td>canvasId, borderThickness</td><td>Épaisseur de bordure du rectangle modifiée</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionBorderStyleChanged</span></code></td><td>canvasId, borderStyle</td><td>Style de bordure du rectangle modifié</td></tr>
+</table>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Événements d'interaction souris sur le fond</h2>
+
+<table class="param-table">
+    <tr><th>Événement</th><th>Données reçues</th><th>Quand</th></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">click</span></code></td><td>canvasId, x, y, button, originalEvent</td><td>Clic sur le fond du canevas</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">dblclick</span></code></td><td>canvasId, x, y, button, originalEvent</td><td>Double-clic sur le fond</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">mousedown</span></code></td><td>canvasId, x, y, button, originalEvent</td><td>Bouton souris enfoncé sur le fond</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">mouseup</span></code></td><td>canvasId, x, y, button, originalEvent</td><td>Bouton souris relâché sur le fond</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">mousemove</span></code></td><td>canvasId, x, y, button, originalEvent</td><td>Souris bouge sur le fond (pas sur un objet)</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">wheel</span></code></td><td>canvasId, x, y, deltaX, deltaY, deltaZ, originalEvent</td><td>Molette sur le fond</td></tr>
+    <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">contextmenu</span></code></td><td>canvasId, x, y, originalEvent</td><td>Clic droit sur le fond</td></tr>
+</table>
+
+<div class="note">
+    <strong>Note:</strong> Les événements de propriétés ne sont émis que si la valeur change réellement.
+    Les événements souris sont émis à chaque interaction sur le fond (aucun objet sous le curseur).
+    Pendant le tracé d'un rectangle de sélection, les événements souris sont suspendus.
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">created</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand un nouveau canvas est créé avec <code>voh.canvas.create()</code>.
+        Le canvas est automatiquement rattaché à une zone.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas créé</td></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone parente</td></tr>
+        <tr><td>name</td><td>texte</td><td>Le nom du canvas</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:created'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Canvas:'</span>, <span class="var">data</span>.<span class="var">canvasId</span>);  <span class="cmt">// 1</span>
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Zone:'</span>, <span class="var">data</span>.<span class="var">zoneId</span>);      <span class="cmt">// 1</span>
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Nom:'</span>, <span class="var">data</span>.<span class="var">name</span>);        <span class="cmt">// "Mon canvas"</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">deleted</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand un canvas est supprimé avec <code>voh.canvas.delete()</code>.
+        Le nom et la zone sont capturés avant la suppression pour être disponibles dans l'événement.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas supprimé</td></tr>
+        <tr><td>zoneId</td><td>nombre</td><td>L'ID de la zone parente (avant suppression)</td></tr>
+        <tr><td>name</td><td>texte</td><td>Le nom du canvas (avant suppression)</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:deleted'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Canvas supprimé:'</span>, <span class="var">data</span>.<span class="var">name</span>);
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Était dans la zone:'</span>, <span class="var">data</span>.<span class="var">zoneId</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">activated</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand un canvas devient actif avec <code>voh.canvas.setActive()</code>.
+        Un seul canvas peut être actif à la fois dans une zone.
+        Également émis automatiquement lors de la création du premier canvas
+        ou après la suppression du canvas actif.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du nouveau canvas actif</td></tr>
+        <tr><td>previousCanvasId</td><td>nombre ou null</td><td>L'ID du canvas précédemment actif. <code>null</code> si c'est la première activation</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:activated'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Actif:'</span>, <span class="var">data</span>.<span class="var">canvasId</span>);
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Précédent:'</span>, <span class="var">data</span>.<span class="var">previousCanvasId</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">deactivated</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand un canvas perd le focus, juste avant qu'un autre canvas soit activé.
+        Cet événement est toujours suivi d'un <code>canvas:activated</code> sur le nouveau canvas actif.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas désactivé</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:deactivated'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Canvas désactivé:'</span>, <span class="var">data</span>.<span class="var">canvasId</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">moved</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la position d'un canvas change avec <code>voh.canvas.setX()</code> ou <code>voh.canvas.setY()</code>.
+        Les deux coordonnées sont toujours fournies dans l'événement.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas déplacé</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position horizontale en pixels</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position verticale en pixels</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:moved'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Position:'</span>, <span class="var">data</span>.<span class="var">x</span>, <span class="var">data</span>.<span class="var">y</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">resized</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la taille d'un canvas change avec <code>voh.canvas.setWidth()</code> ou <code>voh.canvas.setHeight()</code>.
+        Les deux dimensions sont toujours fournies dans l'événement.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas redimensionné</td></tr>
+        <tr><td>width</td><td>nombre</td><td>Largeur en pixels</td></tr>
+        <tr><td>height</td><td>nombre</td><td>Hauteur en pixels</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:resized'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Taille:'</span>, <span class="var">data</span>.<span class="var">width</span>, <span class="str">'×'</span>, <span class="var">data</span>.<span class="var">height</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">locked</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand un canvas est verrouillé avec <code>voh.canvas.setLocked(canvasId, true)</code>.
+        Un canvas verrouillé refuse les interactions utilisateur (déplacement, redimensionnement des objets, etc.).
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas verrouillé</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:locked'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Canvas verrouillé:'</span>, <span class="var">data</span>.<span class="var">canvasId</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">unlocked</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand un canvas est déverrouillé avec <code>voh.canvas.setLocked(canvasId, false)</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas déverrouillé</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:unlocked'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Canvas déverrouillé:'</span>, <span class="var">data</span>.<span class="var">canvasId</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">shown</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand un canvas est rendu visible avec <code>voh.canvas.setVisible(canvasId, true)</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas affiché</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:shown'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Canvas visible:'</span>, <span class="var">data</span>.<span class="var">canvasId</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">hidden</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand un canvas est masqué avec <code>voh.canvas.setVisible(canvasId, false)</code>.
+        Un canvas masqué n'est plus rendu dans la zone, mais conserve tous ses objets et propriétés.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas masqué</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:hidden'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Canvas masqué:'</span>, <span class="var">data</span>.<span class="var">canvasId</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">opacityChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand l'opacité d'un canvas change avec <code>voh.canvas.setOpacity()</code>.
+        L'opacité affecte le rendu visuel du canvas entier et de tous ses objets.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas modifié</td></tr>
+        <tr><td>opacity</td><td>nombre</td><td>Nouvelle opacité (0.0 = transparent → 1.0 = opaque)</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:opacityChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Opacité:'</span>, <span class="var">data</span>.<span class="var">opacity</span>);  <span class="cmt">// 0.75</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">backgroundColorChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la couleur de fond d'un canvas change avec <code>voh.canvas.setBackgroundColor()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas modifié</td></tr>
+        <tr><td>backgroundColor</td><td>texte</td><td>La nouvelle couleur de fond (CSS)</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:backgroundColorChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Couleur de fond:'</span>, <span class="var">data</span>.<span class="var">backgroundColor</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">nameChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand le nom d'un canvas est modifié avec <code>voh.canvas.setName()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas renommé</td></tr>
+        <tr><td>name</td><td>texte</td><td>Le nouveau nom</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:nameChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Nouveau nom:'</span>, <span class="var">data</span>.<span class="var">name</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">zOrderChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand l'ordre d'affichage d'un canvas change.
+        Déclenché par <code>voh.canvas.setZOrder()</code>, <code>moveUp()</code>, <code>moveDown()</code>,
+        <code>moveToFront()</code> et <code>moveToBack()</code>.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas dont l'ordre a changé</td></tr>
+        <tr><td>zOrder</td><td>nombre</td><td>Le nouvel ordre d'affichage (0 = fond)</td></tr>
+    </table>
+
+    <div class="note">
+        <strong>Note:</strong> Les fonctions <code>moveUp()</code> et <code>moveDown()</code> émettent
+        <strong>deux événements</strong>: un pour le canvas déplacé et un pour le canvas avec lequel il échange sa position.
+    </div>
+
+    <div class="note">
+        <strong>Pourquoi deux événements avec moveUp() / moveDown() ?</strong><br><br>
+        Ces fonctions fonctionnent par échange de position: le canvas ciblé prend la place
+        de son voisin, et le voisin prend la place du canvas ciblé.
+        Les deux canvas changent de zOrder, donc deux événements sont émis.<br><br>
+        <strong>Exemple concret:</strong> vous avez 3 canvas empilés:<br>
+        — Canvas A (zOrder 0, au fond)<br>
+        — Canvas B (zOrder 1, au milieu)<br>
+        — Canvas C (zOrder 2, devant)<br><br>
+        Vous appelez <code>voh.canvas.moveUp(canvasA)</code>. Le canvas A échange sa place
+        avec le canvas B:<br>
+        — Canvas B (zOrder 0) ← il descend d'un cran<br>
+        — Canvas A (zOrder 1) ← il monte d'un cran<br>
+        — Canvas C (zOrder 2) ← inchangé<br><br>
+        Résultat: deux événements <code>canvas:zOrderChanged</code> émis, un pour A et un pour B.
+    </div>
+
+    <div class="note">
+        <strong>Mise au premier plan automatique à l'activation</strong><br><br>
+        Si l'option <code>voh.zone.setBringCanvasToFrontOnActivation(zoneId, true)</code> est activée,
+        un événement <code>canvas:zOrderChanged</code> sera également émis à chaque fois qu'un canvas
+        est activé, car il est automatiquement placé devant tous les autres.<br><br>
+        Par défaut cette option est désactivée: activer un canvas ne modifie pas les z-orders.
+    </div>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:zOrderChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Canvas'</span>, <span class="var">data</span>.<span class="var">canvasId</span>, <span class="str">'→ zOrder'</span>, <span class="var">data</span>.<span class="var">zOrder</span>);
+});
+
+<span class="cmt">// Appel : voh.canvas.moveUp(canvasA)</span>
+<span class="cmt">// → Événement 1 : Canvas A → zOrder 1 (il monte)</span>
+<span class="cmt">// → Événement 2 : Canvas B → zOrder 0 (il descend)</span></pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionStarted</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand un rectangle de sélection commence à être tracé.<br>
+        Déclenché soit par l'utilisateur (bouton souris enfoncé), soit par <code>voh.canvas.selection.simulate()</code>.<br>
+        Dans le cas souris, la sélection doit être activée (<code>voh.canvas.selection.setEnabled(canvasId, true)</code>).
+        Dans le cas d'une simulation, cet événement est émis même si la sélection est désactivée.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X du point de départ, relative au canevas (en pixels)</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y du point de départ, relative au canevas (en pixels)</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:selectionStarted'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Sélection démarrée en:'</span>, <span class="var">data</span>.<span class="var">x</span>, <span class="var">data</span>.<span class="var">y</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionEnded</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand un tracé de rectangle de sélection se termine.<br>
+        Déclenché soit quand l'utilisateur relâche le bouton souris, soit à la fin d'une <code>voh.canvas.selection.simulate()</code>.<br>
+        Le rectangle fourni est toujours <strong>normalisé</strong>: x, y, width et height sont toujours positifs,
+        quel que soit le sens du tracé.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X du coin haut-gauche du rectangle final (en pixels, relatif au canevas)</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y du coin haut-gauche du rectangle final (en pixels, relatif au canevas)</td></tr>
+        <tr><td>width</td><td>nombre</td><td>Largeur du rectangle (toujours ≥ 0)</td></tr>
+        <tr><td>height</td><td>nombre</td><td>Hauteur du rectangle (toujours ≥ 0)</td></tr>
+    </table>
+
+    <div class="note">
+        <strong>Note (souris):</strong> Cet événement est émis même si le rectangle est de taille nulle (simple clic sans déplacement).
+        Vérifiez <code>data.width > 0 && data.height > 0</code> si vous souhaitez ignorer les clics simples.<br><br>
+        <strong>Note (simulation):</strong> <code>voh.canvas.selection.simulate()</code> émet toujours cet événement à la fin du tracé,
+        même en mode instantané (<code>duration: 0</code>). En cas d'annulation via <code>cancelSimulation()</code>,
+        l'événement n'est <strong>pas</strong> émis — la Promise se résout simplement avec <code>false</code>.
+    </div>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:selectionEnded'</span>, (<span class="var">data</span>) => {
+    <span class="cmt">// Ignorer les simples clics</span>
+    <span class="kw">if</span> (<span class="var">data</span>.<span class="var">width</span> === <span class="num">0</span> || <span class="var">data</span>.<span class="var">height</span> === <span class="num">0</span>) <span class="kw">return</span>;
+
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Rectangle de sélection:'</span>);
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'  Position:'</span>, <span class="var">data</span>.<span class="var">x</span>, <span class="var">data</span>.<span class="var">y</span>);
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'  Taille:  '</span>, <span class="var">data</span>.<span class="var">width</span>, <span class="str">'×'</span>, <span class="var">data</span>.<span class="var">height</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionEnabledChanged</span> <span class="event-sep">/</span> <span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionMouseButtonChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand l'activation de la sélection ou le bouton souris configuré est modifié.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Événement</th><th>Données</th><th>Déclenché par</th></tr>
+        <tr><td><code>canvas:selectionEnabledChanged</code></td><td>canvasId, enabled</td><td><code>voh.canvas.selection.setEnabled()</code></td></tr>
+        <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionMouseButtonChanged</span></code></td><td>canvasId, mouseButton</td><td><code>voh.canvas.selection.setMouseButton()</code></td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:selectionEnabledChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Sélection activée:'</span>, <span class="var">data</span>.<span class="var">enabled</span>);  <span class="cmt">// true ou false</span>
+});
+
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:selectionMouseButtonChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Bouton souris:'</span>, <span class="var">data</span>.<span class="var">mouseButton</span>);  <span class="cmt">// 'left', 'middle' ou 'right'</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionBackgroundColorChanged</span> <span class="event-sep">/</span> <span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionBorderColorChanged</span> <span class="event-sep">/</span> <span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionBorderThicknessChanged</span> <span class="event-sep">/</span> <span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionBorderStyleChanged</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand les propriétés visuelles du rectangle de sélection sont modifiées.
+        Voir <a href="selection.html">Sélection</a> pour la documentation complète de ces propriétés.
+    </div>
+
+    <table class="param-table">
+        <tr><th>Événement</th><th>Données</th><th>Déclenché par</th></tr>
+        <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionBackgroundColorChanged</span></code></td><td>canvasId, backgroundColor</td><td><code>setBackgroundColor()</code></td></tr>
+        <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionBorderColorChanged</span></code></td><td>canvasId, borderColor</td><td><code>setBorderColor()</code></td></tr>
+        <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionBorderThicknessChanged</span></code></td><td>canvasId, borderThickness</td><td><code>setBorderThickness()</code></td></tr>
+        <tr><td><code><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">selectionBorderStyleChanged</span></code></td><td>canvasId, borderStyle</td><td><code>setBorderStyle()</code></td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:selectionBorderStyleChanged'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Style bordure:'</span>, <span class="var">data</span>.<span class="var">borderStyle</span>);  <span class="cmt">// 'solid', 'dashed' ou 'dotted'</span>
+});</pre>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     ÉVÉNEMENTS D'INTERACTION SOURIS SUR LE FOND DU CANEVAS
+
+     Ces événements sont émis quand la souris interagit avec une zone
+     du canevas où il n'y a AUCUN objet visible. Si un objet est sous
+     le curseur, ce sont les événements object:* qui sont émis à la place.
+
+     Logique de routage :
+     1. La souris bouge/clique sur le canevas
+     2. Le système cherche l'objet le plus haut sous le curseur (hit-test)
+     3. Si un objet est trouvé → événement object:*
+     4. Si aucun objet → événement canvas:*
+
+     Suspension automatique : pendant le tracé d'un rectangle de sélection
+     (selectionIsDrawing = true), AUCUN événement souris n'est émis.
+     ════════════════════════════════════════════════════════════════════════ -->
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">click</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand l'utilisateur clique sur le fond du canevas (zone vide, aucun objet sous le curseur).
+        Si un objet est sous le curseur, c'est <code>object:click</code> qui est émis à la place — les deux
+        ne sont jamais émis en même temps pour le même clic.<br><br>
+        <strong>x et y</strong> sont les coordonnées en pixels relatives au coin supérieur gauche du canevas
+        (pas de la fenêtre du navigateur). Elles correspondent directement aux coordonnées des objets
+        sur le canevas (même repère que <code>voh.objects.setX()</code>).<br><br>
+        <strong>button</strong> indique quel bouton a été utilisé : <code>'left'</code> (gauche),
+        <code>'middle'</code> (molette/milieu) ou <code>'right'</code> (droit).<br><br>
+        <strong>originalEvent</strong> est l'objet <code>MouseEvent</code> natif du navigateur.
+        Il permet d'accéder aux touches modificatrices (<code>ctrlKey</code>, <code>shiftKey</code>,
+        <code>altKey</code>) et à toutes les propriétés DOM standard.
+    </div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas sur lequel le clic a eu lieu</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X du clic en pixels, relative au coin supérieur gauche du canevas</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y du clic en pixels, relative au coin supérieur gauche du canevas</td></tr>
+        <tr><td>button</td><td>texte</td><td>Bouton utilisé : <code>'left'</code>, <code>'middle'</code> ou <code>'right'</code></td></tr>
+        <tr><td>originalEvent</td><td>MouseEvent</td><td>L'événement DOM natif du navigateur (accès à ctrlKey, shiftKey, clientX, etc.)</td></tr>
+    </table>
+
+<pre><span class="cmt">// Créer un objet à l'endroit où on clique sur le fond</span>
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:click'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Clic sur fond à'</span>, <span class="var">data</span>.<span class="var">x</span>, <span class="var">data</span>.<span class="var">y</span>);
+
+    <span class="cmt">// Créer un objet là où on a cliqué</span>
+    <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">create</span>(<span class="var">data</span>.<span class="var">canvasId</span>, {
+        <span class="var">x</span>: <span class="var">data</span>.<span class="var">x</span> - <span class="num">25</span>,  <span class="cmt">// centré sur le clic</span>
+        <span class="var">y</span>: <span class="var">data</span>.<span class="var">y</span> - <span class="num">25</span>,
+        <span class="var">width</span>: <span class="num">50</span>, <span class="var">height</span>: <span class="num">50</span>
+    });
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">dblclick</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand l'utilisateur double-clique sur le fond du canevas (zone vide).
+        Mêmes données que <code>canvas:click</code>. Un double-clic génère aussi deux <code>canvas:click</code> avant le <code>canvas:dblclick</code>.
+    </div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X du double-clic (pixels, relative au canevas)</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y du double-clic (pixels, relative au canevas)</td></tr>
+        <tr><td>button</td><td>texte</td><td>Bouton utilisé : <code>'left'</code>, <code>'middle'</code> ou <code>'right'</code></td></tr>
+        <tr><td>originalEvent</td><td>MouseEvent</td><td>L'événement DOM natif du navigateur</td></tr>
+    </table>
+
+<pre><span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:dblclick'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Double-clic fond à'</span>, <span class="var">data</span>.<span class="var">x</span>, <span class="var">data</span>.<span class="var">y</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">mousedown</span> <span class="event-sep">/</span> <span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">mouseup</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand un bouton souris est enfoncé (<code>mousedown</code>) ou relâché (<code>mouseup</code>) sur le fond du canevas.<br><br>
+        <code>mousedown</code> est émis au moment exact où le bouton est pressé.
+        <code>mouseup</code> est émis quand le bouton est relâché.
+        <code>click</code> est émis après <code>mouseup</code> si le bouton a été enfoncé et relâché au même endroit.<br><br>
+        L'ordre d'émission pour un clic simple est : <code>mousedown</code> → <code>mouseup</code> → <code>click</code>.
+    </div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X de la souris (pixels, relative au canevas)</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y de la souris (pixels, relative au canevas)</td></tr>
+        <tr><td>button</td><td>texte</td><td>Bouton concerné : <code>'left'</code>, <code>'middle'</code> ou <code>'right'</code></td></tr>
+        <tr><td>originalEvent</td><td>MouseEvent</td><td>L'événement DOM natif du navigateur</td></tr>
+    </table>
+
+<pre><span class="cmt">// Détecter un clic gauche enfoncé sur le fond</span>
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:mousedown'</span>, (<span class="var">data</span>) => {
+    <span class="kw">if</span> (<span class="var">data</span>.<span class="var">button</span> === <span class="str">'left'</span>) {
+        <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Clic gauche enfoncé à'</span>, <span class="var">data</span>.<span class="var">x</span>, <span class="var">data</span>.<span class="var">y</span>);
+    }
+});
+
+<span class="cmt">// Détecter quand le bouton est relâché</span>
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:mouseup'</span>, (<span class="var">data</span>) => {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Bouton relâché à'</span>, <span class="var">data</span>.<span class="var">x</span>, <span class="var">data</span>.<span class="var">y</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">mousemove</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la souris bouge au-dessus d'une zone vide du canevas (aucun objet visible sous le curseur).<br><br>
+        <strong>Important :</strong> cet événement n'est émis que quand la souris est sur le fond. Dès que le
+        curseur passe au-dessus d'un objet, c'est <code>object:mousemove</code> qui prend le relais.
+        Quand le curseur quitte l'objet et revient sur le fond, <code>canvas:mousemove</code> reprend.<br><br>
+        <strong>Fréquence :</strong> émis à chaque déplacement de souris détecté par le navigateur
+        (typiquement 60 à 120 fois par seconde selon le navigateur et le système).
+        Éviter d'y mettre du code lourd (pas de création d'objets, pas de calculs coûteux).<br><br>
+        <strong>x et y</strong> sont les coordonnées de la souris en pixels, relatives au coin supérieur
+        gauche du canevas (même repère que les positions des objets).
+    </div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas au-dessus duquel la souris se déplace</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X actuelle de la souris (pixels, relative au canevas)</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y actuelle de la souris (pixels, relative au canevas)</td></tr>
+        <tr><td>button</td><td>texte</td><td>Bouton actuellement enfoncé pendant le déplacement (ou <code>'left'</code> si aucun)</td></tr>
+        <tr><td>originalEvent</td><td>MouseEvent</td><td>L'événement DOM natif (accès à movementX, movementY pour le delta de déplacement)</td></tr>
+    </table>
+
+<pre><span class="cmt">// Afficher les coordonnées de la souris en temps réel</span>
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:mousemove'</span>, (<span class="var">data</span>) => {
+    <span class="var">document</span>.<span class="fn">getElementById</span>(<span class="str">'coords'</span>).<span class="var">textContent</span> =
+        <span class="str">'X: '</span> + <span class="var">data</span>.<span class="var">x</span> + <span class="str">' Y: '</span> + <span class="var">data</span>.<span class="var">y</span>;
+});
+
+<span class="cmt">// Utiliser le delta de déplacement (mouvement relatif)</span>
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:mousemove'</span>, (<span class="var">data</span>) => {
+    <span class="kw">const</span> <span class="var">deltaX</span> = <span class="var">data</span>.<span class="var">originalEvent</span>.<span class="var">movementX</span>;
+    <span class="kw">const</span> <span class="var">deltaY</span> = <span class="var">data</span>.<span class="var">originalEvent</span>.<span class="var">movementY</span>;
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Delta:'</span>, <span class="var">deltaX</span>, <span class="var">deltaY</span>);
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">wheel</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand la molette de la souris est utilisée au-dessus d'une zone vide du canevas.<br><br>
+        <strong>deltaY</strong> est la valeur la plus courante : négatif = molette vers le haut, positif = molette vers le bas.
+        <strong>deltaX</strong> est utilisé pour le défilement horizontal (pavé tactile, souris spéciales).
+        <strong>deltaZ</strong> est très rare (certains périphériques 3D).<br><br>
+        Les valeurs delta dépendent du navigateur et du système d'exploitation. Elles ne sont pas
+        en pixels mais en "unités de défilement" (environ 100 par cran de molette classique).
+    </div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X de la souris au moment de la molette (pixels, relative au canevas)</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y de la souris au moment de la molette (pixels, relative au canevas)</td></tr>
+        <tr><td>deltaX</td><td>nombre</td><td>Défilement horizontal (négatif = gauche, positif = droite)</td></tr>
+        <tr><td>deltaY</td><td>nombre</td><td>Défilement vertical (négatif = vers le haut, positif = vers le bas)</td></tr>
+        <tr><td>deltaZ</td><td>nombre</td><td>Défilement en profondeur (rare, souvent 0)</td></tr>
+        <tr><td>originalEvent</td><td>WheelEvent</td><td>L'événement DOM natif (accès à deltaMode pour l'unité de mesure)</td></tr>
+    </table>
+
+<pre><span class="cmt">// Zoom avec la molette sur le fond du canevas</span>
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:wheel'</span>, (<span class="var">data</span>) => {
+    <span class="kw">const</span> <span class="var">zoneId</span> = <span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getZoneId</span>(<span class="var">data</span>.<span class="var">canvasId</span>);
+    <span class="kw">if</span> (<span class="var">data</span>.<span class="var">deltaY</span> < <span class="num">0</span>) {
+        <span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">zoomIn</span>(<span class="var">zoneId</span>);   <span class="cmt">// molette vers le haut → zoom +</span>
+    } <span class="kw">else</span> {
+        <span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">zoomOut</span>(<span class="var">zoneId</span>);  <span class="cmt">// molette vers le bas → zoom -</span>
+    }
+    <span class="var">data</span>.<span class="var">originalEvent</span>.<span class="fn">preventDefault</span>();  <span class="cmt">// empêche le scroll de la page</span>
+});</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2><span class="event-domain">canvas</span><span class="event-sep">:</span><span class="event-action">contextmenu</span></h2>
+
+<div class="method">
+    <div class="method-description">
+        Émis quand l'utilisateur fait un clic droit sur le fond du canevas (zone vide).
+        Par défaut, le navigateur affiche son menu contextuel natif. Pour le bloquer et afficher
+        un menu personnalisé, appeler <code>data.originalEvent.preventDefault()</code>.<br><br>
+        Si un objet est sous le curseur, c'est <code>object:contextmenu</code> qui est émis à la place.
+    </div>
+    <table class="param-table">
+        <tr><th>Propriété</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>x</td><td>nombre</td><td>Position X du clic droit (pixels, relative au canevas)</td></tr>
+        <tr><td>y</td><td>nombre</td><td>Position Y du clic droit (pixels, relative au canevas)</td></tr>
+        <tr><td>originalEvent</td><td>MouseEvent</td><td>L'événement DOM natif — appeler <code>.preventDefault()</code> pour bloquer le menu navigateur</td></tr>
+    </table>
+
+<pre><span class="cmt">// Bloquer le menu natif et afficher les coordonnées</span>
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'canvas:contextmenu'</span>, (<span class="var">data</span>) => {
+    <span class="var">data</span>.<span class="var">originalEvent</span>.<span class="fn">preventDefault</span>();  <span class="cmt">// bloque le menu natif du navigateur</span>
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Clic droit sur fond à'</span>, <span class="var">data</span>.<span class="var">x</span>, <span class="var">data</span>.<span class="var">y</span>);
+});</pre>
+</div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

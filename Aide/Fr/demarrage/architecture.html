@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Architecture — VOH Documentation</title>
+</head>
+<body>
+
+<h1>Architecture</h1>
+<p class="intro">Le moteur VOH est organisé en 7 couches empilées et son API en sous-objets logiques.</p>
+
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Les 7 couches</h2>
+
+<pre><span class="var">Zone</span>   (<span class="num">1</span>)  → Conteneur de premier niveau (fond, grille, bordure, viewport)
+<span class="var">Canvas</span> (<span class="num">5</span>)  → Surface de travail avec 5 couches superposées :
+               couleur de fond, image de fond, grille, objets, overlay
+<span class="var">Ui</span>     (<span class="num">1</span>)  → Interface utilisateur (futur éditeur visuel)</pre>
+
+<h2>Organisation de l'API</h2>
+
+<p>L'API est organisée en sous-objets :</p>
+<pre><span class="var">voh</span>.<span class="var">zone</span>                 → Gestion des zones
+<span class="var">voh</span>.<span class="var">canvas</span>               → Gestion des canvas
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">selection</span>     → Apparence du rectangle de sélection
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">history</span>       → Historique undo/redo (page active)
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">pages</span>         → Gestion des pages (navigation, propriétés, sous-objets)
+<span class="var">voh</span>.<span class="var">objects</span>              → Gestion des objets visuels
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="var">selection</span>    → Sélection d'objets
+<span class="var">voh</span>.<span class="fn">on</span>/<span class="fn">once</span>/<span class="fn">off</span>           → Abonnement aux événements
+<span class="var">voh</span>.<span class="var">diagnostics</span>          → Rapport de diagnostic (erreurs, appels API, événements)
+<span class="var">voh</span>.<span class="var">connections</span>          → Liaisons entre objets (à venir)</pre>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

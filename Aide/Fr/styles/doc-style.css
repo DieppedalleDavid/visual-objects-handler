@@ -1,0 +1,192 @@
+/* ═══════════════════════════════════════════════════════════════
+   STYLES DE LA DOCUMENTATION VOH — THÈME NEO
+   CSS partagé par toutes les pages de contenu (chargées dans l'iframe).
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+    --doc-background: #ffffff;
+    --doc-surface: #f5f5f5;
+    --doc-surface-hover: #eaeaea;
+    --doc-border: #d0d0d0;
+    --doc-text: #2e383c;
+    --doc-text-muted: #75787b;
+    --doc-heading: #1a1a1a;
+    --doc-accent: #1d75b3;
+    --doc-accent-hover: #155d8e;
+    --doc-success: #047d65;
+    --doc-warning: #b35e14;
+    --doc-error: #9c3328;
+    --doc-code-background: #f7f7f7;
+    --neo-keyword: #1d75b3;
+    --neo-string: #b35e14;
+    --neo-number: #75438a;
+    --neo-comment: #75787b;
+    --neo-variable: #047d65;
+    --neo-tag: #9c3328;
+    --neo-text: #2e383c;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: var(--doc-background);
+    color: var(--doc-text);
+    line-height: 1.6;
+    padding: 40px 60px;
+    max-width: 900px;
+}
+
+/* ── Titres ── */
+h1 {
+    font-size: 28px; color: var(--doc-heading);
+    margin-bottom: 10px; border-bottom: 2px solid var(--doc-accent);
+    padding-bottom: 10px;
+}
+h2 {
+    font-size: 22px; color: var(--doc-accent);
+    margin-top: 40px; margin-bottom: 15px;
+    padding-top: 15px; border-top: 1px solid var(--doc-border);
+}
+h3 { font-size: 15px; color: var(--doc-heading); margin-top: 20px; margin-bottom: 8px; }
+p { margin-bottom: 12px; }
+.intro { font-size: 15px; color: var(--doc-text-muted); margin-bottom: 25px; }
+
+/* ── Méthodes ── */
+.method {
+    background-color: var(--doc-surface);
+    border: 1px solid var(--doc-border); border-radius: 8px;
+    padding: 18px 22px; margin-bottom: 20px;
+}
+.method-name {
+    font-family: 'Consolas', 'Fira Code', monospace;
+    font-size: 14px; font-weight: 700;
+    color: var(--neo-keyword);
+    margin-bottom: 8px;
+}
+.method-description {
+    font-size: 13px; color: var(--doc-text);
+    margin-bottom: 10px; line-height: 1.5;
+}
+.method-return {
+    font-size: 12px; color: var(--doc-text-muted); margin-bottom: 10px;
+}
+.method-return .return-type {
+    color: var(--neo-variable); font-family: monospace;
+}
+.method pre {
+    margin-top: 8px; margin-bottom: 0;
+    font-size: 12px; padding: 10px 14px;
+}
+
+/* ── Tableaux de paramètres ── */
+.param-table {
+    width: 100%; border-collapse: collapse;
+    margin-bottom: 12px; font-size: 12px;
+}
+.param-table th {
+    background-color: var(--doc-code-background); color: var(--doc-accent);
+    text-align: left; padding: 6px 10px;
+    border: 1px solid var(--doc-border); font-size: 11px;
+}
+.param-table td {
+    padding: 5px 10px; border: 1px solid var(--doc-border); vertical-align: top;
+}
+.param-table td:first-child {
+    font-family: monospace; color: var(--neo-string); white-space: nowrap;
+}
+.param-table td:nth-child(2) {
+    font-family: monospace; color: var(--neo-number);
+    font-size: 11px; white-space: nowrap;
+}
+
+/* ── Tables générales ── */
+table {
+    width: 100%; border-collapse: collapse;
+    margin-bottom: 20px; font-size: 13px;
+}
+th {
+    background-color: var(--doc-surface); color: var(--doc-accent);
+    text-align: left; padding: 8px 12px;
+    border: 1px solid var(--doc-border); font-size: 12px;
+}
+td { padding: 6px 12px; border: 1px solid var(--doc-border); }
+td code { font-size: 11px; }
+
+/* ── Blocs de code ── */
+pre {
+    background-color: var(--doc-code-background);
+    border: 1px solid var(--doc-border); border-radius: 6px;
+    padding: 14px 18px; overflow-x: auto; margin-bottom: 16px;
+    font-family: 'Consolas', 'Fira Code', monospace;
+    font-size: 13px; line-height: 1.5; color: var(--neo-text);
+}
+code {
+    font-family: 'Consolas', 'Fira Code', monospace; font-size: 12px;
+    background-color: var(--doc-code-background); padding: 1px 1px;
+    border-radius: 3px; color: var(--neo-number);
+}
+
+/* ── Coloration syntaxique ── */
+.kw  { color: var(--neo-keyword); }
+.fn  { color: var(--neo-keyword); }
+.str { color: var(--neo-string); }
+.num { color: var(--neo-number); }
+.cmt { color: var(--neo-comment); }
+.var { color: var(--neo-variable); }
+.tag { color: var(--neo-tag); }
+
+/* ── Notes ── */
+.note {
+    background-color: rgba(29, 117, 179, 0.06);
+    border-left: 3px solid var(--doc-accent);
+    padding: 10px 14px; margin-bottom: 16px;
+    border-radius: 0 6px 6px 0; font-size: 13px;
+}
+
+/* ── Page d'accueil ── */
+.welcome-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px; margin-top: 20px;
+}
+.welcome-card {
+    background: var(--doc-surface);
+    border: 1px solid var(--doc-border);
+    border-radius: 8px; padding: 16px;
+    cursor: pointer; transition: border-color 0.2s;
+}
+.welcome-card:hover {
+    border-color: var(--doc-accent);
+}
+.welcome-card h3 {
+    margin: 0 0 6px; color: var(--doc-accent); font-size: 14px;
+}
+.welcome-card p {
+    margin: 0; font-size: 12px; color: var(--doc-text-muted);
+}
+
+/* ── Noms d'événements (domaine:action) ── */
+.event-domain { color: var(--doc-accent); }        /* domaine  → bleu  */
+.event-sep    { color: var(--doc-text-muted); }    /* :        → gris  */
+.event-action { color: var(--neo-string); }        /* action   → orange */
+
+/* ── Signature de méthode API (remplace .method-name pour les signatures voh.*) ── */
+.method-sig {
+    font-family: 'Consolas', 'Fira Code', monospace;
+    font-size: 13px;
+    background: #f7f7f7;
+    border: 1px solid #d0d0d0;
+    border-left: 3px solid var(--doc-accent);
+    border-radius: 0 6px 6px 0;
+    padding: 8px 14px;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+.sig-obj    { color: var(--neo-variable); font-weight: normal; }
+.sig-fn     { color: var(--doc-accent);  font-weight: bold; }
+.sig-sep    { color: var(--doc-text);    font-weight: normal; }
+.sig-paren  { color: var(--doc-text); }
+.sig-param  { color: var(--neo-string); }
+.sig-slash  { color: var(--doc-text-muted); margin: 0 6px; }
+.sig-arrow  { color: var(--doc-text-muted); margin: 0 4px; }
+.sig-return { color: var(--neo-number); }

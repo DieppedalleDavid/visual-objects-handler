@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Nom — voh.objects</title>
+</head>
+<body>
+
+<h1>voh.objects — Nom</h1>
+<p class="intro">Définir et lire le nom d'un objet.</p>
+
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Définir le nom</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">setName</span><span class="sig-paren">(</span><span class="sig-param">objectId, name</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit le nom de l'objet. Le nom est libre et sert à identifier l'objet dans les logs et l'interface.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>objectId</td><td>nombre</td><td>L'ID de l'objet</td></tr>
+        <tr><td>name</td><td>texte</td><td>Le nouveau nom</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi.</div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setName</span>(<span class="var">objet</span>, <span class="str">'Bouton principal'</span>);</pre>
+</div>
+
+<h2>Lire le nom</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getName</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">texte | null</span></div>
+    <div class="method-description">Retourne le nom de l'objet. Par défaut: <code>"Objet N"</code> (N = ID de l'objet).</div>
+    <div class="method-return">Retourne: <span class="return-type">texte | null</span></div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getName</span>(<span class="var">objet</span>));  <span class="cmt">// "Bouton principal"</span></pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

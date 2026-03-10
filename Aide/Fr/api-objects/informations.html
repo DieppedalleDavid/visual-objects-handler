@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Informations — voh.objects</title>
+</head>
+<body>
+
+<h1>voh.objects — Informations</h1>
+<p class="intro">Compter, lister, vérifier l'existence et connaître le canevas parent d'un objet.</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Compter les objets</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getCount</span><span class="sig-paren">(</span><span class="sig-param">canvasId?</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre</span></div>
+    <div class="method-description">
+        Retourne le nombre d'objets. Si <code>canvasId</code> est fourni, compte uniquement les objets de ce canevas.
+        Si omis, retourne le nombre total d'objets dans l'instance.
+    </div>
+    <div class="method-return">Retourne: <span class="return-type">nombre</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getCount</span>(<span class="var">canvas</span>);  <span class="cmt">// objets sur ce canevas</span>
+<span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getCount</span>();         <span class="cmt">// total de tous les canevas</span></pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Lister les objets</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getList</span><span class="sig-paren">(</span><span class="sig-param">canvasId?</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">tableau</span></div>
+    <div class="method-description">
+        Retourne un tableau d'objets <code>{ id, name, canvasId }</code>.
+        Si <code>canvasId</code> est fourni, liste uniquement les objets de ce canevas. Si omis, liste tous les objets.
+    </div>
+    <div class="method-return">Retourne: <span class="return-type">Array&lt;{ id, name, canvasId }&gt;</span></div>
+<pre><span class="kw">const</span> <span class="var">liste</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getList</span>(<span class="var">canvas</span>);
+<span class="kw">for</span> (<span class="kw">const</span> <span class="var">item</span> <span class="kw">of</span> <span class="var">liste</span>) {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="var">item</span>.<span class="var">id</span>, <span class="var">item</span>.<span class="var">name</span>);
+}</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Vérifier l'existence</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">exists</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Retourne <code>true</code> si l'objet existe, <code>false</code> sinon.</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">exists</span>(<span class="var">objet</span>);  <span class="cmt">// true ou false</span></pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Canevas et page parent</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getCanvasId</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre | null</span></div>
+    <div class="method-description">Retourne l'ID du canevas contenant l'objet, ou <code>null</code> si l'objet n'existe pas.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre | null</span></div>
+<pre><span class="kw">const</span> <span class="var">id</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getCanvasId</span>(<span class="var">objet</span>);
+<span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Canevas parent:'</span>, <span class="var">id</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.objects</span><span class="sig-sep">.</span><span class="sig-fn">getPageId</span><span class="sig-paren">(</span><span class="sig-param">objectId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre | null</span></div>
+    <div class="method-description">Retourne l'ID de la page sur laquelle vit l'objet, ou <code>null</code> si l'objet n'existe pas. Un objet est créé sur la page active du canevas au moment de sa création.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre | null</span></div>
+<pre><span class="kw">const</span> <span class="var">pageId</span> = <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">getPageId</span>(<span class="var">objet</span>);
+<span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Page parente:'</span>, <span class="var">pageId</span>);</pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,426 @@
+
+## 4. Dossier projet utilisateur (FUTUR — nécessite wrapper desktop)
+
+**⚠️ Cette section décrit l'architecture CIBLE pour quand le wrapper desktop sera intégré (Phase 8). Actuellement en phase API-first, le projet VOH est un dossier de développement unique. Les médias sont dans `Medias/Images/`. Les scripts de test sont dans l'éditeur de code intégré. Il n'y a pas de "projet utilisateur" séparé pour l'instant.**
+
+### 4.1 Concept
+
+Chaque projet VOH est un dossier normal sur le disque. Pas de ZIP, pas de format spécial. L'utilisateur choisit le nom et l'emplacement du dossier.
+
+### 4.2 Structure
+
+```
+MonProjet/
+├── MonProjet.voh                  ← Fichier projet (JSON : objets, pages, connexions, règles)
+├── Auto-Save/                     ← Sauvegardes automatiques du .voh par rotation
+│   ├── Slot_01.voh
+│   ├── Slot_02.voh
+│   ├── ...
+│   ├── Slot_10.voh
+│   └── autosave-index.json        ← Slot courant, date/heure de chaque slot
+├── Paramètres/
+│   ├── grille.json                ← Config grille (profils sauvegardés)
+│   ├── canvas.json                ← Taille du canvas, couleur de fond, etc.
+│   └── raccourcis.json            ← Raccourcis clavier personnalisés (si modifiés)
+├── Images/
+│   ├── fond.png
+│   └── logo.jpg
+├── Vidéos/
+│   ├── demo.mp4
+│   └── intro.webm
+├── Sons/
+│   └── clic.wav
+└── Fichiers/
+    ├── données.csv
+    └── config.txt
+```
+
+### 4.3 Le fichier .voh
+
+Le fichier .voh est un fichier JSON pur (pas un ZIP). Il contient les données du projet : les objets, leurs propriétés, les pages, les connexions, les groupes, les règles personnalisées. Les médias ne sont PAS dans le .voh, ils sont référencés par des chemins relatifs.
+
+Tous les chemins dans le .voh sont relatifs au dossier du projet. Exemple : `"Images/logo.jpg"`, jamais `"C:\Users\David\MonProjet\Images\logo.jpg"`. Ça garantit que le projet est portable : l'utilisateur copie le dossier sur une clé USB, le donne à quelqu'un, ça marche.
+
+### 4.4 Paramètres globaux vs paramètres projet
+
+Il y a deux niveaux de paramètres.
+
+Les paramètres globaux de l'application sont stockés dans localStorage en mode web, ou dans `%APPDATA%/VOH/config.json` en mode desktop :
+
+- Thème de l'interface
+- Langue de l'interface
+- Liste des projets récents
+- Option "Réouvrir le dernier projet au démarrage"
+- Chemins par défaut
+- Mode d'auto-save (voir section 4.7)
+
+Les paramètres du projet sont dans le dossier `Paramètres/` du projet :
+
+- Configuration de la grille et profils de grille sauvegardés (grille.json)
+- Taille du canvas, couleur de fond, etc. (canvas.json)
+- Raccourcis clavier personnalisés (raccourcis.json)
+
+Les paramètres projet peuvent être importés/exportés pour les réutiliser dans d'autres projets.
+
+### 4.5 Création d'un nouveau projet
+
+"Nouveau projet" dans l'éditeur :
+
+1. L'utilisateur choisit un nom et un emplacement via un dialogue fichier
+2. VOH crée le dossier avec les sous-dossiers (Images/, Vidéos/, Sons/, Fichiers/, Paramètres/, Auto-Save/)
+3. VOH crée le fichier .voh avec la configuration par défaut
+4. Le projet est ouvert dans l'éditeur
+
+### 4.6 Écran de démarrage
+
+Au lancement de VOH, un écran d'accueil s'affiche avec :
+
+- **Nouveau projet** — Crée un nouveau dossier projet (voir 4.5)
+- **Ouvrir un projet** — Dialogue fichier natif pour choisir un .voh existant
+- **Projets récents** — Liste des derniers projets ouverts (chemins stockés dans les paramètres globaux)
+- **Réouvrir le dernier projet** — Option dans les paramètres globaux, si activée VOH ouvre directement le dernier projet sans afficher l'écran de démarrage
+
+La liste des projets récents est stockée dans localStorage en mode web, ou dans `%APPDATA%/VOH/config.json` en mode desktop.
+
+### 4.7 Auto-save — Sauvegarde automatique par rotation de slots
+
+L'auto-save sauvegarde uniquement le fichier .voh en rotation dans le dossier `Auto-Save/`. Les médias ne sont pas concernés : ils sont déjà sur disque et ne bougent pas.
+
+```
+Auto-Save/
+├── Slot_01.voh                    ← Copie du .voh au moment de l'auto-save
+├── Slot_02.voh
+├── ...
+├── Slot_10.voh
+└── autosave-index.json            ← Slot courant, date/heure de chaque slot
+```
+
+#### Fonctionnement
+
+1. À chaque intervalle, VOH copie le .voh courant dans le prochain slot disponible
+2. Quand tous les slots sont remplis, on revient au slot 1 et on écrase, puis 2, etc.
+3. Le fichier `autosave-index.json` note quel slot est le plus récent et la date/heure de chaque slot
+
+Le .voh fait quelques Ko/Mo, donc l'auto-save est instantané. 10 slots = quelques Mo d'espace disque au maximum.
+
+#### Restauration
+
+Menu "Restaurer un auto-save" dans l'éditeur. L'utilisateur voit la liste des slots avec leur date et heure, il choisit un slot, VOH remplace le .voh courant par celui du slot choisi.
+
+#### Paramètres globaux
+
+- **Auto-save activé/désactivé** (défaut : activé)
+- **Intervalle** : toutes les 5/10/15/30 minutes (défaut : 5 minutes)
+- **Nombre max de slots** : 3/5/10/20 (défaut : 10)
+
+Note importante : l'auto-save ne touche PAS le .voh principal du projet. Le .voh principal n'est modifié que par une sauvegarde manuelle (Ctrl+S). L'auto-save écrit uniquement dans le dossier Auto-Save/.
+
+### 4.8 Nettoyage du projet (bonus futur)
+
+Le dossier projet peut contenir des fichiers importés mais plus utilisés par aucun objet. Une fonction "Nettoyer le projet" dans les menus analyse le .voh, identifie les fichiers orphelins, et propose de les supprimer :
+
+"Votre projet contient 100 fichiers mais seulement 3 sont utilisés par des objets. Voulez-vous supprimer les 97 fichiers inutilisés ?"
+
+Les fichiers ne sont supprimés qu'après confirmation explicite de l'utilisateur.
+
+### 4.9 Migration des projets v4
+
+Les anciens .voh (format ZIP avec médias en Base64) sont détectés automatiquement. Un dialogue demande : "Ce projet est au format v4, voulez-vous le convertir ?"
+
+Si oui :
+
+1. L'utilisateur choisit l'emplacement du nouveau dossier projet
+2. VOH extrait les médias du ZIP dans les sous-dossiers appropriés
+3. Les data URIs sont remplacés par des chemins relatifs
+4. Le .voh est sauvegardé au nouveau format JSON
+5. L'ancien fichier n'est pas supprimé
+
+
+---
+
+
+## 5. Les produits VOH
+
+VOH a deux types d'utilisateurs qui nécessitent des outils différents :
+
+L'utilisateur visuel utilise l'éditeur graphique pour créer et manipuler des objets.
+
+Le développeur écrit du code JavaScript avec l'API du Core pour créer sa propre application.
+
+### 5.1 L'Éditeur (version web ou desktop)
+
+C'est le produit principal. Il contient le Core + l'Editor. L'utilisateur visuel crée son projet, manipule les objets, configure les propriétés, définit les règles via l'EventMaker, et produit un résultat.
+
+L'éditeur fonctionne d'abord en mode web (navigateur standard). Une version desktop pourra être ajoutée plus tard via un wrapper (Electron, Tauri ou autre — voir section 6).
+
+L'éditeur inclut un mode aperçu (F5) qui masque les panneaux d'édition et affiche le canvas en plein écran tel que l'utilisateur final le verrait. Echap pour revenir à l'éditeur. L'éditeur inclura aussi la fonction "Compiler" qui génère une application autonome du projet (voir section 5.3).
+
+### 5.2 Le Player/Runtime (web)
+
+C'est l'outil du développeur qui utilise le Core sans l'Editor. Le Player est une page HTML légère qui charge le Core seul et exécute le code du développeur.
+
+Le développeur crée son propre index.html, écrit ses scripts JS avec l'API VOH :
+
+```javascript
+// Créer l'instance VOH dans un conteneur HTML (div)
+const voh = new VisualObjectsHandler(document.getElementById('monDiv'));
+await voh.init();
+
+// Créer une zone (conteneur de premier niveau)
+const zoneId = voh.zone.create({ name: 'Ma zone' });
+
+// Créer un canvas dans la zone (surface de travail avec Pixi.js)
+const canvasId = voh.canvas.create({
+  zone: zoneId, name: 'Mon canvas',
+  x: 0, y: 0, width: 800, height: 600
+});
+
+// Créer des objets dans le canvas
+voh.objects.create(canvasId, {
+  type: 'rectangle', x: 100, y: 100,
+  width: 200, height: 150
+});
+
+// Écouter les événements (format domaine:action)
+voh.on('object:clicked', (data) => {
+  // sa logique
+});
+```
+
+Il ouvre la page dans un navigateur pour tester, comme un "F5" de développeur.
+
+Le Player est distribué dans le SDK développeur (voir section 5.4).
+
+### 5.3 Le Compilateur / Export (futur)
+
+Le compilateur produit une application autonome à partir d'un projet. Tout est embarqué : le Core, les fichiers du projet, les images, vidéos, sons. L'utilisateur final ouvre l'application et ça tourne. Cette fonctionnalité nécessite un wrapper desktop et sera développée quand le wrapper sera choisi et intégré (voir section 6).
+
+Note : le compilateur produit l'application du projet de l'utilisateur. C'est différent de la version Constructor de VOH.
+
+### 5.4 Le SDK développeur
+
+Le Core VOH est open source et distribué via un SDK :
+
+```
+VOH-SDK/
+├── Core/
+│   └── voh-core.js                ← Core open source
+├── player.html                    ← Page Core seul (pour tester sans l'Editor)
+├── docs/
+│   └── api-reference.html
+└── examples/
+    ├── basic/
+    │   └── index.html
+    └── game/
+        └── index.html
+```
+
+Le Core est open source (licence à définir). Le développeur reçoit le code source complet, il peut l'utiliser, le modifier et contribuer au projet. La distribution se fera via GitHub (dépôt public).
+
+
+---
+
+
+## 6. Wrapper desktop (futur — Phase différée)
+
+### 6.1 Approche web-first
+
+La v5 adopte une approche web-first : le Core et l'Editor fonctionnent d'abord dans un navigateur standard, sans dépendance à un framework desktop. C'est la leçon tirée de l'expérience Neutralinojs en v4 : trop de temps perdu à combattre des bugs de wrapper au lieu de développer le produit.
+
+Le Core et l'Editor sont construits et testés comme une application web pure. Quand ils seront solides et fonctionnels, un wrapper desktop sera ajouté pour bénéficier de :
+
+- Accès complet au système de fichiers (sauvegarde/chargement natif)
+- Dialogues fichiers natifs (ouvrir, enregistrer)
+- Compilation en application standalone
+- Association de fichier .voh
+
+### 6.2 Candidats pour le wrapper desktop
+
+Le choix du wrapper sera fait au moment de l'intégration. Candidats actuels :
+
+| Framework | Avantages | Inconvénients |
+|-----------|-----------|---------------|
+| **Electron** | Tout JavaScript, écosystème énorme, fs natif, compilation simple | ~100 Mo, ~200 Mo RAM |
+| **Tauri** | ~5-10 Mo, ~30 Mo RAM, très performant | Backend Rust, installation complexe |
+| **NW.js** | Très simple, Node.js direct dans HTML | Communauté réduite |
+
+La décision sera prise quand le Core sera mature. L'architecture Core/Editor est 100% indépendante du wrapper — le même code tourne dans un navigateur et dans n'importe quel wrapper.
+
+### 6.3 Fonctionnalités desktop (quand le wrapper sera intégré)
+
+Les fonctionnalités suivantes nécessitent un wrapper desktop et seront disponibles une fois celui-ci choisi :
+
+- Accès au système de fichiers (lecture/écriture de fichiers)
+- Dialogues fichiers natifs (ouvrir, enregistrer, nouveau projet)
+- Fenêtre native (titre dynamique, plein écran)
+- Association de fichier .voh (double-clic → ouvre l'éditeur)
+- Compilation en application standalone
+- Paramètres globaux dans %APPDATA%
+
+### 6.4 Version Constructor
+
+La version Constructor de VOH est une version à structure plate destinée à faciliter l'intégration par des développeurs. C'est différent de la compilation d'un projet utilisateur (section 5.3) :
+
+- La **compilation** produit une application du projet de l'utilisateur final (son jeu, son éditeur, etc.)
+- La **version Constructor** est une distribution de VOH lui-même avec une structure simplifiée pour les développeurs qui veulent intégrer VOH dans leurs propres outils
+
+La version Constructor continue d'exister et est générée à chaque release de VOH.
+
+### 6.5 Ce qui fonctionne sans wrapper desktop
+
+En mode web-first (navigateur standard), les fonctionnalités suivantes sont pleinement disponibles :
+
+- Tout le Core (objets, sélection, poignées, rotation, connexions, etc.)
+- Le moteur de rendu Pixi.js (WebGL, GPU) avec rendu hybride (statique/dynamique)
+- Les GIF animés et vidéos sur objets (natif Pixi.js)
+- Le moteur de règles JSON
+- L'éditeur de code (CodeMirror)
+- L'undo/redo, le copy/paste
+- Le système de pages
+- L'export d'images (PNG, JPEG, WebP)
+- L'API complète VOH
+- Les thèmes et les traductions
+
+### 6.6 Ce qui nécessite un wrapper desktop
+
+- Sauvegarde/chargement de fichiers sur disque (dossier projet, .voh)
+- FileManager (import automatique, cache LRU avec fichiers sur disque)
+- Auto-save par rotation de slots
+- Compilation en application standalone
+- Association de fichier .voh
+- Paramètres globaux dans %APPDATA%
+
+
+---
+
+
+## 7. API v5 — Organisation par sous-objets
+
+### 7.1 Principes de nommage
+
+| Principe | Exemple bon | Raison |
+|----------|-------------|--------|
+| Verbes clairs | `voh.canvas.setName(id, name)` | Action explicite |
+| Hiérarchie par domaine | `voh.canvas.titleBar.setHeight()` | Le chemin dit tout |
+| Pas de redondance | `voh.canvas.getList(zoneId)` | Le domaine est dans le chemin |
+| Getters/setters appairés | `setOpacity()` / `getOpacity()` | Cohérence systématique |
+| Événements domaine:action | `canvas:created`, `object:moved` | Format à deux-points |
+
+### 7.2 Organisation par sous-objets
+
+L'API v5 est organisée en sous-objets qui reflètent la hiérarchie Zone → Canvas → Pages → Objets. Chaque sous-objet regroupe les méthodes de son domaine. Collections au pluriel, services au singulier.
+
+```javascript
+// ── Initialisation ──
+const voh = new VisualObjectsHandler(document.getElementById('monDiv'));
+await voh.init();
+
+// ── Zone (conteneur de premier niveau) ──
+const zoneId = voh.zone.create({ name: 'Ma zone' });
+voh.zone.setWidth(zoneId, 1200);
+voh.zone.setGridWidth(zoneId, 25);
+voh.zone.setGridHeight(zoneId, 25);
+
+// ── Canvas (surface de travail dans une zone) ──
+const canvasId = voh.canvas.create({ zone: zoneId, name: 'Mon canvas', x: 0, y: 0, width: 800, height: 600 });
+voh.canvas.setName(canvasId, 'Canvas principal');
+voh.canvas.setBorderColor(canvasId, '#333333');
+voh.canvas.setActive(canvasId);
+
+// ── Canvas — Barre de titre ──
+voh.canvas.titleBar.setVisible(canvasId, true);
+voh.canvas.titleBar.setHeight(canvasId, 28);
+voh.canvas.titleBar.setBackgroundColor(canvasId, '#2d2d30');
+
+// ── Canvas — Boutons barre de titre ──
+voh.canvas.titleBar.buttons.setVisible(canvasId, 'close', true);
+voh.canvas.titleBar.buttons.setBackgroundColor(canvasId, 'close', '#e81123');
+
+// ── Canvas — Poignées de redimensionnement ──
+voh.canvas.handles.enableOnly(canvasId, ['bottomRight', 'right', 'bottom']);
+voh.canvas.handles.setColor(canvasId, '#007acc');
+
+// ── Canvas — Icône de déplacement ──
+voh.canvas.moveIcon.setVisible(canvasId, true);
+voh.canvas.moveIcon.setPosition(canvasId, 'top-left');
+
+// ── Canvas — Docking ──
+voh.canvas.docking.dock(canvasId, 'left');
+voh.canvas.docking.setArrowColor('#007acc');
+
+// ── Canvas — États MDI ──
+voh.canvas.minimize(canvasId);
+voh.canvas.maximize(canvasId);
+voh.canvas.restore(canvasId);
+
+// ── Pages (par canvas — dimensions, fond, bordure, arrondis, grille, sélection, objets, undo/redo) ──
+const pageId = voh.canvas.pages.add(canvasId, { name: 'Page 2' });
+voh.canvas.pages.setActive(canvasId, pageId);
+voh.canvas.pages.setWidth(canvasId, pageId, 800);
+voh.canvas.pages.setHeight(canvasId, pageId, 600);
+voh.canvas.pages.setBackgroundColor(canvasId, pageId, '#ffffff');
+voh.canvas.pages.setBackgroundImage(canvasId, pageId, 'Images/fond.png');
+voh.canvas.pages.setBorderColor(canvasId, pageId, '#333333');
+voh.canvas.pages.setCornerRadius(canvasId, pageId, 8);
+voh.canvas.pages.setGridWidth(canvasId, pageId, 25);
+voh.canvas.pages.setGridHeight(canvasId, pageId, 25);
+voh.canvas.pages.setGridVisible(canvasId, pageId, true);
+voh.canvas.pages.setSnapEnabled(canvasId, pageId, true);
+voh.canvas.pages.setSelectionBackgroundColor(canvasId, pageId, 'rgba(0, 120, 215, 0.15)');
+voh.canvas.pages.undo(canvasId, pageId);
+voh.canvas.pages.redo(canvasId, pageId);
+
+// ── Objets (dans un canvas, sur la page active) — FUTUR ──
+// voh.objects.create(canvasId, { type: 'rectangle', x: 100, y: 100, width: 200, height: 150 });
+// voh.objects.delete(canvasId, objectId);
+// voh.objects.get(canvasId, objectId);
+
+// ── Sélection d'objets (par canvas) — FUTUR ──
+// voh.objects.selection.select(canvasId, objectId);
+// voh.objects.selection.selectAll(canvasId);
+// voh.objects.selection.clear(canvasId);
+
+// ── Presse-papiers (partagé entre canvas) — FUTUR ──
+// voh.clipboard.copy(canvasId);
+// voh.clipboard.paste(canvasId);
+
+// ── Connexions (entre objets dans un canvas) — FUTUR ──
+// voh.connections.create(canvasId, sourceId, targetId, options);
+// voh.connections.delete(canvasId, connectionId);
+
+// ── Événements (format domaine:action) ──
+voh.on('canvas:created', (data) => { /* { canvasId } */ });
+voh.on('canvas:activated', (data) => { /* { canvasId } */ });
+voh.on('canvas:leftClick', (data) => { /* { canvasId, x, y } */ });
+voh.on('object:created', (data) => { /* { canvasId, objectId } */ });
+voh.on('object:moved', (data) => { /* { canvasId, objectId, x, y } */ });
+voh.on('page:activated', (data) => { /* { canvasId, pageId } */ });
+```
+
+### 7.3 Récapitulatif des sous-objets API
+
+| Sous-objet | Type | Statut | Description |
+|------------|------|--------|-------------|
+| `voh.zone` | Service (singulier) | ✅ Implémenté | Zones (conteneurs de premier niveau) |
+| `voh.canvas` | Service (singulier) | 🔶 En conception | Canvas (surfaces de travail dans les zones) |
+| `voh.canvas.titleBar` | Sous-service | 🔶 En conception | Barre de titre des canvas |
+| `voh.canvas.titleBar.buttons` | Sous-service | 🔶 En conception | Boutons fermer/minimiser/maximiser |
+| `voh.canvas.handles` | Sous-service | 🔶 En conception | Poignées de redimensionnement des canvas |
+| `voh.canvas.moveIcon` | Sous-service | 🔶 En conception | Icône de déplacement alternative |
+| `voh.canvas.docking` | Sous-service | 🔶 En conception | Docking des canvas entre eux |
+| `voh.canvas.pages` | Sous-collection (pluriel) | 🔶 En conception | Pages par canvas (dimensions, fond, bordure, arrondis, grille, snap, curseur, sélection souris, undo/redo) |
+| `voh.objects` | Collection (pluriel) | ⬜ Prévu | Objets graphiques dans les canvas |
+| `voh.objects.selection` | Sous-service (singulier) | ⬜ Prévu | Sélection d'objets (par canvas, vidée au changement de page) |
+| `voh.clipboard` | Service (singulier) | ⬜ Prévu | Presse-papiers partagé entre canvas |
+| `voh.history` | Service (singulier) | ⬜ Prévu | Alias global undo/redo (délègue à la page active) |
+| `voh.connections` | Collection (pluriel) | ⬜ Prévu | Connexions/liaisons entre objets |
+| `voh.render` | Service (singulier) | ⬜ Prévu | Rendu et export d'images |
+| `voh.rules` | Collection (pluriel) | ⬜ Prévu (Phase 4) | Moteur de règles JSON |
+| `voh.files` | Service (singulier) | ⬜ Prévu (wrapper) | FileManager (médias) |
+| `voh.project` | Service (singulier) | ⬜ Prévu (wrapper) | Gestion de projet |
+
+La liste complète des méthodes pour `voh.canvas` et `voh.canvas.pages` est définie dans le document de conception du module Canvas (voh-canvas-conception.md — 378 méthodes, 136 événements).
+
+
+---
+

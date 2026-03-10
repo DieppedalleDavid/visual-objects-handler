@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Grille — voh.zone</title>
+</head>
+<body>
+
+<h1>voh.zone — Grille</h1>
+<p class="intro">Quadrillage visuel sur la zone pour positionner les éléments.</p>
+
+<div class="note">
+    La grille est un quadrillage visuel sur la zone qui sert de repère pour positionner les canevas.
+    Elle est masquée par défaut — il faut passer <code>gridIsVisible: true</code> pour la voir.
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setGridWidth</span><span class="sig-paren">(</span><span class="sig-param">zoneId, pixels</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getGridWidth</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Espacement horizontal entre les lignes de la grille (en pixels, minimum 1).</div>
+    <div class="method-return"><strong>set</strong> → <code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setGridHeight</span><span class="sig-paren">(</span><span class="sig-param">zoneId, pixels</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getGridHeight</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Espacement vertical entre les lignes de la grille (en pixels, minimum 1).</div>
+    <div class="method-return"><strong>set</strong> → <code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setGridColor</span><span class="sig-paren">(</span><span class="sig-param">zoneId, couleur</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getGridColor</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Couleur des lignes de la grille.</div>
+    <div class="method-return"><strong>set</strong> → <code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setGridOpacity</span><span class="sig-paren">(</span><span class="sig-param">zoneId, opacité</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getGridOpacity</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Opacité de la grille. <code>0.0</code> = invisible, <code>1.0</code> = opaque.</div>
+    <div class="method-return"><strong>set</strong> → <code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setGridVisible</span><span class="sig-paren">(</span><span class="sig-param">zoneId, visible</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getGridVisible</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Affiche ou masque la grille. Les propriétés sont conservées même quand la grille est masquée.</div>
+    <div class="method-return"><strong>set</strong> <span class="sig-arrow">→</span> <span class="sig-return"><code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div></span></div>
+
+<pre><span class="cmt">// Activer la grille et la configurer</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setGridVisible</span>(<span class="var">zone</span>, <span class="kw">true</span>);
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setGridWidth</span>(<span class="var">zone</span>, <span class="num">40</span>);
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setGridHeight</span>(<span class="var">zone</span>, <span class="num">40</span>);
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setGridColor</span>(<span class="var">zone</span>, <span class="str">'rgba(255, 255, 255, 1.0)'</span>);
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setGridOpacity</span>(<span class="var">zone</span>, <span class="num">0.2</span>);
+
+<span class="cmt">// Masquer la grille (les réglages sont conservés)</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setGridVisible</span>(<span class="var">zone</span>, <span class="kw">false</span>);
+
+<span class="cmt">// La réafficher plus tard → elle reprend son apparence</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setGridVisible</span>(<span class="var">zone</span>, <span class="kw">true</span>);</pre>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

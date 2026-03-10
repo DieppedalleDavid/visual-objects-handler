@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Dimensions — voh.canvas</title>
+</head>
+<body>
+
+<h1>voh.canvas — Dimensions</h1>
+<p class="intro">Largeur et hauteur d'un canvas en pixels.</p>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">setWidth</span><span class="sig-paren">(</span><span class="sig-param">canvasId, width</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit la largeur du canvas.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas</td></tr>
+        <tr><td>width</td><td>nombre</td><td>Largeur en pixels</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si canvas inexistant.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">setWidth</span>(<span class="var">canvas1</span>, <span class="num">700</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">getWidth</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre ou null</span></div>
+    <div class="method-description">Retourne la largeur du canvas.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre</span> — la largeur en pixels, ou <code>null</code> si le canvas n'existe pas.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getWidth</span>(<span class="var">canvas1</span>));  <span class="cmt">// 700</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">setHeight</span><span class="sig-paren">(</span><span class="sig-param">canvasId, height</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit la hauteur du canvas.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas</td></tr>
+        <tr><td>height</td><td>nombre</td><td>Hauteur en pixels</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si canvas inexistant.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">setHeight</span>(<span class="var">canvas1</span>, <span class="num">450</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">getHeight</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre ou null</span></div>
+    <div class="method-description">Retourne la hauteur du canvas.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre</span> — la hauteur en pixels, ou <code>null</code> si le canvas n'existe pas.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getHeight</span>(<span class="var">canvas1</span>));  <span class="cmt">// 450</span></pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

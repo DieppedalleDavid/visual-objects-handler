@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Raccourcis clavier — VOH Documentation</title>
+</head>
+<body>
+
+<h1>Raccourcis clavier</h1>
+<p class="intro">Liste complète des raccourcis clavier disponibles dans l'éditeur de code.</p>
+
+<div class="note">
+    Les raccourcis utilisant <code>Ctrl</code> fonctionnent aussi avec <code>Cmd</code> sur macOS.
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Fichier</h2>
+
+<table>
+    <tr><th>Raccourci</th><th>Action</th></tr>
+    <tr><td><code>Ctrl+N</code></td><td>Nouveau fichier (vide l'éditeur)</td></tr>
+    <tr><td><code>Ctrl+O</code></td><td>Ouvrir un fichier <code>.js</code> ou <code>.ts</code> depuis le disque</td></tr>
+    <tr><td><code>Ctrl+S</code></td><td>Enregistrer le fichier courant</td></tr>
+    <tr><td><code>Ctrl+Shift+S</code></td><td>Enregistrer sous (nouveau nom de fichier)</td></tr>
+</table>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Édition</h2>
+
+<table>
+    <tr><th>Raccourci</th><th>Action</th></tr>
+    <tr><td><code>Ctrl+Z</code></td><td>Annuler la dernière modification</td></tr>
+    <tr><td><code>Ctrl+Y</code></td><td>Rétablir la modification annulée</td></tr>
+    <tr><td><code>Ctrl+X</code></td><td>Couper la sélection</td></tr>
+    <tr><td><code>Ctrl+C</code></td><td>Copier la sélection</td></tr>
+    <tr><td><code>Ctrl+V</code></td><td>Coller depuis le presse-papiers</td></tr>
+    <tr><td><code>Ctrl+A</code></td><td>Tout sélectionner</td></tr>
+</table>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Recherche et remplacement</h2>
+
+<table>
+    <tr><th>Raccourci</th><th>Action</th></tr>
+    <tr><td><code>Ctrl+F</code></td><td>Ouvrir le panneau de recherche</td></tr>
+    <tr><td><code>Ctrl+H</code></td><td>Ouvrir le panneau de recherche avec remplacement</td></tr>
+    <tr><td><code>Ctrl+G</code></td><td>Occurrence suivante</td></tr>
+    <tr><td><code>Ctrl+Shift+G</code></td><td>Occurrence précédente</td></tr>
+    <tr><td><code>Entrée</code></td><td>Occurrence suivante (dans le panneau de recherche)</td></tr>
+    <tr><td><code>Shift+Entrée</code></td><td>Occurrence précédente (dans le panneau de recherche)</td></tr>
+    <tr><td><code>Échap</code></td><td>Fermer le panneau de recherche</td></tr>
+</table>
+
+<p>
+    Le panneau de recherche propose trois options de filtrage :
+    <strong>Respecter la casse</strong>, <strong>Mot entier seulement</strong> et
+    <strong>Expression régulière</strong>. Le compteur d'occurrences s'affiche en temps réel.
+</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Code</h2>
+
+<table>
+    <tr><th>Raccourci</th><th>Action</th></tr>
+    <tr><td><code>Tab</code></td><td>Indenter la sélection (ou insérer 4 espaces si pas de sélection)</td></tr>
+    <tr><td><code>Shift+Tab</code></td><td>Dés-indenter la sélection ou la ligne courante</td></tr>
+    <tr><td><code>Ctrl+Shift+F</code></td><td>Reformater le code (indentation automatique)</td></tr>
+    <tr><td><code>Ctrl+Q</code></td><td>Replier / Déplier le bloc de code sous le curseur</td></tr>
+</table>
+
+<div class="note">
+    <strong>Reformater le code</strong> corrige automatiquement l'indentation. Si du texte est
+    sélectionné, seule la sélection est reformatée. Sinon, tout le code est reformaté.
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Exécution et aide</h2>
+
+<table>
+    <tr><th>Raccourci</th><th>Action</th></tr>
+    <tr><td><code>F5</code></td><td>Exécuter le script dans un nouvel onglet (<code>runner.html</code>)</td></tr>
+    <tr><td><code>F1</code></td><td>Ouvrir la page de documentation de la fonction API sous le curseur</td></tr>
+</table>
+
+<p>
+    Le raccourci <code>F1</code> fonctionne quand le curseur texte est positionné sur un nom
+    de fonction API (par exemple <code>voh.objects.create</code>). La page de documentation
+    correspondante s'ouvre dans un nouvel onglet du navigateur.
+</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Autocomplétion</h2>
+
+<table>
+    <tr><th>Raccourci</th><th>Action</th></tr>
+    <tr><td><code>↑</code> / <code>↓</code></td><td>Naviguer dans la liste de propositions</td></tr>
+    <tr><td><code>Entrée</code> ou <code>Tab</code></td><td>Valider la proposition sélectionnée</td></tr>
+    <tr><td><code>Échap</code></td><td>Fermer la liste de propositions</td></tr>
+</table>
+
+<p>
+    L'autocomplétion se déclenche automatiquement en tapant. Voir la page
+    <a href="fonctionnalites.html">Fonctionnalités de l'éditeur</a> pour les détails.
+</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Menu contextuel</h2>
+
+<p>
+    Un clic droit dans l'éditeur ouvre un menu contextuel avec les actions courantes :
+    Annuler, Couper, Copier, Coller, Tout sélectionner, Rechercher, Remplacer et Reformater le code.
+</p>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

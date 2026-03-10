@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Dimensions — voh.zone</title>
+</head>
+<body>
+
+<h1>voh.zone — Dimensions</h1>
+<p class="intro">Définir et lire la taille des zones.</p>
+
+<div class="note">
+    Par défaut, <code>width</code> et <code>height</code> valent <code>null</code>: la zone prend 100% de l'espace disponible.
+    Si on définit une taille en pixels plus grande que le conteneur, des scrollbars apparaissent.
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setWidth</span><span class="sig-paren">(</span><span class="sig-param">zoneId, largeur</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getWidth</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Définit ou lit la largeur. Passer <code>null</code> pour reprendre 100%.</div>
+    <div class="method-return"><strong>set</strong> → <code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div>
+<pre><span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setWidth</span>(<span class="var">zone</span>, <span class="num">1200</span>);       <span class="cmt">// Largeur fixe 1200px</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setWidth</span>(<span class="var">zone</span>, <span class="kw">null</span>);       <span class="cmt">// Reprendre 100%</span>
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">getWidth</span>(<span class="var">zone</span>));  <span class="cmt">// null ou 1200</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setHeight</span><span class="sig-paren">(</span><span class="sig-param">zoneId, hauteur</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getHeight</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Définit ou lit la hauteur. Même logique que la largeur.</div>
+    <div class="method-return"><strong>set</strong> → <code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div>
+<pre><span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setHeight</span>(<span class="var">zone</span>, <span class="num">800</span>);
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">getHeight</span>(<span class="var">zone</span>));  <span class="cmt">// 800</span></pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Référence API complète — VOH Documentation</title>
+    <style>
+        .ref-filters {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin: 18px 0 14px 0;
+            flex-wrap: wrap;
+        }
+        .ref-search {
+            flex: 1;
+            min-width: 200px;
+            padding: 7px 11px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 13px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            outline: none;
+            background: #fafafa;
+        }
+        .ref-search:focus {
+            border-color: #3478d7;
+            background: #fff;
+            box-shadow: 0 0 0 2px rgba(52,120,215,0.12);
+        }
+        .ref-module-select {
+            padding: 7px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 12px;
+            background: #fafafa;
+            cursor: pointer;
+            outline: none;
+        }
+        .ref-module-select:focus { border-color: #3478d7; }
+        .ref-count {
+            font-size: 12px;
+            color: #888;
+            white-space: nowrap;
+            min-width: 100px;
+            text-align: right;
+        }
+        .ref-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            font-size: 12.5px;
+        }
+        .ref-table th {
+            text-align: left;
+            padding: 9px 10px;
+            background: #f7f8fa;
+            border-bottom: 2px solid #ddd;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: #555;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        .ref-table td {
+            padding: 7px 10px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+        .ref-table tr:hover td { background: #f5f8fd; }
+        .ref-td-method { width: 38%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ref-td-desc { width: 47%; color: #444; line-height: 1.45; }
+        .ref-td-module { width: 15%; text-align: center; }
+        .ref-method-link {
+            color: #1a5dab;
+            text-decoration: none;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+        }
+        .ref-method-link:hover { text-decoration: underline; }
+        .ref-method-nolink {
+            color: #666;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+        }
+        .ref-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 600;
+            border: 1px solid;
+            white-space: nowrap;
+        }
+        .ref-hidden { display: none; }
+        .ref-no-results {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            color: #999;
+            font-style: italic;
+        }
+        .ref-reset {
+            padding: 6px 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #fafafa;
+            cursor: pointer;
+            font-size: 12px;
+            color: #555;
+        }
+        .ref-reset:hover { background: #eee; }
+    </style>
+</head>
+<body>
+
+<h1>Référence API complète</h1>
+<p class="intro">289 méthodes disponibles. Cliquez sur un nom de méthode pour ouvrir sa page de documentation.</p>
+
+<div class="ref-filters">
+    <input type="text" class="ref-search" id="refSearch" placeholder="Rechercher une méthode..." oninput="_refFilter()">
+    <select class="ref-module-select" id="refModule" onchange="_refFilter()">
+        <option value="">Tous les modules</option>
+            <option value="canvas">voh.canvas (45)</option>
+            <option value="canvas.pages">voh.canvas.pages (69)</option>
+            <option value="canvas.pages.history">voh.canvas.pages.history (11)</option>
+            <option value="canvas.selection">voh.canvas.selection (14)</option>
+            <option value="global">voh (global) (18)</option>
+            <option value="js">JavaScript (9)</option>
+            <option value="objects">voh.objects (66)</option>
+            <option value="objects.selection">voh.objects.selection (9)</option>
+            <option value="zone">voh.zone (48)</option>
+    </select>
+    <button class="ref-reset" onclick="_refReset()">Réinitialiser</button>
+    <span class="ref-count" id="refCount">289 méthodes</span>
+</div>
+
+<div id="refNoResults" class="ref-no-results">Aucune méthode trouvée.</div>
+
+<table class="ref-table">
+    <thead>
+        <tr>
+            <th>Méthode</th>
+            <th>Description</th>
+            <th>Module</th>
+        </tr>
+    </thead>
+    <tbody id="refTbody">
+        <tr data-method="console.error" data-module="js">
+            <td class="ref-td-method"><span class="ref-method-nolink">console.error</span></td>
+            <td class="ref-td-desc">Affiche une erreur dans la console.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#888;background:#f5f5f5;border-color:#88840;">JavaScript</span></td>
+        </tr>        <tr data-method="console.log" data-module="js">
+            <td class="ref-td-method"><span class="ref-method-nolink">console.log</span></td>
+            <td class="ref-td-desc">Affiche un message dans la console.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#888;background:#f5f5f5;border-color:#88840;">JavaScript</span></td>
+        </tr>        <tr data-method="console.warn" data-module="js">
+            <td class="ref-td-method"><span class="ref-method-nolink">console.warn</span></td>
+            <td class="ref-td-desc">Affiche un avertissement dans la console.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#888;background:#f5f5f5;border-color:#88840;">JavaScript</span></td>
+        </tr>        <tr data-method="document.getelementbyid" data-module="js">
+            <td class="ref-td-method"><span class="ref-method-nolink">document.getElementById</span></td>
+            <td class="ref-td-desc">Retourne l&#x27;élément DOM ayant cet ID.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#888;background:#f5f5f5;border-color:#88840;">JavaScript</span></td>
+        </tr>        <tr data-method="document.queryselector" data-module="js">
+            <td class="ref-td-method"><span class="ref-method-nolink">document.querySelector</span></td>
+            <td class="ref-td-desc">Retourne le premier élément correspondant au sélecteur CSS.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#888;background:#f5f5f5;border-color:#88840;">JavaScript</span></td>
+        </tr>        <tr data-method="json.parse" data-module="js">
+            <td class="ref-td-method"><span class="ref-method-nolink">JSON.parse</span></td>
+            <td class="ref-td-desc">Parse une chaîne JSON et retourne l&#x27;objet correspondant.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#888;background:#f5f5f5;border-color:#88840;">JavaScript</span></td>
+        </tr>        <tr data-method="json.stringify" data-module="js">
+            <td class="ref-td-method"><span class="ref-method-nolink">JSON.stringify</span></td>
+            <td class="ref-td-desc">Convertit une valeur JavaScript en chaîne JSON.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#888;background:#f5f5f5;border-color:#88840;">JavaScript</span></td>
+        </tr>        <tr data-method="setinterval" data-module="js">
+            <td class="ref-td-method"><span class="ref-method-nolink">setInterval</span></td>
+            <td class="ref-td-desc">Exécute une fonction de manière répétée avec un intervalle.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#888;background:#f5f5f5;border-color:#88840;">JavaScript</span></td>
+        </tr>        <tr data-method="settimeout" data-module="js">
+            <td class="ref-td-method"><span class="ref-method-nolink">setTimeout</span></td>
+            <td class="ref-td-desc">Exécute une fonction après un délai en millisecondes.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#888;background:#f5f5f5;border-color:#88840;">JavaScript</span></td>
+        </tr>        <tr data-method="visualobjectshandler" data-module="global">
+            <td class="ref-td-method"><span class="ref-method-nolink">VisualObjectsHandler</span></td>
+            <td class="ref-td-desc">Crée une nouvelle instance du moteur VOH dans un élément DOM conteneur.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.canvas.bringtofront" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/z-order.html" class="ref-method-link">voh.canvas.bringToFront</a></td>
+            <td class="ref-td-desc">Amène le canevas au premier plan (z-order maximal).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.create" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/creation.html" class="ref-method-link">voh.canvas.create</a></td>
+            <td class="ref-td-desc">Crée un nouveau canevas dans une zone. Chaque canevas est indépendant avec son propre état.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.delete" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/creation.html" class="ref-method-link">voh.canvas.delete</a></td>
+            <td class="ref-td-desc">Supprime un canevas et tous ses objets.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.exists" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/informations.html" class="ref-method-link">voh.canvas.exists</a></td>
+            <td class="ref-td-desc">Vérifie si un canevas existe.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.getactiveid" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/canvas-actif.html" class="ref-method-link">voh.canvas.getActiveId</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;ID du canevas actuellement actif.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.getbackgroundcolor" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/fond-rendu.html" class="ref-method-link">voh.canvas.getBackgroundColor</a></td>
+            <td class="ref-td-desc">Retourne la couleur de fond du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.getcount" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/informations.html" class="ref-method-link">voh.canvas.getCount</a></td>
+            <td class="ref-td-desc">Retourne le nombre de canevas dans une zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.getheight" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/dimensions.html" class="ref-method-link">voh.canvas.getHeight</a></td>
+            <td class="ref-td-desc">Retourne la hauteur du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.getlist" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/informations.html" class="ref-method-link">voh.canvas.getList</a></td>
+            <td class="ref-td-desc">Retourne la liste des IDs des canevas d&#x27;une zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.getlocked" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/verrouillage.html" class="ref-method-link">voh.canvas.getLocked</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;état de verrouillage du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.getname" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/nom.html" class="ref-method-link">voh.canvas.getName</a></td>
+            <td class="ref-td-desc">Retourne le nom du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.getopacity" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/opacite.html" class="ref-method-link">voh.canvas.getOpacity</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;opacité du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.getvisible" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/visibilite.html" class="ref-method-link">voh.canvas.getVisible</a></td>
+            <td class="ref-td-desc">Retourne la visibilité du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.getwidth" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/dimensions.html" class="ref-method-link">voh.canvas.getWidth</a></td>
+            <td class="ref-td-desc">Retourne la largeur du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.getx" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/position.html" class="ref-method-link">voh.canvas.getX</a></td>
+            <td class="ref-td-desc">Retourne la position X du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.gety" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/position.html" class="ref-method-link">voh.canvas.getY</a></td>
+            <td class="ref-td-desc">Retourne la position Y du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.getzoneid" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/informations.html" class="ref-method-link">voh.canvas.getZoneId</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;ID de la zone à laquelle appartient ce canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.getzorder" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/z-order.html" class="ref-method-link">voh.canvas.getZOrder</a></td>
+            <td class="ref-td-desc">Retourne le z-order du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.history.canredo" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/historique.html" class="ref-method-link">voh.canvas.history.canRedo</a></td>
+            <td class="ref-td-desc">Retourne true s&#x27;il y a au moins une action refaisable.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.history.canundo" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/historique.html" class="ref-method-link">voh.canvas.history.canUndo</a></td>
+            <td class="ref-td-desc">Retourne true s&#x27;il y a au moins une action annulable.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.history.clear" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/historique.html" class="ref-method-link">voh.canvas.history.clear</a></td>
+            <td class="ref-td-desc">Vide l&#x27;historique undo et redo de la page active.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.history.getmaxlevel" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/historique.html" class="ref-method-link">voh.canvas.history.getMaxLevel</a></td>
+            <td class="ref-td-desc">Retourne le niveau maximum de l&#x27;historique.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.history.getredocount" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/historique.html" class="ref-method-link">voh.canvas.history.getRedoCount</a></td>
+            <td class="ref-td-desc">Retourne le nombre d&#x27;actions refaisables.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.history.getundocount" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/historique.html" class="ref-method-link">voh.canvas.history.getUndoCount</a></td>
+            <td class="ref-td-desc">Retourne le nombre d&#x27;actions annulables.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.history.pause" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/historique.html" class="ref-method-link">voh.canvas.history.pause</a></td>
+            <td class="ref-td-desc">Met l&#x27;historique en pause. Les actions sont accumulées pour un batch.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.history.redo" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/historique.html" class="ref-method-link">voh.canvas.history.redo</a></td>
+            <td class="ref-td-desc">Refait la dernière action annulée sur la page active.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.history.resume" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/historique.html" class="ref-method-link">voh.canvas.history.resume</a></td>
+            <td class="ref-td-desc">Reprend l&#x27;enregistrement. Les actions accumulées deviennent un batch unique.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.history.setmaxlevel" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/historique.html" class="ref-method-link">voh.canvas.history.setMaxLevel</a></td>
+            <td class="ref-td-desc">Définit le nombre maximum d&#x27;actions conservées (défaut: 50).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.history.undo" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/historique.html" class="ref-method-link">voh.canvas.history.undo</a></td>
+            <td class="ref-td-desc">Annule la dernière action sur la page active du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.islocked" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/verrouillage.html" class="ref-method-link">voh.canvas.isLocked</a></td>
+            <td class="ref-td-desc">Retourne true si le canevas est verrouillé (alias de getLocked).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.isvisible" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/visibilite.html" class="ref-method-link">voh.canvas.isVisible</a></td>
+            <td class="ref-td-desc">Retourne true si le canevas est visible (alias de getVisible).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.movedown" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/z-order.html" class="ref-method-link">voh.canvas.moveDown</a></td>
+            <td class="ref-td-desc">Descend le canevas d&#x27;un niveau dans l&#x27;empilement.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.moveup" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/z-order.html" class="ref-method-link">voh.canvas.moveUp</a></td>
+            <td class="ref-td-desc">Monte le canevas d&#x27;un niveau dans l&#x27;empilement.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.add" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.add</a></td>
+            <td class="ref-td-desc">Ajoute une page au canevas. Retourne l&#x27;ID de la page créée.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.background.getcolor" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-fond.html" class="ref-method-link">voh.canvas.pages.background.getColor</a></td>
+            <td class="ref-td-desc">Retourne la couleur de fond d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.background.getimage" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-fond.html" class="ref-method-link">voh.canvas.pages.background.getImage</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;image de fond d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.background.getimageopacity" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-fond.html" class="ref-method-link">voh.canvas.pages.background.getImageOpacity</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;opacité de l&#x27;image de fond.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.background.setcolor" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-fond.html" class="ref-method-link">voh.canvas.pages.background.setColor</a></td>
+            <td class="ref-td-desc">Définit la couleur de fond d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.background.setimage" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-fond.html" class="ref-method-link">voh.canvas.pages.background.setImage</a></td>
+            <td class="ref-td-desc">Définit l&#x27;image de fond d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.background.setimageopacity" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-fond.html" class="ref-method-link">voh.canvas.pages.background.setImageOpacity</a></td>
+            <td class="ref-td-desc">Définit l&#x27;opacité de l&#x27;image de fond (0.0 à 1.0).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.border.getcolor" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-bordure.html" class="ref-method-link">voh.canvas.pages.border.getColor</a></td>
+            <td class="ref-td-desc">Retourne la couleur de bordure d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.border.getcornerradius" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-bordure.html" class="ref-method-link">voh.canvas.pages.border.getCornerRadius</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;arrondi des coins d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.border.getstyle" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-bordure.html" class="ref-method-link">voh.canvas.pages.border.getStyle</a></td>
+            <td class="ref-td-desc">Retourne le style de bordure d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.border.getthickness" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-bordure.html" class="ref-method-link">voh.canvas.pages.border.getThickness</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;épaisseur de la bordure d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.border.getvisible" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-bordure.html" class="ref-method-link">voh.canvas.pages.border.getVisible</a></td>
+            <td class="ref-td-desc">Retourne la visibilité de la bordure.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.border.setcolor" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-bordure.html" class="ref-method-link">voh.canvas.pages.border.setColor</a></td>
+            <td class="ref-td-desc">Définit la couleur de bordure d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.border.setcornerradius" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-bordure.html" class="ref-method-link">voh.canvas.pages.border.setCornerRadius</a></td>
+            <td class="ref-td-desc">Définit l&#x27;arrondi des coins d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.border.setstyle" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-bordure.html" class="ref-method-link">voh.canvas.pages.border.setStyle</a></td>
+            <td class="ref-td-desc">Définit le style de bordure: solid, dashed, dotted.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.border.setthickness" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-bordure.html" class="ref-method-link">voh.canvas.pages.border.setThickness</a></td>
+            <td class="ref-td-desc">Définit l&#x27;épaisseur de la bordure d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.border.setvisible" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-bordure.html" class="ref-method-link">voh.canvas.pages.border.setVisible</a></td>
+            <td class="ref-td-desc">Active ou désactive la bordure de la page. Les propriétés (couleur, épaisseur, etc.) sont conservées.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.cursor.get" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-curseur.html" class="ref-method-link">voh.canvas.pages.cursor.get</a></td>
+            <td class="ref-td-desc">Retourne le curseur configuré pour une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.cursor.set" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-curseur.html" class="ref-method-link">voh.canvas.pages.cursor.set</a></td>
+            <td class="ref-td-desc">Définit le curseur de la souris pour une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.dimensions.getheight" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-dimensions.html" class="ref-method-link">voh.canvas.pages.dimensions.getHeight</a></td>
+            <td class="ref-td-desc">Retourne la hauteur d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.dimensions.getwidth" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-dimensions.html" class="ref-method-link">voh.canvas.pages.dimensions.getWidth</a></td>
+            <td class="ref-td-desc">Retourne la largeur d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.dimensions.setheight" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-dimensions.html" class="ref-method-link">voh.canvas.pages.dimensions.setHeight</a></td>
+            <td class="ref-td-desc">Définit la hauteur d&#x27;une page. Sans pageId = page active.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.dimensions.setwidth" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-dimensions.html" class="ref-method-link">voh.canvas.pages.dimensions.setWidth</a></td>
+            <td class="ref-td-desc">Définit la largeur d&#x27;une page. Sans pageId = page active.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.duplicate" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.duplicate</a></td>
+            <td class="ref-td-desc">Duplique une page avec toutes ses propriétés.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.exists" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.exists</a></td>
+            <td class="ref-td-desc">Vérifie si une page existe dans le canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.export" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.export</a></td>
+            <td class="ref-td-desc">Exporte une page en objet JSON sérialisable.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.getactiveid" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.getActiveId</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;ID de la page active du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.getcount" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.getCount</a></td>
+            <td class="ref-td-desc">Retourne le nombre de pages du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.getindex" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.getIndex</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;index (0-based) d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.getlist" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.getList</a></td>
+            <td class="ref-td-desc">Retourne la liste ordonnée des pages.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.getname" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.getName</a></td>
+            <td class="ref-td-desc">Retourne le nom d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.goto" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.goTo</a></td>
+            <td class="ref-td-desc">Active la page à l&#x27;index donné (0-based).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.getcellheight" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.getCellHeight</a></td>
+            <td class="ref-td-desc">Retourne la hauteur des cellules de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.getcellwidth" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.getCellWidth</a></td>
+            <td class="ref-td-desc">Retourne la largeur des cellules de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.getcolor" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.getColor</a></td>
+            <td class="ref-td-desc">Retourne la couleur de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.getopacity" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.getOpacity</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;opacité de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.getsnapenabled" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.getSnapEnabled</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;état du snap à la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.getstyle" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.getStyle</a></td>
+            <td class="ref-td-desc">Retourne le style de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.getthickness" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.getThickness</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;épaisseur des lignes de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.getvisible" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.getVisible</a></td>
+            <td class="ref-td-desc">Retourne la visibilité de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.setcellheight" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.setCellHeight</a></td>
+            <td class="ref-td-desc">Définit la hauteur des cellules de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.setcellwidth" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.setCellWidth</a></td>
+            <td class="ref-td-desc">Définit la largeur des cellules de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.setcolor" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.setColor</a></td>
+            <td class="ref-td-desc">Définit la couleur de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.setopacity" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.setOpacity</a></td>
+            <td class="ref-td-desc">Définit l&#x27;opacité de la grille (0.0 à 1.0).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.setsnapenabled" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.setSnapEnabled</a></td>
+            <td class="ref-td-desc">Active ou désactive l&#x27;accrochage à la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.setstyle" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.setStyle</a></td>
+            <td class="ref-td-desc">Définit le style de la grille: solid, dashed, dotted, dots.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.setthickness" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.setThickness</a></td>
+            <td class="ref-td-desc">Définit l&#x27;épaisseur des lignes de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.grid.setvisible" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-grille.html" class="ref-method-link">voh.canvas.pages.grid.setVisible</a></td>
+            <td class="ref-td-desc">Affiche ou masque la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.history.canredo" data-module="canvas.pages.history">
+            <td class="ref-td-method"><a href="../api-canvas/pages-historique.html" class="ref-method-link">voh.canvas.pages.history.canRedo</a></td>
+            <td class="ref-td-desc">Retourne true s&#x27;il y a au moins une action refaisable.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages.history</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.history.canundo" data-module="canvas.pages.history">
+            <td class="ref-td-method"><a href="../api-canvas/pages-historique.html" class="ref-method-link">voh.canvas.pages.history.canUndo</a></td>
+            <td class="ref-td-desc">Retourne true s&#x27;il y a au moins une action annulable.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages.history</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.history.clear" data-module="canvas.pages.history">
+            <td class="ref-td-method"><a href="../api-canvas/pages-historique.html" class="ref-method-link">voh.canvas.pages.history.clear</a></td>
+            <td class="ref-td-desc">Vide l&#x27;historique undo et redo de la page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages.history</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.history.getmaxlevel" data-module="canvas.pages.history">
+            <td class="ref-td-method"><a href="../api-canvas/pages-historique.html" class="ref-method-link">voh.canvas.pages.history.getMaxLevel</a></td>
+            <td class="ref-td-desc">Retourne le niveau maximum de l&#x27;historique.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages.history</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.history.getredocount" data-module="canvas.pages.history">
+            <td class="ref-td-method"><a href="../api-canvas/pages-historique.html" class="ref-method-link">voh.canvas.pages.history.getRedoCount</a></td>
+            <td class="ref-td-desc">Retourne le nombre d&#x27;actions refaisables.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages.history</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.history.getundocount" data-module="canvas.pages.history">
+            <td class="ref-td-method"><a href="../api-canvas/pages-historique.html" class="ref-method-link">voh.canvas.pages.history.getUndoCount</a></td>
+            <td class="ref-td-desc">Retourne le nombre d&#x27;actions annulables.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages.history</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.history.pause" data-module="canvas.pages.history">
+            <td class="ref-td-method"><a href="../api-canvas/pages-historique.html" class="ref-method-link">voh.canvas.pages.history.pause</a></td>
+            <td class="ref-td-desc">Met l&#x27;historique en pause. Les actions sont accumulées pour un batch.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages.history</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.history.redo" data-module="canvas.pages.history">
+            <td class="ref-td-method"><a href="../api-canvas/pages-historique.html" class="ref-method-link">voh.canvas.pages.history.redo</a></td>
+            <td class="ref-td-desc">Refait la dernière action annulée.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages.history</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.history.resume" data-module="canvas.pages.history">
+            <td class="ref-td-method"><a href="../api-canvas/pages-historique.html" class="ref-method-link">voh.canvas.pages.history.resume</a></td>
+            <td class="ref-td-desc">Reprend l&#x27;enregistrement. Les actions accumulées deviennent un batch unique.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages.history</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.history.setmaxlevel" data-module="canvas.pages.history">
+            <td class="ref-td-method"><a href="../api-canvas/pages-historique.html" class="ref-method-link">voh.canvas.pages.history.setMaxLevel</a></td>
+            <td class="ref-td-desc">Définit le nombre maximum d&#x27;actions conservées (défaut: 50).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages.history</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.history.undo" data-module="canvas.pages.history">
+            <td class="ref-td-method"><a href="../api-canvas/pages-historique.html" class="ref-method-link">voh.canvas.pages.history.undo</a></td>
+            <td class="ref-td-desc">Annule la dernière action sur la page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages.history</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.import" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.import</a></td>
+            <td class="ref-td-desc">Importe une page depuis un objet JSON.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.movedown" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.moveDown</a></td>
+            <td class="ref-td-desc">Descend une page d&#x27;un cran dans l&#x27;ordre.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.moveto" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.moveTo</a></td>
+            <td class="ref-td-desc">Déplace une page à un index précis.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.moveup" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.moveUp</a></td>
+            <td class="ref-td-desc">Monte une page d&#x27;un cran dans l&#x27;ordre.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.next" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.next</a></td>
+            <td class="ref-td-desc">Active la page suivante (circulaire).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.previous" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.previous</a></td>
+            <td class="ref-td-desc">Active la page précédente (circulaire).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.remove" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.remove</a></td>
+            <td class="ref-td-desc">Supprime une page. Impossible de supprimer la dernière page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.selection.getbackgroundcolor" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-selection.html" class="ref-method-link">voh.canvas.pages.selection.getBackgroundColor</a></td>
+            <td class="ref-td-desc">Retourne la couleur de fond du rectangle de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.selection.getbordercolor" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-selection.html" class="ref-method-link">voh.canvas.pages.selection.getBorderColor</a></td>
+            <td class="ref-td-desc">Retourne la couleur de bordure du rectangle de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.selection.getborderstyle" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-selection.html" class="ref-method-link">voh.canvas.pages.selection.getBorderStyle</a></td>
+            <td class="ref-td-desc">Retourne le style de bordure du rectangle de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.selection.getborderthickness" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-selection.html" class="ref-method-link">voh.canvas.pages.selection.getBorderThickness</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;épaisseur de bordure du rectangle de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.selection.getenabled" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-selection.html" class="ref-method-link">voh.canvas.pages.selection.getEnabled</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;état d&#x27;activation de la sélection souris.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.selection.getmousebutton" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-selection.html" class="ref-method-link">voh.canvas.pages.selection.getMouseButton</a></td>
+            <td class="ref-td-desc">Retourne le bouton souris configuré pour la sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.selection.setbackgroundcolor" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-selection.html" class="ref-method-link">voh.canvas.pages.selection.setBackgroundColor</a></td>
+            <td class="ref-td-desc">Définit la couleur de fond du rectangle de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.selection.setbordercolor" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-selection.html" class="ref-method-link">voh.canvas.pages.selection.setBorderColor</a></td>
+            <td class="ref-td-desc">Définit la couleur de bordure du rectangle de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.selection.setborderstyle" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-selection.html" class="ref-method-link">voh.canvas.pages.selection.setBorderStyle</a></td>
+            <td class="ref-td-desc">Définit le style de bordure du rectangle de sélection: solid, dashed, dotted.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.selection.setborderthickness" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-selection.html" class="ref-method-link">voh.canvas.pages.selection.setBorderThickness</a></td>
+            <td class="ref-td-desc">Définit l&#x27;épaisseur de bordure du rectangle de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.selection.setenabled" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-selection.html" class="ref-method-link">voh.canvas.pages.selection.setEnabled</a></td>
+            <td class="ref-td-desc">Active ou désactive la sélection à la souris.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.selection.setmousebutton" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages-selection.html" class="ref-method-link">voh.canvas.pages.selection.setMouseButton</a></td>
+            <td class="ref-td-desc">Définit le bouton souris pour la sélection: left, middle, right.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.setactive" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.setActive</a></td>
+            <td class="ref-td-desc">Active une page (la rend courante).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.pages.setname" data-module="canvas.pages">
+            <td class="ref-td-method"><a href="../api-canvas/pages.html" class="ref-method-link">voh.canvas.pages.setName</a></td>
+            <td class="ref-td-desc">Définit le nom d&#x27;une page.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#3d6bb0;background:#eef3fc;border-color:#3d6bb040;">voh.canvas.pages</span></td>
+        </tr>        <tr data-method="voh.canvas.selection.cancelsimulation" data-module="canvas.selection">
+            <td class="ref-td-method"><a href="../api-canvas/selection.html" class="ref-method-link">voh.canvas.selection.cancelSimulation</a></td>
+            <td class="ref-td-desc">Annule une simulation de sélection en cours. Résout la Promise avec false.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas.selection</span></td>
+        </tr>        <tr data-method="voh.canvas.selection.getbackgroundcolor" data-module="canvas.selection">
+            <td class="ref-td-method"><a href="../api-canvas/selection.html" class="ref-method-link">voh.canvas.selection.getBackgroundColor</a></td>
+            <td class="ref-td-desc">Retourne la couleur de fond du rectangle de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas.selection</span></td>
+        </tr>        <tr data-method="voh.canvas.selection.getbordercolor" data-module="canvas.selection">
+            <td class="ref-td-method"><a href="../api-canvas/selection.html" class="ref-method-link">voh.canvas.selection.getBorderColor</a></td>
+            <td class="ref-td-desc">Retourne la couleur de bordure du rectangle de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas.selection</span></td>
+        </tr>        <tr data-method="voh.canvas.selection.getborderstyle" data-module="canvas.selection">
+            <td class="ref-td-method"><a href="../api-canvas/selection.html" class="ref-method-link">voh.canvas.selection.getBorderStyle</a></td>
+            <td class="ref-td-desc">Retourne le style de la bordure du rectangle de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas.selection</span></td>
+        </tr>        <tr data-method="voh.canvas.selection.getborderthickness" data-module="canvas.selection">
+            <td class="ref-td-method"><a href="../api-canvas/selection.html" class="ref-method-link">voh.canvas.selection.getBorderThickness</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;épaisseur de la bordure du rectangle de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas.selection</span></td>
+        </tr>        <tr data-method="voh.canvas.selection.getenabled" data-module="canvas.selection">
+            <td class="ref-td-method"><a href="../api-canvas/selection.html" class="ref-method-link">voh.canvas.selection.getEnabled</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;état d&#x27;activation de la sélection à la souris.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas.selection</span></td>
+        </tr>        <tr data-method="voh.canvas.selection.getmousebutton" data-module="canvas.selection">
+            <td class="ref-td-method"><a href="../api-canvas/selection.html" class="ref-method-link">voh.canvas.selection.getMouseButton</a></td>
+            <td class="ref-td-desc">Retourne le bouton souris configuré pour la sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas.selection</span></td>
+        </tr>        <tr data-method="voh.canvas.selection.setbackgroundcolor" data-module="canvas.selection">
+            <td class="ref-td-method"><a href="../api-canvas/selection.html" class="ref-method-link">voh.canvas.selection.setBackgroundColor</a></td>
+            <td class="ref-td-desc">Définit la couleur de fond du rectangle de sélection. Accepte rgba() pour la transparence.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas.selection</span></td>
+        </tr>        <tr data-method="voh.canvas.selection.setbordercolor" data-module="canvas.selection">
+            <td class="ref-td-method"><a href="../api-canvas/selection.html" class="ref-method-link">voh.canvas.selection.setBorderColor</a></td>
+            <td class="ref-td-desc">Définit la couleur de bordure du rectangle de sélection. Accepte rgba() pour la transparence.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas.selection</span></td>
+        </tr>        <tr data-method="voh.canvas.selection.setborderstyle" data-module="canvas.selection">
+            <td class="ref-td-method"><a href="../api-canvas/selection.html" class="ref-method-link">voh.canvas.selection.setBorderStyle</a></td>
+            <td class="ref-td-desc">Définit le style de la bordure du rectangle de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas.selection</span></td>
+        </tr>        <tr data-method="voh.canvas.selection.setborderthickness" data-module="canvas.selection">
+            <td class="ref-td-method"><a href="../api-canvas/selection.html" class="ref-method-link">voh.canvas.selection.setBorderThickness</a></td>
+            <td class="ref-td-desc">Définit l&#x27;épaisseur de la bordure du rectangle de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas.selection</span></td>
+        </tr>        <tr data-method="voh.canvas.selection.setenabled" data-module="canvas.selection">
+            <td class="ref-td-method"><a href="../api-canvas/selection.html" class="ref-method-link">voh.canvas.selection.setEnabled</a></td>
+            <td class="ref-td-desc">Active ou désactive la sélection à la souris sur un canevas. Par défaut false.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas.selection</span></td>
+        </tr>        <tr data-method="voh.canvas.selection.setmousebutton" data-module="canvas.selection">
+            <td class="ref-td-method"><a href="../api-canvas/selection.html" class="ref-method-link">voh.canvas.selection.setMouseButton</a></td>
+            <td class="ref-td-desc">Définit le bouton souris pour tracer le rectangle de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas.selection</span></td>
+        </tr>        <tr data-method="voh.canvas.selection.simulate" data-module="canvas.selection">
+            <td class="ref-td-method"><a href="../api-canvas/selection.html" class="ref-method-link">voh.canvas.selection.simulate</a></td>
+            <td class="ref-td-desc">Simule programmatiquement un tracé de rectangle de sélection. Retourne une Promise résolue à true quand terminé, false si annulée.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas.selection</span></td>
+        </tr>        <tr data-method="voh.canvas.sendtoback" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/z-order.html" class="ref-method-link">voh.canvas.sendToBack</a></td>
+            <td class="ref-td-desc">Envoie le canevas à l&#x27;arrière-plan (z-order minimal).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.setactive" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/canvas-actif.html" class="ref-method-link">voh.canvas.setActive</a></td>
+            <td class="ref-td-desc">Définit le canevas actif pour les opérations suivantes.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.setbackgroundcolor" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/fond-rendu.html" class="ref-method-link">voh.canvas.setBackgroundColor</a></td>
+            <td class="ref-td-desc">Définit la couleur de fond du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.setheight" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/dimensions.html" class="ref-method-link">voh.canvas.setHeight</a></td>
+            <td class="ref-td-desc">Définit la hauteur du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.setlocked" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/verrouillage.html" class="ref-method-link">voh.canvas.setLocked</a></td>
+            <td class="ref-td-desc">Verrouille ou déverrouille le canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.setname" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/nom.html" class="ref-method-link">voh.canvas.setName</a></td>
+            <td class="ref-td-desc">Définit le nom du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.setopacity" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/opacite.html" class="ref-method-link">voh.canvas.setOpacity</a></td>
+            <td class="ref-td-desc">Définit l&#x27;opacité du canevas (0.0 à 1.0).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.setvisible" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/visibilite.html" class="ref-method-link">voh.canvas.setVisible</a></td>
+            <td class="ref-td-desc">Affiche ou masque le canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.setwidth" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/dimensions.html" class="ref-method-link">voh.canvas.setWidth</a></td>
+            <td class="ref-td-desc">Définit la largeur du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.setx" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/position.html" class="ref-method-link">voh.canvas.setX</a></td>
+            <td class="ref-td-desc">Définit la position X du canevas dans la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.sety" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/position.html" class="ref-method-link">voh.canvas.setY</a></td>
+            <td class="ref-td-desc">Définit la position Y du canevas dans la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.canvas.setzorder" data-module="canvas">
+            <td class="ref-td-method"><a href="../api-canvas/z-order.html" class="ref-method-link">voh.canvas.setZOrder</a></td>
+            <td class="ref-td-desc">Définit le z-order du canevas à une valeur précise.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#2e8b57;background:#e6f5ec;border-color:#2e8b5740;">voh.canvas</span></td>
+        </tr>        <tr data-method="voh.destroy" data-module="global">
+            <td class="ref-td-method"><a href="../demarrage/demarrage-rapide.html" class="ref-method-link">voh.destroy</a></td>
+            <td class="ref-td-desc">Détruit l&#x27;instance et libère toutes les ressources (zones, canevas, objets, événements). Après cet appel, l&#x27;instance n&#x27;est plus utilisable.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.diagnostics.clear" data-module="global">
+            <td class="ref-td-method"><a href="../api-diagnostics/diagnostics.html" class="ref-method-link">voh.diagnostics.clear</a></td>
+            <td class="ref-td-desc">Vide tous les journaux de diagnostic (erreurs, avertissements, appels API, événements).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.diagnostics.copyreporttoclipboard" data-module="global">
+            <td class="ref-td-method"><a href="../api-diagnostics/diagnostics.html" class="ref-method-link">voh.diagnostics.copyReportToClipboard</a></td>
+            <td class="ref-td-desc">Copie le rapport de diagnostic dans le presse-papiers.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.diagnostics.downloadreport" data-module="global">
+            <td class="ref-td-method"><a href="../api-diagnostics/diagnostics.html" class="ref-method-link">voh.diagnostics.downloadReport</a></td>
+            <td class="ref-td-desc">Génère le rapport et propose le téléchargement en fichier .txt.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.diagnostics.generatereport" data-module="global">
+            <td class="ref-td-method"><a href="../api-diagnostics/diagnostics.html" class="ref-method-link">voh.diagnostics.generateReport</a></td>
+            <td class="ref-td-desc">Génère un rapport de diagnostic complet (système, état du projet, erreurs, appels API, événements) sous forme d&#x27;objet JSON.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.diagnostics.generatereportastext" data-module="global">
+            <td class="ref-td-method"><a href="../api-diagnostics/diagnostics.html" class="ref-method-link">voh.diagnostics.generateReportAsText</a></td>
+            <td class="ref-td-desc">Génère le rapport de diagnostic formaté en texte lisible.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.diagnostics.getsummary" data-module="global">
+            <td class="ref-td-method"><a href="../api-diagnostics/diagnostics.html" class="ref-method-link">voh.diagnostics.getSummary</a></td>
+            <td class="ref-td-desc">Retourne un résumé rapide (nombre d&#x27;erreurs, avertissements, appels API, événements).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.diagnostics.showreport" data-module="global">
+            <td class="ref-td-method"><a href="../api-diagnostics/diagnostics.html" class="ref-method-link">voh.diagnostics.showReport</a></td>
+            <td class="ref-td-desc">Affiche le rapport de diagnostic dans une fenêtre en lecture seule avec possibilité de copier.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.geteventnames" data-module="global">
+            <td class="ref-td-method"><a href="../api-events/abonnements.html" class="ref-method-link">voh.getEventNames</a></td>
+            <td class="ref-td-desc">Retourne la liste des noms d&#x27;événements qui ont au moins un listener abonné.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.getlistenercount" data-module="global">
+            <td class="ref-td-method"><a href="../api-events/abonnements.html" class="ref-method-link">voh.getListenerCount</a></td>
+            <td class="ref-td-desc">Retourne le nombre de listeners abonnés à un événement. Si aucun nom n&#x27;est fourni, retourne le nombre total de listeners.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.getversion" data-module="global">
+            <td class="ref-td-method"><a href="../demarrage/demarrage-rapide.html" class="ref-method-link">voh.getVersion</a></td>
+            <td class="ref-td-desc">Retourne la version du Core VOH (ex: &quot;2.26.00&quot;).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.init" data-module="global">
+            <td class="ref-td-method"><a href="../demarrage/demarrage-rapide.html" class="ref-method-link">voh.init</a></td>
+            <td class="ref-td-desc">Initialise le moteur (charge Pixi.js, crée les managers). Obligatoire avant toute autre méthode.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.isready" data-module="global">
+            <td class="ref-td-method"><a href="../demarrage/demarrage-rapide.html" class="ref-method-link">voh.isReady</a></td>
+            <td class="ref-td-desc">Retourne true si l&#x27;instance est initialisée et prête à être utilisée.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.objects.bringtofront" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/z-order.html" class="ref-method-link">voh.objects.bringToFront</a></td>
+            <td class="ref-td-desc">Amène l&#x27;objet au premier plan (z-order).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.create" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/creation.html" class="ref-method-link">voh.objects.create</a></td>
+            <td class="ref-td-desc">Crée un objet sur un canevas. Retourne l&#x27;ID de l&#x27;objet créé.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.delete" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/creation.html" class="ref-method-link">voh.objects.delete</a></td>
+            <td class="ref-td-desc">Supprime un objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.exists" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/informations.html" class="ref-method-link">voh.objects.exists</a></td>
+            <td class="ref-td-desc">Vérifie si un objet existe.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getbackgroundcolor" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/couleur-fond.html" class="ref-method-link">voh.objects.getBackgroundColor</a></td>
+            <td class="ref-td-desc">Retourne la couleur de fond de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getcanvasid" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/informations.html" class="ref-method-link">voh.objects.getCanvasId</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;ID du canevas de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getcount" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/informations.html" class="ref-method-link">voh.objects.getCount</a></td>
+            <td class="ref-td-desc">Retourne le nombre d&#x27;objets (d&#x27;un canevas ou total).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getcursor" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/curseur.html" class="ref-method-link">voh.objects.getCursor</a></td>
+            <td class="ref-td-desc">Retourne le curseur CSS de l&#x27;objet (ou null si aucun).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getdrawingcallback" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drawing-callback.html" class="ref-method-link">voh.objects.getDrawingCallback</a></td>
+            <td class="ref-td-desc">Retourne le callback de dessin (ou null si rendu par défaut).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getheight" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/dimensions.html" class="ref-method-link">voh.objects.getHeight</a></td>
+            <td class="ref-td-desc">Retourne la hauteur de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getlist" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/informations.html" class="ref-method-link">voh.objects.getList</a></td>
+            <td class="ref-td-desc">Retourne la liste des objets.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getlocked" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/verrouillage.html" class="ref-method-link">voh.objects.getLocked</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;état de verrouillage de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getmousedragbutton" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.getMouseDragButton</a></td>
+            <td class="ref-td-desc">Retourne le bouton souris configuré pour le drag.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getmousedragenabled" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.getMouseDragEnabled</a></td>
+            <td class="ref-td-desc">Retourne si le drag souris est activé sur l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getmousedragmode" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.getMouseDragMode</a></td>
+            <td class="ref-td-desc">Retourne le mode de drag de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getmousedragmultimode" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.getMouseDragMultiMode</a></td>
+            <td class="ref-td-desc">Retourne le mode de déplacement en multi-sélection (ou null si hérite du solo).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getmousedragmultipreviewcallback" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.getMouseDragMultiPreviewCallback</a></td>
+            <td class="ref-td-desc">Retourne le callback de dessin du fantôme en multi-sélection (ou null si hérite).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getmousedragoffsetx" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.getMouseDragOffsetX</a></td>
+            <td class="ref-td-desc">Retourne le décalage X du drag.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getmousedragoffsety" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.getMouseDragOffsetY</a></td>
+            <td class="ref-td-desc">Retourne le décalage Y du drag.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getmousedragpreviewcallback" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.getMouseDragPreviewCallback</a></td>
+            <td class="ref-td-desc">Retourne le callback de dessin du fantôme (ou null si dessin par défaut).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getname" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/nom.html" class="ref-method-link">voh.objects.getName</a></td>
+            <td class="ref-td-desc">Retourne le nom de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getopacity" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/opacite.html" class="ref-method-link">voh.objects.getOpacity</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;opacité de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getpageid" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/informations.html" class="ref-method-link">voh.objects.getPageId</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;ID de la page sur laquelle vit l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getselectionbordercolor" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.getSelectionBorderColor</a></td>
+            <td class="ref-td-desc">Retourne la couleur du contour de sélection de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getselectionborderoffset" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.getSelectionBorderOffset</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;espace entre l&#x27;objet et son contour de sélection (positif, 0 ou négatif).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getselectionborderstyle" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.getSelectionBorderStyle</a></td>
+            <td class="ref-td-desc">Retourne le style du contour de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getselectionborderthickness" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.getSelectionBorderThickness</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;épaisseur du contour de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getselectionmode" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.getSelectionMode</a></td>
+            <td class="ref-td-desc">Retourne le mode de sélection par rectangle de l&#x27;objet (&#x27;enclosed&#x27; par défaut).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getvisible" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/visibilite.html" class="ref-method-link">voh.objects.getVisible</a></td>
+            <td class="ref-td-desc">Retourne la visibilité de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getwidth" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/dimensions.html" class="ref-method-link">voh.objects.getWidth</a></td>
+            <td class="ref-td-desc">Retourne la largeur de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getx" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/position.html" class="ref-method-link">voh.objects.getX</a></td>
+            <td class="ref-td-desc">Retourne la position X de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.gety" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/position.html" class="ref-method-link">voh.objects.getY</a></td>
+            <td class="ref-td-desc">Retourne la position Y de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.getzorder" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/z-order.html" class="ref-method-link">voh.objects.getZOrder</a></td>
+            <td class="ref-td-desc">Retourne le z-order de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.hittest" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/curseur.html" class="ref-method-link">voh.objects.hitTest</a></td>
+            <td class="ref-td-desc">Recherche l&#x27;objet le plus haut (z-order max) sous le point (x, y). Utilise la grille spatiale multi-niveaux pour des performances O(1) même avec 20 000+ objets.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.islocked" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/verrouillage.html" class="ref-method-link">voh.objects.isLocked</a></td>
+            <td class="ref-td-desc">Alias de getLocked. Retourne true si l&#x27;objet est verrouillé.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.isselected" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.isSelected</a></td>
+            <td class="ref-td-desc">Vérifie si un objet est sélectionné (retrouve automatiquement son canevas).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.isvisible" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/visibilite.html" class="ref-method-link">voh.objects.isVisible</a></td>
+            <td class="ref-td-desc">Alias de getVisible. Retourne true si l&#x27;objet est visible.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.movedown" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/z-order.html" class="ref-method-link">voh.objects.moveDown</a></td>
+            <td class="ref-td-desc">Descend l&#x27;objet d&#x27;un niveau dans l&#x27;empilement.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.moveup" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/z-order.html" class="ref-method-link">voh.objects.moveUp</a></td>
+            <td class="ref-td-desc">Monte l&#x27;objet d&#x27;un niveau dans l&#x27;empilement.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.redraw" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drawing-callback.html" class="ref-method-link">voh.objects.redraw</a></td>
+            <td class="ref-td-desc">Force le redessin de l&#x27;objet (utile quand les données du callback changent).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.selection.deselect" data-module="objects.selection">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.selection.deselect</a></td>
+            <td class="ref-td-desc">Retire un objet de la sélection du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects.selection</span></td>
+        </tr>        <tr data-method="voh.objects.selection.deselectall" data-module="objects.selection">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.selection.deselectAll</a></td>
+            <td class="ref-td-desc">Désélectionne tous les objets du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects.selection</span></td>
+        </tr>        <tr data-method="voh.objects.selection.getselectedcount" data-module="objects.selection">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.selection.getSelectedCount</a></td>
+            <td class="ref-td-desc">Retourne le nombre d&#x27;objets sélectionnés.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects.selection</span></td>
+        </tr>        <tr data-method="voh.objects.selection.getselectedids" data-module="objects.selection">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.selection.getSelectedIds</a></td>
+            <td class="ref-td-desc">Retourne les IDs des objets sélectionnés.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects.selection</span></td>
+        </tr>        <tr data-method="voh.objects.selection.isselected" data-module="objects.selection">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.selection.isSelected</a></td>
+            <td class="ref-td-desc">Vérifie si un objet est sélectionné dans un canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects.selection</span></td>
+        </tr>        <tr data-method="voh.objects.selection.select" data-module="objects.selection">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.selection.select</a></td>
+            <td class="ref-td-desc">Ajoute un objet à la sélection du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects.selection</span></td>
+        </tr>        <tr data-method="voh.objects.selection.selectall" data-module="objects.selection">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.selection.selectAll</a></td>
+            <td class="ref-td-desc">Sélectionne tous les objets visibles de la page active.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects.selection</span></td>
+        </tr>        <tr data-method="voh.objects.selection.selectonly" data-module="objects.selection">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.selection.selectOnly</a></td>
+            <td class="ref-td-desc">Sélectionne un seul objet en désélectionnant tous les autres.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects.selection</span></td>
+        </tr>        <tr data-method="voh.objects.selection.toggle" data-module="objects.selection">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.selection.toggle</a></td>
+            <td class="ref-td-desc">Bascule la sélection d&#x27;un objet (ajoute s&#x27;il n&#x27;est pas sélectionné, retire sinon).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects.selection</span></td>
+        </tr>        <tr data-method="voh.objects.sendtoback" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/z-order.html" class="ref-method-link">voh.objects.sendToBack</a></td>
+            <td class="ref-td-desc">Envoie l&#x27;objet à l&#x27;arrière-plan.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setbackgroundcolor" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/couleur-fond.html" class="ref-method-link">voh.objects.setBackgroundColor</a></td>
+            <td class="ref-td-desc">Définit la couleur de fond (rendu par défaut, sans effet si drawingCallback).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setcursor" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/curseur.html" class="ref-method-link">voh.objects.setCursor</a></td>
+            <td class="ref-td-desc">Définit le curseur CSS affiché au survol de l&#x27;objet. null = curseur par défaut du canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setdrawingcallback" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drawing-callback.html" class="ref-method-link">voh.objects.setDrawingCallback</a></td>
+            <td class="ref-td-desc">Définit un callback de dessin personnalisé. callback(context, width, height, objectId). null = rendu par défaut.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setheight" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/dimensions.html" class="ref-method-link">voh.objects.setHeight</a></td>
+            <td class="ref-td-desc">Définit la hauteur de l&#x27;objet (minimum 5px).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setlocked" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/verrouillage.html" class="ref-method-link">voh.objects.setLocked</a></td>
+            <td class="ref-td-desc">Verrouille ou déverrouille un objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setmousedragbutton" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.setMouseDragButton</a></td>
+            <td class="ref-td-desc">Définit le bouton souris qui déclenche le drag.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setmousedragenabled" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.setMouseDragEnabled</a></td>
+            <td class="ref-td-desc">Active ou désactive le déplacement à la souris (drag) sur un objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setmousedragmode" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.setMouseDragMode</a></td>
+            <td class="ref-td-desc">Définit le mode de drag : &#x27;direct&#x27; (l&#x27;objet bouge en temps réel) ou &#x27;preview&#x27; (un fantôme suit la souris, l&#x27;objet bouge au relâchement).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setmousedragmultimode" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.setMouseDragMultiMode</a></td>
+            <td class="ref-td-desc">Définit le mode de déplacement en multi-sélection. null = hérite de mouseDragMode.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setmousedragmultipreviewcallback" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.setMouseDragMultiPreviewCallback</a></td>
+            <td class="ref-td-desc">Définit le callback de dessin du fantôme en multi-sélection. null = hérite de mouseDragPreviewCallback.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setmousedragoffsetx" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.setMouseDragOffsetX</a></td>
+            <td class="ref-td-desc">Définit le décalage X du drag en pixels. 0 = l&#x27;objet garde sa position relative sous le curseur.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setmousedragoffsety" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.setMouseDragOffsetY</a></td>
+            <td class="ref-td-desc">Définit le décalage Y du drag en pixels. 0 = l&#x27;objet garde sa position relative sous le curseur.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setmousedragpreviewcallback" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/drag-souris.html" class="ref-method-link">voh.objects.setMouseDragPreviewCallback</a></td>
+            <td class="ref-td-desc">Définit le callback de dessin du fantôme en mode preview. Signature: function(context, width, height, objectId). null = pointillés bleus par défaut.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setname" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/nom.html" class="ref-method-link">voh.objects.setName</a></td>
+            <td class="ref-td-desc">Définit le nom de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setopacity" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/opacite.html" class="ref-method-link">voh.objects.setOpacity</a></td>
+            <td class="ref-td-desc">Définit l&#x27;opacité de l&#x27;objet (0.0 à 1.0).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setselectionbordercolor" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.setSelectionBorderColor</a></td>
+            <td class="ref-td-desc">Définit la couleur du contour de sélection de l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setselectionborderoffset" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.setSelectionBorderOffset</a></td>
+            <td class="ref-td-desc">Définit l&#x27;espace entre l&#x27;objet et son contour de sélection (pixels). 0 = collé, positif = extérieur, négatif = par-dessus l&#x27;objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setselectionborderstyle" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.setSelectionBorderStyle</a></td>
+            <td class="ref-td-desc">Définit le style du contour de sélection.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setselectionborderthickness" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.setSelectionBorderThickness</a></td>
+            <td class="ref-td-desc">Définit l&#x27;épaisseur du contour de sélection (pixels).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setselectionmode" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/selection.html" class="ref-method-link">voh.objects.setSelectionMode</a></td>
+            <td class="ref-td-desc">Définit le mode de sélection par rectangle pour cet objet. &#x27;enclosed&#x27; (défaut) = entièrement contenu dans le rectangle. &#x27;intersect&#x27; = touché partiellement suffit. null est accepté et converti en &#x27;encl</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setvisible" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/visibilite.html" class="ref-method-link">voh.objects.setVisible</a></td>
+            <td class="ref-td-desc">Affiche ou masque un objet.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setwidth" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/dimensions.html" class="ref-method-link">voh.objects.setWidth</a></td>
+            <td class="ref-td-desc">Définit la largeur de l&#x27;objet (minimum 5px).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setx" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/position.html" class="ref-method-link">voh.objects.setX</a></td>
+            <td class="ref-td-desc">Définit la position X de l&#x27;objet sur le canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.sety" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/position.html" class="ref-method-link">voh.objects.setY</a></td>
+            <td class="ref-td-desc">Définit la position Y de l&#x27;objet sur le canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.objects.setzorder" data-module="objects">
+            <td class="ref-td-method"><a href="../api-objects/z-order.html" class="ref-method-link">voh.objects.setZOrder</a></td>
+            <td class="ref-td-desc">Définit le z-order de l&#x27;objet à une valeur précise.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#c03830;background:#fdecea;border-color:#c0383040;">voh.objects</span></td>
+        </tr>        <tr data-method="voh.off" data-module="global">
+            <td class="ref-td-method"><a href="../api-events/abonnements.html" class="ref-method-link">voh.off</a></td>
+            <td class="ref-td-desc">Désabonne un callback d&#x27;un événement.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.on" data-module="global">
+            <td class="ref-td-method"><a href="../api-events/abonnements.html" class="ref-method-link">voh.on</a></td>
+            <td class="ref-td-desc">Abonne un callback à un événement. Le callback sera appelé à chaque émission.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.once" data-module="global">
+            <td class="ref-td-method"><a href="../api-events/abonnements.html" class="ref-method-link">voh.once</a></td>
+            <td class="ref-td-desc">Abonne un callback qui ne sera appelé qu&#x27;une seule fois, puis automatiquement désabonné.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.removealllisteners" data-module="global">
+            <td class="ref-td-method"><a href="../api-events/abonnements.html" class="ref-method-link">voh.removeAllListeners</a></td>
+            <td class="ref-td-desc">Retire tous les listeners d&#x27;un événement donné, ou de TOUS les événements si aucun nom n&#x27;est fourni.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#6b4fbb;background:#ede9f8;border-color:#6b4fbb40;">voh</span></td>
+        </tr>        <tr data-method="voh.zone.create" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/creation.html" class="ref-method-link">voh.zone.create</a></td>
+            <td class="ref-td-desc">Crée une nouvelle zone (conteneur de premier niveau pour les canevas).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.delete" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/creation.html" class="ref-method-link">voh.zone.delete</a></td>
+            <td class="ref-td-desc">Supprime une zone et tous ses canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.exists" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/informations.html" class="ref-method-link">voh.zone.exists</a></td>
+            <td class="ref-td-desc">Vérifie si une zone avec cet ID existe.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getactiveid" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/zone-active.html" class="ref-method-link">voh.zone.getActiveId</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;ID de la zone actuellement active.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getbackgroundcolor" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/fond.html" class="ref-method-link">voh.zone.getBackgroundColor</a></td>
+            <td class="ref-td-desc">Retourne la couleur de fond de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getbackgroundimage" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/fond.html" class="ref-method-link">voh.zone.getBackgroundImage</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;URL de l&#x27;image de fond de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getbackgroundimageopacity" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/fond.html" class="ref-method-link">voh.zone.getBackgroundImageOpacity</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;opacité de l&#x27;image de fond de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getbordercolor" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/bordure.html" class="ref-method-link">voh.zone.getBorderColor</a></td>
+            <td class="ref-td-desc">Retourne la couleur de bordure de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getborderthickness" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/bordure.html" class="ref-method-link">voh.zone.getBorderThickness</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;épaisseur de bordure de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getbringcanvastofrontonactivation" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/informations.html" class="ref-method-link">voh.zone.getBringCanvasToFrontOnActivation</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;état de l&#x27;option bringCanvasToFrontOnActivation.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getcanvascontainer" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/informations.html" class="ref-method-link">voh.zone.getCanvasContainer</a></td>
+            <td class="ref-td-desc">Retourne le conteneur DOM des canevas d&#x27;une zone. Utilisé par le CanvasManager pour y insérer les canevas.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getcount" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/informations.html" class="ref-method-link">voh.zone.getCount</a></td>
+            <td class="ref-td-desc">Retourne le nombre total de zones créées.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getgridcolor" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/grille.html" class="ref-method-link">voh.zone.getGridColor</a></td>
+            <td class="ref-td-desc">Retourne la couleur des lignes de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getgridheight" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/grille.html" class="ref-method-link">voh.zone.getGridHeight</a></td>
+            <td class="ref-td-desc">Retourne la hauteur des cases de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getgridopacity" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/grille.html" class="ref-method-link">voh.zone.getGridOpacity</a></td>
+            <td class="ref-td-desc">Retourne l&#x27;opacité de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getgridvisible" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/grille.html" class="ref-method-link">voh.zone.getGridVisible</a></td>
+            <td class="ref-td-desc">Retourne true si la grille est visible.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getgridwidth" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/grille.html" class="ref-method-link">voh.zone.getGridWidth</a></td>
+            <td class="ref-td-desc">Retourne la largeur des cases de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getheight" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/dimensions.html" class="ref-method-link">voh.zone.getHeight</a></td>
+            <td class="ref-td-desc">Retourne la hauteur de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getlist" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/informations.html" class="ref-method-link">voh.zone.getList</a></td>
+            <td class="ref-td-desc">Retourne la liste des IDs de toutes les zones.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getname" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/nom.html" class="ref-method-link">voh.zone.getName</a></td>
+            <td class="ref-td-desc">Retourne le nom de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getscrollbarvisible" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/viewport.html" class="ref-method-link">voh.zone.getScrollbarVisible</a></td>
+            <td class="ref-td-desc">Retourne true si les scrollbars sont visibles.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getscrollx" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/viewport.html" class="ref-method-link">voh.zone.getScrollX</a></td>
+            <td class="ref-td-desc">Retourne la position horizontale du défilement (valeur réelle si zone active).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getscrolly" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/viewport.html" class="ref-method-link">voh.zone.getScrollY</a></td>
+            <td class="ref-td-desc">Retourne la position verticale du défilement (valeur réelle si zone active).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getwidth" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/dimensions.html" class="ref-method-link">voh.zone.getWidth</a></td>
+            <td class="ref-td-desc">Retourne la largeur de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.getzoom" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/zoom.html" class="ref-method-link">voh.zone.getZoom</a></td>
+            <td class="ref-td-desc">Retourne le niveau de zoom de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.resetzoom" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/zoom.html" class="ref-method-link">voh.zone.resetZoom</a></td>
+            <td class="ref-td-desc">Réinitialise le zoom de la zone à 100%.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.scrolltocenter" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/viewport.html" class="ref-method-link">voh.zone.scrollToCenter</a></td>
+            <td class="ref-td-desc">Centre la vue sur le contenu de la zone (milieu de la zone au milieu de la vue).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setactive" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/zone-active.html" class="ref-method-link">voh.zone.setActive</a></td>
+            <td class="ref-td-desc">Définit la zone active. C&#x27;est sur cette zone que les opérations suivantes s&#x27;appliqueront.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setbackgroundcolor" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/fond.html" class="ref-method-link">voh.zone.setBackgroundColor</a></td>
+            <td class="ref-td-desc">Définit la couleur de fond de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setbackgroundimage" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/fond.html" class="ref-method-link">voh.zone.setBackgroundImage</a></td>
+            <td class="ref-td-desc">Définit l&#x27;image de fond de la zone. Chaîne vide pour enlever.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setbackgroundimageopacity" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/fond.html" class="ref-method-link">voh.zone.setBackgroundImageOpacity</a></td>
+            <td class="ref-td-desc">Définit l&#x27;opacité de l&#x27;image de fond (0.0 à 1.0). N&#x27;affecte pas la couleur de fond.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setbordercolor" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/bordure.html" class="ref-method-link">voh.zone.setBorderColor</a></td>
+            <td class="ref-td-desc">Définit la couleur de bordure de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setborderthickness" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/bordure.html" class="ref-method-link">voh.zone.setBorderThickness</a></td>
+            <td class="ref-td-desc">Définit l&#x27;épaisseur de bordure de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setbringcanvastofrontonactivation" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/informations.html" class="ref-method-link">voh.zone.setBringCanvasToFrontOnActivation</a></td>
+            <td class="ref-td-desc">Si activé, le canevas actif passe automatiquement au premier plan.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setgridcolor" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/grille.html" class="ref-method-link">voh.zone.setGridColor</a></td>
+            <td class="ref-td-desc">Définit la couleur des lignes de la grille.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setgridheight" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/grille.html" class="ref-method-link">voh.zone.setGridHeight</a></td>
+            <td class="ref-td-desc">Définit la hauteur des cases de la grille en pixels (minimum 1).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setgridopacity" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/grille.html" class="ref-method-link">voh.zone.setGridOpacity</a></td>
+            <td class="ref-td-desc">Définit l&#x27;opacité de la grille (0.0 invisible, 1.0 opaque). Indépendant de la couleur.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setgridvisible" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/grille.html" class="ref-method-link">voh.zone.setGridVisible</a></td>
+            <td class="ref-td-desc">Affiche ou masque la grille de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setgridwidth" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/grille.html" class="ref-method-link">voh.zone.setGridWidth</a></td>
+            <td class="ref-td-desc">Définit la largeur des cases de la grille en pixels (minimum 1).</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setheight" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/dimensions.html" class="ref-method-link">voh.zone.setHeight</a></td>
+            <td class="ref-td-desc">Définit la hauteur de la zone en pixels.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setname" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/nom.html" class="ref-method-link">voh.zone.setName</a></td>
+            <td class="ref-td-desc">Définit le nom affiché de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setscrollbarvisible" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/viewport.html" class="ref-method-link">voh.zone.setScrollbarVisible</a></td>
+            <td class="ref-td-desc">Affiche ou masque les scrollbars de la zone. true = auto, false = masquées.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setscrollx" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/viewport.html" class="ref-method-link">voh.zone.setScrollX</a></td>
+            <td class="ref-td-desc">Définit la position horizontale du défilement en pixels.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setscrolly" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/viewport.html" class="ref-method-link">voh.zone.setScrollY</a></td>
+            <td class="ref-td-desc">Définit la position verticale du défilement en pixels.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setwidth" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/dimensions.html" class="ref-method-link">voh.zone.setWidth</a></td>
+            <td class="ref-td-desc">Définit la largeur de la zone en pixels.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.setzoom" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/zoom.html" class="ref-method-link">voh.zone.setZoom</a></td>
+            <td class="ref-td-desc">Définit le niveau de zoom de la zone.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.zoomin" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/zoom.html" class="ref-method-link">voh.zone.zoomIn</a></td>
+            <td class="ref-td-desc">Augmente le zoom de la zone d&#x27;un cran.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>        <tr data-method="voh.zone.zoomout" data-module="zone">
+            <td class="ref-td-method"><a href="../api-zone/zoom.html" class="ref-method-link">voh.zone.zoomOut</a></td>
+            <td class="ref-td-desc">Diminue le zoom de la zone d&#x27;un cran.</td>
+            <td class="ref-td-module"><span class="ref-badge" style="color:#d4820a;background:#fef5e6;border-color:#d4820a40;">voh.zone</span></td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+    function _refFilter() {
+        var search = document.getElementById('refSearch').value.toLowerCase().trim();
+        var module = document.getElementById('refModule').value;
+        var rows   = document.querySelectorAll('#refTbody tr');
+        var visible = 0;
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var methodMatch = !search || row.dataset.method.indexOf(search) !== -1;
+            var moduleMatch = !module || row.dataset.module === module;
+            var show = methodMatch && moduleMatch;
+            row.classList.toggle('ref-hidden', !show);
+            if (show) visible++;
+        }
+        document.getElementById('refCount').textContent =
+            visible + ' méthode' + (visible > 1 ? 's' : '');
+        document.getElementById('refNoResults').style.display =
+            visible === 0 ? 'block' : 'none';
+    }
+
+    function _refReset() {
+        document.getElementById('refSearch').value = '';
+        document.getElementById('refModule').value = '';
+        _refFilter();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('refSearch').focus();
+    });
+</script>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

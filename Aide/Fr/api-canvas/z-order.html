@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Z-order — voh.canvas</title>
+</head>
+<body>
+
+<h1>voh.canvas — Z-order</h1>
+<p class="intro">L'ordre d'empilement des canvas dans une zone. Un z-order plus élevé signifie que le canvas est affiché au-dessus des autres. Par défaut, chaque nouveau canvas a un z-order supérieur au précédent.</p>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">bringToFront</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Place un canvas au premier plan (z-order le plus élevé).</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si canvas inexistant.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">bringToFront</span>(<span class="var">canvas1</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">sendToBack</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Place un canvas en arrière-plan (z-order le plus bas).</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si canvas inexistant.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">sendToBack</span>(<span class="var">canvas1</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">moveUp</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Monte un canvas d'un cran dans le z-order (échange avec le canvas juste au-dessus).</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si canvas inexistant.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">moveUp</span>(<span class="var">canvas1</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">moveDown</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Descend un canvas d'un cran dans le z-order (échange avec le canvas juste en-dessous).</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si canvas inexistant.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">moveDown</span>(<span class="var">canvas1</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">setZOrder</span><span class="sig-paren">(</span><span class="sig-param">canvasId, zOrder</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit le z-order du canvas à une valeur précise (nombre entier). Si un autre canvas de la même zone a déjà ce z-order, tous les canvas ayant un z-order supérieur ou égal sont décalés de +1 pour libérer la place.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas</td></tr>
+        <tr><td>zOrder</td><td>nombre</td><td>Valeur de z-order souhaitée (nombre entier)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si canvas inexistant.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">setZOrder</span>(<span class="var">canvas1</span>, <span class="num">10</span>);  <span class="cmt">// place le canvas au z-order 10</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">getZOrder</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre ou null</span></div>
+    <div class="method-description">Retourne le z-order actuel d'un canvas.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre</span> — le z-order (entier ≥ 0), ou <code>null</code> si le canvas n'existe pas.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getZOrder</span>(<span class="var">canvas1</span>));  <span class="cmt">// ex: 3</span></pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>voh.canvas.pages.cursor — Curseur par page</title>
+</head>
+<body>
+
+<h1>voh.canvas.pages.cursor — Curseur par page</h1>
+<p class="intro">Chaque page peut avoir son propre curseur souris. Au changement de page, le curseur est automatiquement mis à jour.</p>
+
+<p class="note">
+    <strong>Règle fondamentale:</strong> sans <code>pageId</code> = page active du canvas.
+    Avec <code>pageId</code> = page ciblée. La Page 1 est créée automatiquement avec chaque canvas.
+    Il doit toujours rester au moins une page.
+</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Curseur</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.pages.cursor</span><span class="sig-sep">.</span><span class="sig-fn">set</span><span class="sig-paren">(</span><span class="sig-param">canvasId, cursor, pageId?</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit le curseur souris d'une page. Accepte toute valeur CSS <code>cursor</code> valide (défaut: <code>'default'</code>).</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>ID du canvas</td></tr>
+        <tr><td>cursor</td><td>texte</td><td>Valeur CSS cursor</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>ID de la page (optionnel)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">pages</span>.<span class="var">cursor</span>.<span class="fn">set</span>(<span class="var">canvas</span>, <span class="str">'crosshair'</span>);  <span class="cmt">// curseur en croix</span>
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">pages</span>.<span class="var">cursor</span>.<span class="fn">set</span>(<span class="var">canvas</span>, <span class="str">'pointer'</span>);    <span class="cmt">// curseur main</span>
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">pages</span>.<span class="var">cursor</span>.<span class="fn">set</span>(<span class="var">canvas</span>, <span class="str">'default'</span>);    <span class="cmt">// curseur par défaut</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas.pages.cursor</span><span class="sig-sep">.</span><span class="sig-fn">get</span><span class="sig-paren">(</span><span class="sig-param">canvasId, pageId?</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">texte | null</span></div>
+    <div class="method-description">Retourne le curseur souris configuré pour la page.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>ID du canvas</td></tr>
+        <tr><td>pageId</td><td>nombre</td><td>ID de la page (optionnel)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">texte | null</span> — la valeur CSS cursor, ou <code>null</code> si erreur.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="var">pages</span>.<span class="var">cursor</span>.<span class="fn">get</span>(<span class="var">canvas</span>));  <span class="cmt">// 'crosshair'</span></pre>
+</div>
+
+<div class="note">
+    <strong>Événements:</strong> les modifications émettent <code>page:cursorChanged</code>.
+</div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

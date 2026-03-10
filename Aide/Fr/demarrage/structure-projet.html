@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Structure du projet — VOH Documentation</title>
+</head>
+<body>
+
+<h1>Structure du projet</h1>
+<p class="intro">Organisation des fichiers et dossiers du projet VOH.</p>
+
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Arborescence</h2>
+
+<pre><span class="var">Voh/</span>
+├── <span class="fn">index.html</span>              ← Éditeur de code intégré
+├── <span class="fn">runner.html</span>             ← Page d'exécution des scripts
+│
+├── <span class="var">Core/</span>                    ← Moteur VOH (14 fichiers JavaScript)
+│   ├── Core-Diagnostics.js      ← Système de diagnostic
+│   ├── Core-EventEmitter.js     ← Système d'événements interne
+│   ├── Core-API.js              ← API publique (voh.zone, voh.canvas, etc.)
+│   ├── Core-Zone.js             ← Gestion des zones
+│   ├── Core-CanvasSelection.js  ← Rectangle de sélection souris
+│   ├── Core-CanvasHistory.js    ← Historique undo/redo
+│   ├── Core-CanvasPage.js       ← Gestion des pages
+│   ├── Core-RenderEngine.js     ← Moteur de rendu Pixi.js
+│   ├── Core-Canvas.js           ← Gestion des canvas
+│   ├── Core-Objects.js          ← Gestion des objets
+│   ├── Core-ObjectSelection.js  ← Sélection d'objets
+│   ├── Core-SpatialGrid.js      ← Grille spatiale (hit-test)
+│   ├── Core-ObjectInteraction.js ← Interaction souris
+│   └── Core-Main.js             ← Classe principale VisualObjectsHandler
+│
+├── <span class="var">Libraries/</span>               ← Bibliothèques externes
+│   ├── <span class="var">CodeMirror/</span>          ← Éditeur de code (utilisé par index.html)
+│   ├── <span class="var">Pixi/</span>                ← Moteur de rendu GPU (utilisé par le Core)
+│   └── <span class="var">TypeScript/</span>          ← Compilateur TypeScript (optionnel)
+│
+├── <span class="var">Medias/</span>                  ← Ressources du projet
+│   └── <span class="var">Images/</span>              ← Images (fonds, textures, etc.)
+│
+├── <span class="var">Exemples/</span>               ← Scripts d'exemple
+│   └── <span class="var">Fr/</span>                  ← Exemples en français
+│       ├── <span class="var">Zone/</span>            ← Exemples de zones (11 scripts)
+│       │   ├── 01-zone-basique.js
+│       │   └── ...
+│       ├── <span class="var">Canevas/</span>         ← Exemples de canvas (19 scripts)
+│       │   ├── 01-canvas-basique.js
+│       │   └── ...
+│       ├── <span class="var">Objets/</span>          ← Exemples d'objets (18 scripts)
+│       │   ├── 01-objet-basique.js
+│       │   └── ...
+│       └── <span class="var">Demo/</span>            ← Démos complètes
+│           ├── demo-diagnostic.js
+│           └── demo-interaction-souris.js
+│
+└── <span class="var">Aide/</span>                    ← Cette documentation
+    └── <span class="var">Fr/</span>                  ← Documentation en français
+        └── index.html        ← Point d'entrée de l'aide</pre>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Rôle de chaque fichier principal</h2>
+
+<h3>index.html — L'éditeur de code</h3>
+<p>
+    C'est l'interface de développement. Il contient un éditeur de code (CodeMirror) avec coloration
+    syntaxique, 31 thèmes, personnalisation des couleurs, et un menu Fichier pour ouvrir/sauvegarder
+    des scripts. Quand on clique sur <strong>Exécuter (F5)</strong>, le script est envoyé vers
+    <code>runner.html</code> qui l'exécute.
+</p>
+
+<h3>runner.html — La page d'exécution</h3>
+<p>
+    C'est la page où le code s'exécute réellement. Elle contient un <code>&lt;div id="container"&gt;</code>
+    qui sert de conteneur pour le rendu VOH, et charge automatiquement Pixi.js et les fichiers du Core.
+    Le code à exécuter est récupéré depuis le <code>localStorage</code> du navigateur (stocké par l'éditeur).
+</p>
+<p>
+    Si une erreur se produit pendant l'exécution, un overlay rouge s'affiche avec le message d'erreur,
+    le fichier concerné et le numéro de ligne.
+</p>
+
+<div class="note">
+    <strong>Important :</strong> <code>runner.html</code> n'est pas juste un outil de l'éditeur — c'est
+    la page qui fait tourner le moteur VOH. Si vous créez votre propre application, votre page HTML
+    joue le même rôle que <code>runner.html</code>.
+</div>
+
+<h3>Core/ — Le moteur VOH</h3>
+<p>
+    Les fichiers JavaScript du Core sont le cœur du moteur. Ils sont chargés par <code>runner.html</code>
+    (ou par votre propre page HTML) dans cet ordre obligatoire :
+</p>
+<pre><span class="num"> 1.</span> <span class="str">Core/Core-Diagnostics.js</span>         ← Système de diagnostic
+<span class="num"> 2.</span> <span class="str">Core/Core-EventEmitter.js</span>        ← Système d'événements interne (on, off, emit)
+<span class="num"> 3.</span> <span class="str">Core/Core-API.js</span>                 ← Définit la structure de l'API publique
+<span class="num"> 4.</span> <span class="str">Core/Core-Zone.js</span>                ← Gestion des zones (ZoneManager)
+<span class="num"> 5.</span> <span class="str">Core/Core-CanvasSelection.js</span>     ← Rectangle de sélection souris
+<span class="num"> 6.</span> <span class="str">Core/Core-CanvasHistory.js</span>       ← Historique undo/redo par page
+<span class="num"> 7.</span> <span class="str">Core/Core-CanvasPage.js</span>          ← Gestion des pages (multi-pages)
+<span class="num"> 8.</span> <span class="str">Core/Core-RenderEngine.js</span>        ← Moteur de rendu Pixi.js
+<span class="num"> 9.</span> <span class="str">Core/Core-Canvas.js</span>              ← Gestion des canvas (CanvasManager)
+<span class="num">10.</span> <span class="str">Core/Core-Objects.js</span>             ← Gestion des objets (ObjectManager)
+<span class="num">11.</span> <span class="str">Core/Core-ObjectSelection.js</span>     ← Sélection d'objets
+<span class="num">12.</span> <span class="str">Core/Core-SpatialGrid.js</span>         ← Grille spatiale pour le hit-test
+<span class="num">13.</span> <span class="str">Core/Core-ObjectInteraction.js</span>   ← Interaction souris (drag, clic, curseurs)
+<span class="num">14.</span> <span class="str">Core/Core-Main.js</span>                ← Classe principale, point d'entrée du moteur</pre>
+
+<div class="note">
+    L'ordre de chargement est important. <code>Core-Main.js</code> doit toujours être chargé en dernier
+    car il utilise les classes définies dans les autres fichiers.
+</div>
+
+<h3>Libraries/ — Les dépendances</h3>
+<p>
+    VOH utilise <strong>Pixi.js</strong> pour le rendu GPU (obligatoire pour le Core).
+    <strong>CodeMirror</strong> est utilisé uniquement par l'éditeur intégré — il n'est pas nécessaire
+    si vous créez votre propre interface. <strong>TypeScript</strong> est optionnel et permet de compiler
+    du TypeScript en JavaScript à la volée.
+</p>
+
+<h3>Medias/ — Les ressources</h3>
+<p>
+    Dossier pour stocker les images, textures et autres fichiers utilisés par vos scripts.
+    Le sous-dossier <code>Images/</code> contient les images. Les chemins dans les scripts sont
+    relatifs à <code>runner.html</code> (ou à votre page HTML).
+</p>
+<p>
+    Par exemple, pour utiliser une image dans un script :
+</p>
+<pre><span class="cmt">// Le chemin est relatif à runner.html (à la racine du projet)</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setBackgroundImage</span>(<span class="var">zone</span>, <span class="str">'Medias/Images/Zelda.png'</span>);</pre>
+
+<h3>Exemples/ — Les scripts d'exemple</h3>
+<p>
+    Scripts prêts à l'emploi pour apprendre l'API. Ouvrez-les avec <strong>Fichier → Ouvrir</strong>
+    dans l'éditeur et appuyez sur <strong>F5</strong> pour les exécuter.
+</p>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

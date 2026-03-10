@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Éditeur et exécution — VOH Documentation</title>
+</head>
+<body>
+
+<h1>Éditeur et exécution</h1>
+<p class="intro">Comment écrire du code et l'exécuter avec l'éditeur intégré.</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">L'éditeur intégré (index.html)</h2>
+
+<p>
+    Le projet inclut un éditeur de code intégré dans <code>index.html</code>.
+    C'est un environnement complet pour écrire et tester vos scripts VOH sans aucun outil externe.
+</p>
+
+<p>Il offre :</p>
+
+<div class="method">
+    <div class="method-name">Fonctionnalités de l'éditeur</div>
+    <div class="method-description">
+        <strong>Édition de code</strong> — Coloration syntaxique JavaScript/TypeScript, numéros de ligne,
+        fermeture automatique des parenthèses et crochets, correspondance des accolades.<br><br>
+        <strong>31 thèmes</strong> — 12 thèmes clairs et 19 thèmes sombres, plus un thème entièrement
+        personnalisable avec 14 couleurs ajustables.<br><br>
+        <strong>Menu Fichier</strong> — Nouveau script, Ouvrir un fichier .js depuis le disque,
+        Sauvegarder (Ctrl+S), Sauvegarder sous.<br><br>
+        <strong>Personnalisation</strong> — Couleur de fond de l'éditeur, couleur de l'interface (barres),
+        taille de police, le tout sauvegardé automatiquement.<br><br>
+        <strong>Exécution</strong> — Bouton ▶ Exécuter (F5) pour lancer le script.<br><br>
+        <strong>Support TypeScript</strong> — Sélectionnez « TypeScript » dans le menu déroulant Langage
+        en haut à gauche. Le compilateur TypeScript est intégré : votre code TS est automatiquement
+        compilé en JavaScript avant l'exécution, sans aucune installation supplémentaire.
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Comment exécuter un script</h2>
+
+<h3>Méthode 1 : Écrire et exécuter</h3>
+<p>
+    Ouvrez <code>index.html</code> dans votre navigateur. Écrivez votre code dans l'éditeur,
+    puis cliquez sur <strong>▶ Exécuter (F5)</strong> ou appuyez sur la touche <strong>F5</strong>.
+</p>
+
+<h3>Méthode 2 : Ouvrir un exemple et exécuter</h3>
+<p>
+    Cliquez sur <strong>Fichier → Ouvrir</strong>, naviguez jusqu'au dossier <code>Exemples/Fr/</code>,
+    choisissez un script (par exemple <code>Zone/01-zone-basique.js</code>), puis appuyez sur <strong>F5</strong>.
+</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Comment ça marche en coulisses</h2>
+
+<p>Quand vous cliquez sur <strong>Exécuter (F5)</strong>, voici ce qui se passe :</p>
+
+<div class="method">
+    <div class="method-name">Étape 1 — Stockage du script</div>
+    <div class="method-description">
+        L'éditeur (<code>index.html</code>) prend le code que vous avez écrit et le stocke dans
+        le <code>localStorage</code> du navigateur, sous la clé <code>voh_runner_script</code>.
+        Le langage (JavaScript ou TypeScript) est aussi stocké sous <code>voh_runner_language</code>.
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">Étape 2 — Ouverture du runner</div>
+    <div class="method-description">
+        L'éditeur ouvre <code>runner.html</code> dans un nouvel onglet du navigateur.
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">Étape 3 — Chargement des bibliothèques</div>
+    <div class="method-description">
+        <code>runner.html</code> charge automatiquement, dans l'ordre :<br>
+        1. <strong>Pixi.js</strong> — Moteur de rendu GPU<br>
+        2. <strong>Core-Diagnostics.js</strong> — Système de diagnostic<br>
+        3. <strong>Core-EventEmitter.js</strong> — Système d'événements interne<br>
+        4. <strong>Core-API.js</strong> — API publique du moteur<br>
+        5. <strong>Core-Zone.js</strong> — Gestion des zones<br>
+        6. <strong>Core-CanvasSelection.js</strong> — Rectangle de sélection souris<br>
+        7. <strong>Core-CanvasHistory.js</strong> — Historique undo/redo<br>
+        8. <strong>Core-CanvasPage.js</strong> — Gestion des pages<br>
+        9. <strong>Core-RenderEngine.js</strong> — Moteur de rendu Pixi.js<br>
+        10. <strong>Core-Canvas.js</strong> — Gestion des canvas<br>
+        11. <strong>Core-Objects.js</strong> — Gestion des objets<br>
+        12. <strong>Core-ObjectSelection.js</strong> — Sélection d'objets<br>
+        13. <strong>Core-SpatialGrid.js</strong> — Grille spatiale (hit-test)<br>
+        14. <strong>Core-ObjectInteraction.js</strong> — Interaction souris<br>
+        15. <strong>Core-Main.js</strong> — Classe principale
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">Étape 4 — Exécution du script</div>
+    <div class="method-description">
+        <code>runner.html</code> récupère le script depuis le <code>localStorage</code>,
+        l'enveloppe dans une fonction <code>async</code> (ce qui permet d'utiliser <code>await</code>),
+        et l'exécute. Le script a accès au <code>&lt;div id="container"&gt;</code> qui remplit
+        toute la page pour le rendu VOH.
+    </div>
+</div>
+
+<div class="method">
+    <div class="method-name">En cas d'erreur</div>
+    <div class="method-description">
+        Si le script provoque une erreur, un overlay rouge s'affiche sur la page avec le message
+        d'erreur, le nom du fichier et le numéro de ligne. Les erreurs non attrapées (exceptions
+        et promesses rejetées) sont aussi capturées automatiquement.
+    </div>
+</div>
+
+<div class="note">
+    <strong>TypeScript :</strong> Si le langage est TypeScript, <code>runner.html</code> charge
+    automatiquement le compilateur TypeScript (<code>Libraries/TypeScript/TypeScript.js</code>)
+    et compile le code en JavaScript avant de l'exécuter. Aucune installation n'est nécessaire.
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Raccourcis clavier</h2>
+
+<table>
+    <tr><th>Raccourci</th><th>Action</th></tr>
+    <tr><td><code>F5</code></td><td>Exécuter le script</td></tr>
+    <tr><td><code>Ctrl + S</code></td><td>Sauvegarder le fichier</td></tr>
+    <tr><td><code>Ctrl + N</code></td><td>Nouveau script</td></tr>
+    <tr><td><code>Ctrl + O</code></td><td>Ouvrir un fichier</td></tr>
+    <tr><td><code>Ctrl + Shift + S</code></td><td>Sauvegarder sous</td></tr>
+    <tr><td><code>Échap</code></td><td>Fermer les menus ouverts</td></tr>
+</table>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

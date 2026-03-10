@@ -1,0 +1,400 @@
+## 12. Tests automatisés — Vitest
+
+### 12.1 Pourquoi des tests automatisés
+
+VOH a 101 000+ lignes de code. Chaque modification peut casser autre chose sans qu'on le remarque. Tester manuellement à chaque changement c'est impossible. Les tests automatisés garantissent que ce qui marche continue de marcher.
+
+### 12.2 Outil choisi : Vitest
+
+Vitest est le framework de test standard pour les projets JavaScript modernes. Natif ES modules, ultra-rapide, et peut tester dans un vrai navigateur via Playwright.
+
+### 12.3 5 niveaux de tests
+
+| Niveau | Type | Ce qu'il teste | Vitesse |
+|--------|------|---------------|---------|
+| 1 | Unitaire | Chaque module isolé | Rapide |
+| 2 | Intégration | Modules ensemble (créer → copier → undo) | Moyen |
+| 3 | Canvas | Rendu Pixi.js et interactions (navigateur réel) | Lent |
+| 4 | API | Toutes les méthodes publiques | Moyen |
+| 5 | E2E | Scénarios complets + stress | Lent |
+
+### 12.4 Couverture minimale ciblée
+
+| Module | Couverture minimale |
+|--------|-------------------|
+| Core managers (History, Selection, Clipboard, Pages) | 90%+ |
+| BaseObject + TypeRegistry | 90%+ |
+| RuleEngine | 85%+ |
+| Save/Load (ProjectManager) | 95%+ |
+| FileManager (import + cache) | 90%+ |
+| CodeGenerator | 80%+ |
+| RenderEngine (Pixi.js) | 60%+ |
+| InteractionManager | 70%+ |
+| Editor UI | 40%+ |
+| Total projet | 75%+ |
+
+### 12.5 Quand les tests sont écrits
+
+Les tests sont écrits en même temps que le code, à chaque phase. Pas de "phase tests" séparée.
+
+
+---
+
+
+## 13. Zoom & scroll — Deux niveaux
+
+### 13.1 Zoom de la zone (viewport)
+
+La zone est le viewport. Elle possède son propre système de zoom et de scroll qui affecte **tous les canvas** qu'elle contient. C'est un zoom de navigation : on zoome/dézoome pour voir l'ensemble des canvas dans la zone, et on scroll pour se déplacer.
+
+Ce zoom est déjà implémenté dans Core-Zone.js via CSS (zoom + overflow scroll).
+
+### 13.2 Zoom interne d'un canvas (contenu de la page)
+
+Chaque canvas a ses 5 layers Pixi.js (fond, image, grille, objets, overlay). Un ViewTransform appliqué sur le Container parent de ces 5 layers permet de zoomer/scroller **à l'intérieur** d'un canvas pour naviguer dans ses objets.
+
+```javascript
+class ViewTransform {
+  constructor(pixiStage) {
+    this._stage = pixiStage;  // Le Container Pixi.js parent des 5 layers
+    this.zoom = 1.0;          // 1.0 = 100%
+    this.scrollX = 0;
+    this.scrollY = 0;
+    this.minZoom = 0.1;       // 10%
+    this.maxZoom = 10.0;      // 1000%
+  }
+
+  // Applique le zoom et scroll sur le Container Pixi.js
+  apply() {
+    this._stage.scale.set(this.zoom);
+    this._stage.position.set(-this.scrollX * this.zoom, -this.scrollY * this.zoom);
+  }
+
+  worldToScreen(worldX, worldY) {
+    return {
+      x: (worldX - this.scrollX) * this.zoom,
+      y: (worldY - this.scrollY) * this.zoom
+    };
+  }
+
+  screenToWorld(screenX, screenY) {
+    return {
+      x: screenX / this.zoom + this.scrollX,
+      y: screenY / this.zoom + this.scrollY
+    };
+  }
+}
+```
+
+Le zoom et le scroll internes sont appliqués une seule fois sur le Container parent — tous les enfants (les 5 layers et leurs contenus) sont transformés automatiquement par le GPU.
+
+### 13.3 Contrôles utilisateur (à définir)
+
+- Molette : zoom centré sur le curseur (dans le canvas actif)
+- Clic milieu + drag : déplacement panoramique (pan)
+- Ctrl + 0 : reset zoom à 100%
+- Ctrl + +/- : zoom par paliers
+
+
+---
+
+
+## 14. Plan de développement — Par phases
+
+**Approche : API-first + Web-first.** Le Core est développé et testé dans un navigateur standard via un éditeur de code intégré (CodeMirror). On construit et valide chaque module du Core via des scripts avant de construire l'éditeur visuel. Le code v4 sert de référence, pas de base à refactorer. Le wrapper desktop sera ajouté plus tard quand le Core sera mature.
+
+### Phase 1 — Infrastructure + Zone (✅ TERMINÉE)
+
+- [x] Structure du projet web-first (index.html, runner.html, Core/)
+- [x] Éditeur de code intégré (CodeMirror) pour écrire et tester les scripts API
+- [x] runner.html pour l'exécution des scripts avec gestion d'erreurs
+- [x] Core-Main.js : classe VisualObjectsHandler (constructeur, init, destroy, instanceId)
+- [x] Core-Zone.js : ZoneManager complet (création, suppression, dimensionnement, bordure, grille zone, fond, viewport scroll)
+- [x] Core-API.js : construction des sous-objets API (voh.zone)
+- [x] Exemples et documentation en français
+- [x] Pixi.js intégré dans Libraries/ (prêt à utiliser)
+
+Livrable : v5.1.0 — Le Core fonctionne. On peut créer des zones et les manipuler via l'API.
+
+### Phase 2 — Canvas basique + Pixi.js (EN COURS — conception terminée)
+
+Document de conception Canvas terminé (378 méthodes API, 136 événements, 6 étapes). Implémentation par étapes :
+
+**Étape 2.1 — Canvas basique :**
+- [ ] Core-Canvas.js : CanvasManager (création/suppression dans une zone)
+- [ ] Core-RenderEngine.js : initialiser Pixi.js Application, créer les 5 Containers layers par canvas
+- [ ] Position, taille, bordure, ombre, clipping, opacity, verrouillage, visibilité
+- [ ] Z-order des canvas dans la zone
+- [ ] Canvas actif (un seul éditable à la fois)
+- [ ] Curseur personnalisable
+- [ ] Contraintes de position et taille
+- [ ] Snap sur la grille de la zone
+- [ ] Duplication, export/import JSON
+- [ ] Événements basiques (canvas:created, canvas:deleted, canvas:activated, etc.)
+- [ ] Événements souris sur le canvas (leftClick, rightClick, mouseMove, etc.)
+- [ ] API : voh.canvas.* (sections 9.1-9.13 du document Canvas)
+
+**Étape 2.2 — Barre de titre + déplacement + redimensionnement :**
+- [ ] Barre de titre avec nom du canvas, drag pour déplacer
+- [ ] 8 poignées de redimensionnement (coins + bords)
+- [ ] Icône de déplacement alternative
+- [ ] Personnalisation complète (couleurs, police, bordure, ombre, curseur)
+- [ ] Double-clic barre de titre → maximiser/restaurer
+- [ ] API : voh.canvas.titleBar.*, voh.canvas.handles.*, voh.canvas.moveIcon.*
+
+**Étape 2.3 — Boutons barre de titre :**
+- [ ] 3 boutons : fermer, minimiser, maximiser
+- [ ] Minimiser → barre de tâches en bas de la zone
+- [ ] Maximiser → plein zone, restaurer → taille précédente
+- [ ] Personnalisation par bouton (couleurs, forme, taille, bordure, ombre)
+- [ ] API : voh.canvas.titleBar.buttons.*
+
+**Étape 2.4 — Pages :**
+- [ ] Core-CanvasPage.js : PageManager (pages par canvas)
+- [ ] Page 1 créée automatiquement avec chaque canvas
+- [ ] Fond par page (couleur + image)
+- [ ] Grille/snap par page
+- [ ] Undo/redo par page
+- [ ] Sélection vidée au changement de page
+- [ ] Clipboard partagé entre canvas
+- [ ] API : voh.canvas.pages.*
+
+**Étape 2.5 — Docking :**
+- [ ] Core-CanvasDocking.js : docking VS2010 entre canvas
+- [ ] Flèches de docking au drag (4 bords + centre en onglets)
+- [ ] Séparateurs redimensionnables
+- [ ] Détacher un canvas docké → flottant
+- [ ] API : voh.canvas.docking.*
+
+**Étape 2.6 — Rendu hybride :**
+- [ ] Ticker Pixi.js : statique par défaut, dynamique auto pour contenu vivant
+- [ ] Détection automatique (GIF animé, vidéo, animation → dynamique)
+- [ ] Retour en statique quand plus rien n'anime
+- [ ] 0 CPU/GPU quand rien ne bouge
+
+Livrable : v5.2.0 — Canvas complets avec fenêtrage MDI, pages, docking, rendu GPU.
+
+### Phase 3 — Objets graphiques
+
+Le cœur fonctionnel. Les objets sont créés dans un canvas, sur la page active.
+
+- [ ] Core-ObjectManager.js : création, suppression, propriétés, z-order
+- [ ] Core-BaseObject.js : structure d'un objet (position, taille, rotation, pivot, style, contraintes)
+- [ ] Core-TypeRegistry.js : registre de formes extensible (rectangle, cercle, triangle, ellipse, polygone, ligne, texte)
+- [ ] Core-RenderObjects.js : rendu des objets en Sprites/Graphics Pixi.js
+- [ ] Core-RenderOverlay.js : poignées de redimensionnement/rotation des objets, rectangle de sélection souris
+- [ ] Core-SelectionManager.js : sélection simple, multi-sélection (Ctrl+clic, rectangle de sélection)
+- [ ] Core-InteractionManager.js : événements souris/clavier sur les objets et poignées
+- [ ] Déplacement, redimensionnement, rotation avec pivot
+- [ ] Contraintes (zones, axes, pas, snap to grid)
+- [ ] Ombres portées via DropShadowFilter (GPU)
+- [ ] Dégradés linéaires et radiaux
+- [ ] Bordures personnalisables
+- [ ] API : voh.objects.*, voh.objects.selection.*
+
+Livrable : v5.3.0 — On peut créer, manipuler, sélectionner des objets sur le canvas.
+
+### Phase 4 — Undo/redo + Clipboard + Connexions
+
+- [ ] Core-HistoryManager.js : undo/redo par page (snapshot + diff)
+- [ ] Core-ClipboardManager.js : couper/copier/coller/dupliquer (clipboard partagé entre canvas)
+- [ ] Core-ConnectionManager.js : connexions/liaisons entre objets, ancrages (25 points)
+- [ ] Core-RenderConnections.js : rendu des connexions (lignes, courbes, flèches)
+- [ ] Groupes d'objets, système d'épingle (pin)
+- [ ] API : voh.history.*, voh.clipboard.*, voh.connections.*
+
+Livrable : v5.4.0 — Manipulation complète des objets avec undo/redo et connexions.
+
+### Phase 5 — Moteur de règles (Rule Engine)
+
+- [ ] Core-RuleEngine.js : chargement JSON, pré-compilation en fonctions JS natives
+- [ ] rules/default-rules.json : reproduit exactement les comportements par défaut
+- [ ] Indexation des règles par événement (Map<eventName, CompiledRule[]>)
+- [ ] Extraire les mécaniques en engines séparés (DragEngine, ResizeEngine, RotateEngine)
+- [ ] InteractionManager émet les événements bruts → RuleEngine évalue → exécute les actions
+- [ ] Règles personnalisables par l'utilisateur
+- [ ] API : voh.rules.*
+
+Livrable : v5.5.0 — Mêmes comportements, pilotés par des règles JSON modifiables.
+
+### Phase 6 — Contenu dynamique natif
+
+- [ ] GIF animés : natif Pixi.js v8.7.0+, contrôles lecture (play, pause, vitesse, boucle)
+- [ ] Vidéo sur objets : textures vidéo Pixi.js (MP4, WebM)
+- [ ] Sprites animés : séquences d'images, frame par frame
+- [ ] Ticker hybride affiné : détection automatique, retour en statique
+
+Livrable : v5.6.0 — GIF, vidéos et animations fonctionnent nativement.
+
+### Phase 7 — Éditeur visuel (Editor)
+
+C'est ici qu'on construit l'interface graphique complète par-dessus le Core.
+
+- [ ] Interface docking type VS2010 (panneaux dockables, flottants, redimensionnables)
+- [ ] Panneaux : Canvas (central), Objets (treeview), Propriétés (propgrid), Événements, Console
+- [ ] Menus : Fichier, Édition, Affichage, Outils, Aide
+- [ ] Barre d'outils, barre de statut
+- [ ] Système de thèmes via variables CSS (clair, sombre, VS2010)
+- [ ] Système i18n avec les 3 langues (fr/en/de)
+- [ ] Modales : paramètres, grille, export, à propos
+- [ ] EventMaker : interface pour visualiser/modifier les règles
+- [ ] Mode aperçu (F5 / Echap)
+
+Livrable : v5.7.0 — L'éditeur visuel complet, utilisable sans écrire de code.
+
+### Phase 8 — Wrapper desktop + Filesystem
+
+Le wrapper desktop est intégré quand le Core et l'Editor sont matures.
+
+- [ ] Choisir le framework (Electron, Tauri, NW.js ou autre — voir section 6.2)
+- [ ] Intégrer le wrapper : l'Editor web tourne dans une fenêtre native
+- [ ] Accès au système de fichiers (lecture/écriture natifs)
+- [ ] Dialogues fichiers natifs (ouvrir, enregistrer, nouveau projet)
+- [ ] Dossier projet sur disque (voir section 4)
+- [ ] FileManager : import automatique + cache LRU sur disque
+- [ ] Auto-save par rotation de slots
+- [ ] Compilation en application standalone
+- [ ] Association de fichier .voh
+- [ ] Paramètres globaux dans %APPDATA%/VOH/config.json
+
+Livrable : v5.8.0 — VOH est une application desktop avec accès fichiers et compilation.
+
+### Phase 9 — SDK développeur + Open source
+
+- [ ] Build Vite du Core + Pixi.js → voh-core.min.js (~700 Ko minifié)
+- [ ] Dépôt GitHub public du Core
+- [ ] Documentation API, exemples, README, LICENSE
+- [ ] Page player.html (Core + Pixi.js seuls)
+
+Livrable : v5.9.0 — SDK distribuable, dépôt GitHub public.
+
+### Phases futures
+
+- **Couche Interface v2** : InterfaceBuilder, contrôles HTML au-dessus du canvas liés aux objets
+- **Animations personnalisées** : timeline, interpolation (easing), export GIF/vidéo
+- **Éditeur d'image intégré** : recadrer, pivoter, luminosité/contraste
+
+### En parallèle — PB Bridge
+
+Développé progressivement :
+
+- [ ] PBBridge.js : détection d'environnement PB, événements standardisés
+- [ ] Wrapper VOH.pbi : procédures PureBasic
+- [ ] Exemples et documentation PB
+
+
+---
+
+
+## 15. Risques et points d'attention
+
+### 15.1 Performance du moteur de règles
+
+Risque : évaluation des règles trop lente sur mousemove avec 500+ objets.
+Mitigation : pré-compilation en fonctions JS natives + indexation par événement. Si malgré tout c'est plus lent, option de "mode direct" qui court-circuite le moteur.
+
+### 15.2 Complétude de la reconstruction
+
+Risque : oublier des fonctionnalités de la v4 pendant la réécriture.
+Mitigation : la v4 sert de cahier des charges vivant. Chaque fonctionnalité de la v4 est cochée dans une checklist. Tests de non-régression : charger un projet v4 converti, vérifier que tout fonctionne identiquement.
+
+### 15.3 Compatibilité des projets existants
+
+Risque : les fichiers .voh de la v4 ne chargent plus en v5.
+Mitigation : la v5 détecte la version du fichier et propose la migration avec dialogue de confirmation.
+
+### 15.4 Taille du chantier
+
+Risque : projet trop ambitieux qui n'aboutit pas.
+Mitigation : les phases sont indépendantes. La Phase 1 (Zone) est déjà fonctionnelle. On peut s'arrêter après n'importe quelle phase.
+
+### 15.5 Wrapper desktop — Choix différé
+
+Risque : le choix du wrapper desktop est reporté. Quand on y arrivera (Phase 8), le paysage des frameworks aura peut-être changé, ou le framework choisi pourrait avoir ses propres problèmes (comme Neutralinojs en v4).
+Mitigation : l'architecture Core/Editor est 100% indépendante du wrapper. Le même code tourne dans un navigateur et dans n'importe quel wrapper. Si un framework pose problème, on peut en changer sans toucher au Core ni à l'Editor. Le risque est isolé dans la couche wrapper uniquement.
+
+### 15.6 Open source — Concurrence et fork
+
+Risque : le Core est open source. Un concurrent pourrait forker le projet et créer un produit concurrent.
+Mitigation : l'avance technique et la connaissance du projet sont les vrais avantages compétitifs. Un fork sans la vision conceptuelle et l'expertise accumulée ne vaut pas grand-chose. De plus, l'utilisation de bibliothèques tierces (Pixi.js sous licence MIT) impose de respecter les licences — être open source est cohérent avec cet écosystème. La communauté open source apporte aussi des contributions, des retours de bugs, et de la visibilité.
+
+### 15.7 Auto-save et perte de données
+
+Risque : l'auto-save écrase une version correcte avec une version contenant des erreurs de l'utilisateur.
+Mitigation : l'auto-save est une copie du .voh dans un dossier séparé (Auto-Save/), pas un écrasement du .voh principal. La rotation de slots (défaut : 10) permet de remonter dans le temps. Le .voh principal n'est modifié que par Ctrl+S.
+
+### 15.8 Dépendance à Pixi.js
+
+Risque : Pixi.js est une bibliothèque tierce. Si Playco arrête le développement ou introduit des changements cassants, VOH est impacté.
+Mitigation : Pixi.js est sous licence MIT — on peut forker si nécessaire. Le projet est très actif (release régulières, large communauté, utilisé en production par des entreprises). VOH utilise Pixi.js comme moteur de rendu interne uniquement — l'API publique VOH ne dépend pas de Pixi.js. Si un remplacement est nécessaire un jour, seuls les fichiers `engine/Render*.js` sont impactés. De plus, la version de Pixi.js est fixée dans le `package.json` — pas de mise à jour automatique non voulue.
+
+
+---
+
+
+## 16. Récapitulatif des décisions
+
+| Décision | Choix | Justification |
+|----------|-------|---------------|
+| Repartir de zéro ? | Base propre — v4 comme référence | Concepts conservés, code réécrit proprement |
+| Interface Editor ? | Maquette VS2010 dockable | Panneaux dockables, flottants, redimensionnables |
+| Modules ES ? | Oui | Standard moderne, IDE, bundlers |
+| Taille max fichier ? | ~1 500 lignes | Lisibilité, maintenabilité |
+| Bundler ? | Oui — Vite | 50+ fichiers → fichiers minifiés optimisés |
+| Approche développement ? | Web-first + API-first | Le Core fonctionne dans un navigateur, wrapper desktop ajouté plus tard |
+| Application desktop ? | Wrapper différé (Phase 8) | Electron/Tauri/autre — choix quand le Core est mature |
+| Moteur de rendu ? | Pixi.js v8+ (WebGL/GPU) | Remplace Canvas 2D (CPU). 100x+ plus performant pour les ombres, filtres, 1000+ objets. MIT, maintenu par Playco |
+| Filtres GPU ? | pixi-filters (DropShadow, Glow, Outline, etc.) | Ombres portées quasi gratuites au lieu de ctx.shadowBlur |
+| Layers canvas ? | 5 Containers Pixi.js dans 1 canvas WebGL | Plus performant que 5 canvas HTML empilés |
+| Fallback Canvas 2D ? | Non — WebGL uniquement | Tous les navigateurs modernes supportent WebGL |
+| Dossier projet ? | Oui — dossier normal sur disque (nécessite wrapper) | Médias séparés, chemins relatifs, portable |
+| Médias dans le .voh ? | Non — fichiers sur disque (nécessite wrapper) | Mémoire libérée, sauvegarde rapide, lazy loading |
+| MediaStore ? | Supprimé — remplacé par FileManager | Import + cache LRU, plus simple |
+| Import fichiers ? | Copie automatique dans le projet (nécessite wrapper) | Projet autonome et portable |
+| Paramètres thème/langue ? | Globaux (localStorage en web, %APPDATA% en desktop) | Indépendants du projet |
+| Paramètres grille/canvas/raccourcis ? | Par projet (Paramètres/) | Spécifiques, importables/exportables |
+| Écran de démarrage ? | Oui — Nouveau / Ouvrir / Récents / Réouvrir | Standard, paramètres globaux |
+| Auto-save ? | Rotation de slots (.voh uniquement, nécessite wrapper) | Simple, rapide, pas de copie de médias |
+| Nettoyage du projet ? | Oui — suppression des fichiers orphelins | Bonus futur, après confirmation utilisateur |
+| Éditeur d'image ? | Oui — basique (recadrer, pivoter, luminosité) | Bonus futur, sauvegarde en nouveau fichier |
+| Migration v4 ? | Dialogue de confirmation | L'utilisateur décide |
+| Chemins dans le .voh ? | Relatifs au dossier projet | Portabilité, partage |
+| Règles JSON ou JS ? | JSON (compilé en JS) | Éditable visuellement via EventMaker |
+| Rendu continu ou hybride ? | Hybride (ticker Pixi.js arrêté/actif) | 0 CPU/GPU quand statique, boucle quand dynamique |
+| API plate ou sous-objets ? | Sous-objets (voh.zone, voh.canvas, voh.objects, etc.) | Hiérarchie claire Zone → Canvas → Pages → Objets |
+| Compilation application ? | Oui — via le wrapper desktop (Phase 8) | Application autonome distribuable |
+| Core open source ? | Oui | Utilisation de libs MIT (Pixi.js), cohérent avec l'écosystème, apporte communauté et contributions |
+| Player ? | Oui — page HTML pour le SDK développeur | Le développeur qui code avec l'API a besoin d'un runtime |
+| Version Constructor ? | Maintenue | Distribution à plat de VOH, différente de la compilation |
+| Mode aperçu éditeur ? | Oui — F5 / Echap | Tester sans quitter l'éditeur |
+| Association fichier .voh ? | Double-clic → ouvre l'éditeur (nécessite wrapper) | Comportement Windows standard |
+| Tests automatisés ? | Vitest — 5 niveaux, 75%+ couverture | Intégré à chaque phase |
+| Zoom & scroll ? | Deux niveaux : zone (viewport CSS) + canvas interne (ViewTransform Pixi.js) | Zone déjà implémenté, canvas interne en Phase 2 |
+| Multi-canvas ? | Natif — plusieurs canvas dans une zone (MDI) | Architecture Zone → Canvas, clipboard partagé, un seul éditable à la fois |
+| Système de plugins ? | Reporté | Architecture modulaire suffisante pour l'instant |
+| PB Bridge ? | Développé en parallèle des phases | Architecture prête dès le départ |
+| Distribution ? | GitHub (dépôt public) | Code source open source, SDK téléchargeable |
+
+
+---
+
+
+## 17. Questions ouvertes (à décider)
+
+1. Nom de la v5 ? — Garder "Visual Objects Handler" ou un nouveau nom ?
+2. Licence du Core ? — Open source confirmé, mais quelle licence exactement ? Options : MIT (très permissive, comme Pixi.js), Apache 2.0 (permissive + protection brevets), GPL (copyleft, oblige les dérivés à être open source), LGPL (copyleft uniquement sur le module), autre ?
+3. Extension .voh ? — Garder .voh ou changer pour éviter la confusion avec l'ancien format ZIP ?
+4. SDK développeur — Distribué comment ? GitHub releases ? npm ? Les deux ?
+5. Cache LRU du FileManager — Taille max par défaut ? Configurable par l'utilisateur ?
+6. Wrapper desktop — Quel framework choisir quand le moment viendra ? Electron (simple, tout JS) vs Tauri (léger, Rust) vs NW.js (simple mais communauté réduite) ?
+
+
+---
+
+
+*Document généré le 11 février 2026*
+*Mis à jour le 15 février 2026 — Décisions session part 45*
+*Mis à jour le 27 février 2026 — Intégration Pixi.js (moteur de rendu GPU), correction layers (5 Containers Pixi.js), ajout phase API-first*
+*Mis à jour le 27 février 2026 — Core open source, approche web-first, wrapper desktop différé (Phase 8), suppression dépendance Neutralinojs*
+*Mis à jour le 1er mars 2026 — Audit de cohérence complet : API corrigée (Zone→Canvas→Pages→Objets), exemples de code alignés sur le code réel, plan de développement réécrit (Phase 1 Zone terminée, Phase 2 Canvas en cours), structure fichiers actualisée, zoom/scroll deux niveaux, multi-canvas clarifié, section projet utilisateur marquée futur*
+*Basé sur l'analyse de : 26 fichiers Core + 15 fichiers Editor = 101 704 lignes de code*

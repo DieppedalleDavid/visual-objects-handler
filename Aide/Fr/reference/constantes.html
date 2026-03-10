@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Constantes — VOH Documentation</title>
+</head>
+<body>
+
+<h1>Constantes — Valeurs par défaut</h1>
+<p class="intro">Valeurs utilisées quand on crée une zone ou un canevas sans préciser tous les paramètres.</p>
+
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Zone — voh.zone.create()</h2>
+
+<table>
+    <tr><th>Propriété</th><th>Valeur par défaut</th><th>Signification</th></tr>
+    <tr><td>width / height</td><td><code>null</code></td><td>100% de l'espace disponible</td></tr>
+    <tr><td>backgroundColor</td><td><code>'rgba(83, 83, 83, 1.0)'</code></td><td>Gris moyen</td></tr>
+    <tr><td>backgroundImage</td><td><code>''</code></td><td>Pas d'image</td></tr>
+    <tr><td>backgroundImageOpacity</td><td><code>1.0</code></td><td>Image opaque</td></tr>
+    <tr><td>gridWidth / gridHeight</td><td><code>25</code></td><td>Cases de 25 pixels</td></tr>
+    <tr><td>gridColor</td><td><code>'rgba(0, 0, 0, 1.0)'</code></td><td>Lignes noires</td></tr>
+    <tr><td>gridOpacity</td><td><code>0.15</code></td><td>Quasi transparente</td></tr>
+    <tr><td>gridIsVisible</td><td><code>false</code></td><td>Grille masquée</td></tr>
+    <tr><td>scrollbarIsVisible</td><td><code>true</code></td><td>Scrollbars visibles</td></tr>
+    <tr><td>zoom</td><td><code>1.0</code></td><td>100% (taille normale)</td></tr>
+    <tr><td>zoom minimum</td><td><code>0.1</code></td><td>10%</td></tr>
+    <tr><td>zoom maximum</td><td><code>5.0</code></td><td>500%</td></tr>
+    <tr><td>zoom step</td><td><code>0.1</code></td><td>Palier de +/- 10%</td></tr>
+    <tr><td>borderColor</td><td><code>'rgba(0, 0, 0, 1.0)'</code></td><td>Bordure noire</td></tr>
+    <tr><td>borderThickness</td><td><code>1</code></td><td>1 pixel</td></tr>
+    <tr><td>bringCanvasToFrontOnActivation</td><td><code>false</code></td><td>Le z-order ne change pas à l'activation</td></tr>
+</table>
+
+<h2>Canevas — voh.canvas.create()</h2>
+
+<table>
+    <tr><th>Propriété</th><th>Valeur par défaut</th><th>Signification</th></tr>
+    <tr><td>x</td><td><code>50</code></td><td>Position X dans la zone</td></tr>
+    <tr><td>y</td><td><code>50</code></td><td>Position Y dans la zone</td></tr>
+    <tr><td>width</td><td><code>800</code></td><td>Largeur en pixels</td></tr>
+    <tr><td>height</td><td><code>600</code></td><td>Hauteur en pixels</td></tr>
+    <tr><td>backgroundColor</td><td><code>'rgba(255, 255, 255, 1.0)'</code></td><td>Fond blanc</td></tr>
+    <tr><td>isLocked</td><td><code>false</code></td><td>Canevas déverrouillé</td></tr>
+    <tr><td>isVisible</td><td><code>true</code></td><td>Canevas visible</td></tr>
+    <tr><td>opacity</td><td><code>1.0</code></td><td>Complètement opaque</td></tr>
+</table>
+
+<h2>Objets — voh.objects.create()</h2>
+
+<table>
+    <tr><th>Propriété</th><th>Valeur par défaut</th><th>Signification</th></tr>
+    <tr><td>x</td><td><code>50</code></td><td>Position X sur le canevas</td></tr>
+    <tr><td>y</td><td><code>50</code></td><td>Position Y sur le canevas</td></tr>
+    <tr><td>width</td><td><code>150</code></td><td>Largeur en pixels (minimum: 5)</td></tr>
+    <tr><td>height</td><td><code>100</code></td><td>Hauteur en pixels (minimum: 5)</td></tr>
+    <tr><td>backgroundColor</td><td><code>'rgba(200, 200, 200, 1.0)'</code></td><td>Gris clair (rendu par défaut)</td></tr>
+    <tr><td>isLocked</td><td><code>false</code></td><td>Objet déverrouillé</td></tr>
+    <tr><td>isVisible</td><td><code>true</code></td><td>Objet visible</td></tr>
+    <tr><td>opacity</td><td><code>1.0</code></td><td>Complètement opaque</td></tr>
+    <tr><td>drawingCallback</td><td><code>null</code></td><td>Pas de callback (rendu par défaut = rectangle plein)</td></tr>
+    <tr><td>cursor</td><td><code>null</code></td><td>Curseur du canevas (pas de curseur spécifique)</td></tr>
+    <tr><td>mouseDragEnabled</td><td><code>false</code></td><td>Drag désactivé</td></tr>
+    <tr><td>mouseDragButton</td><td><code>'left'</code></td><td>Bouton gauche pour le drag</td></tr>
+    <tr><td>mouseDragMode</td><td><code>'direct'</code></td><td>L'objet suit la souris en temps réel</td></tr>
+    <tr><td>mouseDragOffsetX</td><td><code>0</code></td><td>Pas de décalage X</td></tr>
+    <tr><td>mouseDragOffsetY</td><td><code>0</code></td><td>Pas de décalage Y</td></tr>
+    <tr><td>mouseDragPreviewCallback</td><td><code>null</code></td><td>Fantôme bleu par défaut</td></tr>
+    <tr><td>mouseDragMultiMode</td><td><code>null</code></td><td>Hérite de mouseDragMode</td></tr>
+    <tr><td>mouseDragMultiPreviewCallback</td><td><code>null</code></td><td>Hérite de mouseDragPreviewCallback</td></tr>
+    <tr><td>selectionBorderColor</td><td><code>'rgba(0, 120, 215, 0.9)'</code></td><td>Bleu</td></tr>
+    <tr><td>selectionBorderThickness</td><td><code>1</code></td><td>1 pixel</td></tr>
+    <tr><td>selectionBorderOffset</td><td><code>0</code></td><td>Collé à l'extérieur de l'objet</td></tr>
+    <tr><td>selectionBorderStyle</td><td><code>'solid'</code></td><td>Ligne continue</td></tr>
+    <tr><td>selectionMode</td><td><code>'enclosed'</code></td><td>Entièrement contenu dans le rectangle</td></tr>
+    <tr><td>taille minimum</td><td><code>5</code></td><td>Largeur et hauteur minimum en pixels</td></tr>
+</table>
+
+<h2>Page — voh.canvas.pages.add()</h2>
+
+<table>
+    <tr><th>Propriété</th><th>Valeur par défaut</th><th>Signification</th></tr>
+    <tr><td colspan="3"><strong>Dimensions</strong></td></tr>
+    <tr><td>width</td><td><code>800</code></td><td>Largeur en pixels</td></tr>
+    <tr><td>height</td><td><code>600</code></td><td>Hauteur en pixels</td></tr>
+    <tr><td colspan="3"><strong>Fond</strong></td></tr>
+    <tr><td>backgroundColor</td><td><code>'rgba(255, 255, 255, 1.0)'</code></td><td>Fond blanc</td></tr>
+    <tr><td>backgroundImage</td><td><code>null</code></td><td>Pas d'image</td></tr>
+    <tr><td>backgroundImageOpacity</td><td><code>1.0</code></td><td>Image opaque</td></tr>
+    <tr><td colspan="3"><strong>Bordure</strong></td></tr>
+    <tr><td>borderColor</td><td><code>'rgba(0, 0, 0, 0.2)'</code></td><td>Noir semi-transparent</td></tr>
+    <tr><td>borderThickness</td><td><code>1</code></td><td>1 pixel</td></tr>
+    <tr><td>borderStyle</td><td><code>'solid'</code></td><td>Ligne continue (solid, dashed, dotted)</td></tr>
+    <tr><td>borderCornerRadius</td><td><code>0</code></td><td>Pas d'arrondi</td></tr>
+    <tr><td>borderIsVisible</td><td><code>false</code></td><td>Bordure masquée</td></tr>
+    <tr><td colspan="3"><strong>Grille</strong></td></tr>
+    <tr><td>gridCellWidth</td><td><code>25</code></td><td>Largeur de cellule (pixels)</td></tr>
+    <tr><td>gridCellHeight</td><td><code>25</code></td><td>Hauteur de cellule (pixels)</td></tr>
+    <tr><td>gridColor</td><td><code>'rgba(0, 0, 0, 0.1)'</code></td><td>Noir très transparent</td></tr>
+    <tr><td>gridOpacity</td><td><code>1.0</code></td><td>Opacité de la grille</td></tr>
+    <tr><td>gridThickness</td><td><code>1</code></td><td>Épaisseur des lignes</td></tr>
+    <tr><td>gridStyle</td><td><code>'solid'</code></td><td>Style (solid, dashed, dotted, dots)</td></tr>
+    <tr><td>gridIsVisible</td><td><code>false</code></td><td>Grille masquée</td></tr>
+    <tr><td>gridSnapEnabled</td><td><code>false</code></td><td>Magnétisme désactivé</td></tr>
+    <tr><td colspan="3"><strong>Sélection souris</strong></td></tr>
+    <tr><td>selectionEnabled</td><td><code>false</code></td><td>Sélection souris désactivée</td></tr>
+    <tr><td>selectionMouseButton</td><td><code>'left'</code></td><td>Bouton souris (left, middle, right)</td></tr>
+    <tr><td>selectionBackgroundColor</td><td><code>'rgba(0, 120, 215, 0.15)'</code></td><td>Bleu semi-transparent</td></tr>
+    <tr><td>selectionBorderColor</td><td><code>'rgba(0, 120, 215, 0.8)'</code></td><td>Bleu</td></tr>
+    <tr><td>selectionBorderThickness</td><td><code>1</code></td><td>1 pixel</td></tr>
+    <tr><td>selectionBorderStyle</td><td><code>'solid'</code></td><td>Ligne continue</td></tr>
+    <tr><td colspan="3"><strong>Curseur</strong></td></tr>
+    <tr><td>cursor</td><td><code>'default'</code></td><td>Curseur par défaut</td></tr>
+</table>
+
+<h2>Historique (undo/redo)</h2>
+
+<table>
+    <tr><th>Propriété</th><th>Valeur par défaut</th><th>Signification</th></tr>
+    <tr><td>maxLevel</td><td><code>50</code></td><td>Nombre maximum d'actions annulables par page</td></tr>
+</table>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

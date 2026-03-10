@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Nom — voh.canvas</title>
+</head>
+<body>
+
+<h1>voh.canvas — Nom</h1>
+<p class="intro">Chaque canvas a un nom personnalisable pour l'identifier.</p>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">setName</span><span class="sig-paren">(</span><span class="sig-param">canvasId, name</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Définit le nom d'un canvas.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas</td></tr>
+        <tr><td>name</td><td>texte</td><td>Le nouveau nom</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si canvas inexistant.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">setName</span>(<span class="var">canvas1</span>, <span class="str">'Éditeur principal'</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">getName</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">texte ou null</span></div>
+    <div class="method-description">Retourne le nom d'un canvas.</div>
+    <div class="method-return">Retourne: <span class="return-type">texte</span> — le nom du canvas, ou <code>null</code> si le canvas n'existe pas.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getName</span>(<span class="var">canvas1</span>));  <span class="cmt">// "Éditeur principal"</span></pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

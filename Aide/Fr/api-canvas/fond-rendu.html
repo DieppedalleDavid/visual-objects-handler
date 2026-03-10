@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Fond et rendu — voh.canvas</title>
+</head>
+<body>
+
+<h1>voh.canvas — Fond et rendu</h1>
+<p class="intro">Couleur de fond du canevas et contrôle du moteur de rendu Pixi.js.</p>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Couleur de fond</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">setBackgroundColor</span><span class="sig-paren">(</span><span class="sig-param">canvasId, color</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Définit la couleur de fond du canevas sur la page active. Accepte toute couleur CSS valide
+        (hex, rgb, rgba, nom). La couleur est stockée dans les données de la page active.
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canevas</td></tr>
+        <tr><td>color</td><td>texte</td><td>Couleur CSS (ex: <code>'#ff0000'</code>, <code>'rgba(0,0,0,0.5)'</code>)</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span></div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">setBackgroundColor</span>(<span class="var">canvas</span>, <span class="str">'#1a1a2e'</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">getBackgroundColor</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">texte | null</span></div>
+    <div class="method-description">Retourne la couleur de fond de la page active, ou <code>null</code> si le canevas n'existe pas.</div>
+    <div class="method-return">Retourne: <span class="return-type">texte | null</span></div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getBackgroundColor</span>(<span class="var">canvas</span>));  <span class="cmt">// 'rgba(255, 255, 255, 1.0)'</span></pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Attendre le rendu</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">waitForRender</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">Promise&lt;vrai&gt;</span></div>
+    <div class="method-description">
+        Attend que le rendu Pixi.js soit affiché à l'écran. Si le renderer n'est pas encore initialisé
+        (init asynchrone en cours), attend qu'il le soit. Force un rendu puis attend deux frames du navigateur
+        pour garantir que les pixels sont visibles. Utile après la création d'un canevas ou d'objets.
+    </div>
+    <div class="method-return">Retourne: <span class="return-type">Promise&lt;vrai&gt;</span> — Résout <code>true</code> quand l'affichage est à jour.</div>
+<pre><span class="kw">await</span> <span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">waitForRender</span>(<span class="var">canvas</span>);
+<span class="cmt">// ici les pixels sont visibles, on peut continuer</span></pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Statistiques de rendu</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">getRenderStats</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">objet | null</span></div>
+    <div class="method-description">
+        Retourne les statistiques de rendu complètes du canevas.
+    </div>
+    <div class="method-return">Retourne: <span class="return-type">{ lastTime, minTime, maxTime, averageTime, count, totalTime }</span> — Temps en millisecondes.</div>
+<pre><span class="kw">const</span> <span class="var">stats</span> = <span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getRenderStats</span>(<span class="var">canvas</span>);
+<span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Rendus:'</span>, <span class="var">stats</span>.<span class="var">count</span>, <span class="str">'Moyenne:'</span>, <span class="var">stats</span>.<span class="var">averageTime</span>.<span class="fn">toFixed</span>(<span class="num">2</span>), <span class="str">'ms'</span>);</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">getLastRenderTime</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre</span></div>
+    <div class="method-description">Retourne le temps du dernier rendu en millisecondes.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre</span> — Temps en ms (ex: <code>0.342</code>).</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getLastRenderTime</span>(<span class="var">canvas</span>));  <span class="cmt">// 0.342</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">resetRenderStats</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Remet à zéro les statistiques de rendu du canevas (compteur, min, max, total).</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">resetRenderStats</span>(<span class="var">canvas</span>);</pre>
+</div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

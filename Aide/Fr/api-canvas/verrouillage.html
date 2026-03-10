@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Verrouillage — voh.canvas</title>
+</head>
+<body>
+
+<h1>voh.canvas — Verrouillage</h1>
+<p class="intro">Un canvas verrouillé ne peut être ni déplacé, ni redimensionné par la souris. Les objets à l'intérieur restent manipulables (le verrou concerne le canvas, pas son contenu). L'API peut toujours modifier la position et la taille même si le canvas est verrouillé.</p>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">setLocked</span><span class="sig-paren">(</span><span class="sig-param">canvasId, isLocked</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Verrouille ou déverrouille un canvas.</div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas</td></tr>
+        <tr><td>isLocked</td><td>vrai/faux</td><td><code>true</code> = verrouillé, <code>false</code> = déverrouillé</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si canvas inexistant.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">setLocked</span>(<span class="var">canvas1</span>, <span class="kw">true</span>);
+
+<span class="cmt">// L'API fonctionne toujours même verrouillé</span>
+<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">setX</span>(<span class="var">canvas1</span>, <span class="num">200</span>);  <span class="cmt">// fonctionne</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">getLocked</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux ou null</span></div>
+    <div class="method-description">Retourne l'état de verrouillage.</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si verrouillé, <code>false</code> si déverrouillé, ou <code>null</code> si le canvas n'existe pas.</div>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">isLocked</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux ou null</span></div>
+    <div class="method-description">Alias de <code>getLocked</code>. Forme plus naturelle pour les booléens.</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si verrouillé, <code>false</code> si déverrouillé, ou <code>null</code> si le canvas n'existe pas.</div>
+<pre><span class="kw">if</span> (<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">isLocked</span>(<span class="var">canvas1</span>)) {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Le canvas est verrouillé'</span>);
+}</pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Informations — voh.canvas</title>
+</head>
+<body>
+
+<h1>voh.canvas — Informations</h1>
+<p class="intro">Obtenir des informations sur les canvas existants.</p>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">getCount</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre</span></div>
+    <div class="method-description">Retourne le nombre de canvas dans une zone. Si <code>zoneId</code> n'est pas fourni (ou <code>null</code>), retourne le total de tous les canvas de l'instance.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre</span> — le nombre de canvas (0 si aucun).</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getCount</span>(<span class="var">zone1</span>));  <span class="cmt">// ex: 3</span>
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getCount</span>());       <span class="cmt">// total de l'instance</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">getList</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">tableau de nombres</span></div>
+    <div class="method-description">Retourne la liste des IDs de canvas dans une zone. Si <code>zoneId</code> n'est pas fourni, retourne tous les canvas de l'instance.</div>
+    <div class="method-return">Retourne: <span class="return-type">tableau</span> — les IDs des canvas (tableau vide <code>[]</code> si aucun).</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getList</span>(<span class="var">zone1</span>));  <span class="cmt">// ex: [1, 2, 3]</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">exists</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Vérifie si un canvas existe encore (utile après une suppression).</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si le canvas existe, <code>false</code> sinon.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">exists</span>(<span class="num">1</span>));  <span class="cmt">// true ou false</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">getZoneId</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre ou null</span></div>
+    <div class="method-description">Retourne l'ID de la zone à laquelle appartient un canvas.</div>
+    <div class="method-return">Retourne: <span class="return-type">nombre</span> — l'ID de la zone parente, ou <code>null</code> si le canvas n'existe pas.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getZoneId</span>(<span class="var">canvas1</span>));  <span class="cmt">// ex: 1</span></pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

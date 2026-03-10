@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Démarrage rapide — VOH Documentation</title>
+</head>
+<body>
+
+<h1>Démarrage rapide</h1>
+<p class="intro">Pour utiliser VOH, il faut 3 étapes : inclure les fichiers, créer une instance, et initialiser.</p>
+
+<h3>1. Inclure Pixi.js et les fichiers Core dans votre page HTML</h3>
+<pre><span class="cmt">&lt;!-- Moteur de rendu GPU (obligatoire) --&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Libraries/Pixi/Pixi.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+
+<span class="cmt">&lt;!-- Core VOH (dans cet ordre !) --&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Diagnostics.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-EventEmitter.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-API.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Zone.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-CanvasSelection.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-CanvasHistory.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-CanvasPage.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-RenderEngine.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Canvas.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Objects.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-ObjectSelection.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-SpatialGrid.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-ObjectInteraction.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;script</span> <span class="var">src</span>=<span class="str">"Core/Core-Main.js"</span><span class="tag">&gt;&lt;/script&gt;</span></pre>
+
+<h3>2. Créer une instance et l'initialiser</h3>
+<pre><span class="cmt">// Créer VOH dans un &lt;div&gt; de votre page</span>
+<span class="kw">const</span> <span class="var">voh</span> = <span class="kw">new</span> <span class="fn">VisualObjectsHandler</span>(<span class="var">document</span>.<span class="fn">getElementById</span>(<span class="str">'container'</span>));
+
+<span class="cmt">// Initialiser le moteur (obligatoire, à faire une seule fois)</span>
+<span class="kw">await</span> <span class="var">voh</span>.<span class="fn">init</span>();</pre>
+
+<h3>3. Créer une zone et commencer à travailler</h3>
+<pre><span class="cmt">// Créer une zone avec un fond jaune et une bordure rouge</span>
+<span class="kw">const</span> <span class="var">zone</span> = <span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">create</span>({
+    <span class="var">name</span>: <span class="str">'Ma première zone'</span>,
+    <span class="var">backgroundColor</span>: <span class="str">'rgba(255, 200, 0, 1.0)'</span>,
+    <span class="var">borderColor</span>: <span class="str">'rgba(255, 0, 0, 1.0)'</span>,
+    <span class="var">borderThickness</span>: <span class="num">2</span>
+});
+
+<span class="cmt">// zone contient l'ID (un nombre) de la zone créée</span>
+<span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Zone créée, ID:'</span>, <span class="var">zone</span>);</pre>
+
+<div class="note">
+    <strong>Deux lignes obligatoires</strong> au début de chaque script :<br>
+    <code>const voh = new VisualObjectsHandler(document.getElementById('container'));</code> crée le moteur.<br>
+    <code>await voh.init();</code> l'initialise. Sans ça, rien ne fonctionne.
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Méthodes globales</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh</span><span class="sig-sep">.</span><span class="sig-fn">init</span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">Promise</span></div>
+    <div class="method-description">
+        Initialise le moteur VOH. Doit être appelé une seule fois, avant toute autre opération.
+        Retourne une Promise — utiliser <code>await</code> pour attendre la fin de l'initialisation.
+    </div>
+<pre><span class="kw">const</span> <span class="var">voh</span> = <span class="kw">new</span> <span class="fn">VisualObjectsHandler</span>(<span class="var">document</span>.<span class="fn">getElementById</span>(<span class="str">'container'</span>));
+<span class="kw">await</span> <span class="var">voh</span>.<span class="fn">init</span>();
+<span class="cmt">// Le moteur est prêt, on peut créer des zones et des canevas</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh</span><span class="sig-sep">.</span><span class="sig-fn">isReady</span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Retourne <code>true</code> si <code>voh.init()</code> a été appelé et s'est terminé avec succès.
+        Utile pour vérifier l'état du moteur avant de l'utiliser.
+    </div>
+<pre><span class="kw">if</span> (<span class="var">voh</span>.<span class="fn">isReady</span>()) {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Moteur prêt'</span>);
+} <span class="kw">else</span> {
+    <span class="var">console</span>.<span class="fn">log</span>(<span class="str">'Moteur non initialisé'</span>);
+}</pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh</span><span class="sig-sep">.</span><span class="sig-fn">getVersion</span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">texte</span></div>
+    <div class="method-description">
+        Retourne la version du Core VOH sous forme de chaîne (ex: <code>'2.26.00'</code>).
+        Utile pour le débogage ou pour vérifier la compatibilité.
+    </div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="fn">getVersion</span>());  <span class="cmt">// ex: '2.26.00'</span></pre>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh</span><span class="sig-sep">.</span><span class="sig-fn">destroy</span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">rien</span></div>
+    <div class="method-description">
+        Détruit complètement l'instance VOH : libère les ressources Pixi.js, supprime les listeners DOM,
+        vide toutes les zones, canevas et objets. À appeler quand le moteur n'est plus nécessaire
+        (navigation SPA, fermeture d'une fenêtre, nettoyage de tests).
+        Après un <code>destroy()</code>, l'instance ne peut plus être utilisée.
+    </div>
+<pre><span class="cmt">// Nettoyer le moteur avant de quitter</span>
+<span class="var">voh</span>.<span class="fn">destroy</span>();</pre>
+</div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

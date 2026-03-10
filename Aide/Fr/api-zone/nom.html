@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Nom — voh.zone</title>
+</head>
+<body>
+
+<h1>voh.zone — Nom</h1>
+<p class="intro">Attribuer un nom à une zone pour l'identifier.</p>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setName</span><span class="sig-paren">(</span><span class="sig-param">zoneId, nom</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getName</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Définit ou lit le nom de la zone. Le nom sert à l'identifier, il n'est pas affiché visuellement.</div>
+    <div class="method-return"><strong>set</strong> → <code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div>
+<pre><span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setName</span>(<span class="var">zone</span>, <span class="str">'Éditeur principal'</span>);
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">getName</span>(<span class="var">zone</span>));  <span class="cmt">// 'Éditeur principal'</span></pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

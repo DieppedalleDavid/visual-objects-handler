@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Zoom — voh.zone</title>
+</head>
+<body>
+
+<h1>voh.zone — Zoom</h1>
+<p class="intro">Contrôler le niveau de zoom de la zone.</p>
+
+<div class="note">
+    Le zoom va de 10% (<code>0.1</code>) à 500% (<code>5.0</code>).
+    <code>1.0</code> = taille normale (100%). <code>2.0</code> = deux fois plus gros. <code>0.5</code> = deux fois plus petit.
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">setZoom</span><span class="sig-paren">(</span><span class="sig-param">zoneId, niveau</span><span class="sig-paren">)</span> <span class="sig-slash">/</span> <span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">getZoom</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span></div>
+    <div class="method-description">Définit ou lit le niveau de zoom.</div>
+    <div class="method-return"><strong>set</strong> → <code>true</code> si réussi, <code>false</code> si la zone n'existe pas. <strong>get</strong> → la valeur, ou <code>null</code> si la zone n'existe pas</div>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">zoomIn</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Augmente le zoom de 10% (un palier).</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si zone inexistante.</div>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">zoomOut</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Diminue le zoom de 10% (un palier).</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si zone inexistante.</div>
+</div>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.zone</span><span class="sig-sep">.</span><span class="sig-fn">resetZoom</span><span class="sig-paren">(</span><span class="sig-param">zoneId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">Remet le zoom à 100%.</div>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si zone inexistante.</div></div>
+
+<pre><span class="cmt">// Zoom à 150%</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">setZoom</span>(<span class="var">zone</span>, <span class="num">1.5</span>);
+
+<span class="cmt">// Zoomer par palier (+10% à chaque appel)</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">zoomIn</span>(<span class="var">zone</span>);   <span class="cmt">// → 160%</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">zoomIn</span>(<span class="var">zone</span>);   <span class="cmt">// → 170%</span>
+
+<span class="cmt">// Dézoomer par palier (-10% à chaque appel)</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">zoomOut</span>(<span class="var">zone</span>);  <span class="cmt">// → 160%</span>
+
+<span class="cmt">// Lire le zoom actuel</span>
+<span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">getZoom</span>(<span class="var">zone</span>));  <span class="cmt">// 1.6</span>
+
+<span class="cmt">// Revenir à 100%</span>
+<span class="var">voh</span>.<span class="var">zone</span>.<span class="fn">resetZoom</span>(<span class="var">zone</span>);</pre>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>

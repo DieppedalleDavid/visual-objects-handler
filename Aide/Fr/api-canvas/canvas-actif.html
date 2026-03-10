@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../styles/doc-style.css">
+    <title>Canvas actif — voh.canvas</title>
+</head>
+<body>
+
+<h1>voh.canvas — Canvas actif</h1>
+
+<p class="intro">
+    Le canvas <strong>actif</strong> est une notion purement API: c'est le canvas désigné comme cible
+    par défaut pour les opérations qui n'en précisent pas un explicitement. Ce n'est pas un "focus"
+    au sens interface — les événements souris (survol, clic, etc.) fonctionnent sur tous les canvas
+    en permanence, qu'ils soient actifs ou non.
+</p>
+
+<div class="tip">
+    <strong>Actif ≠ focus souris.</strong> Un objet sur un canvas non actif peut très bien réagir
+    au survol de la souris et changer de couleur. L'état "actif" n'a aucun impact sur les événements
+    des objets — c'est au développeur de décider dans son code si l'état actif doit influencer
+    le comportement de son éditeur.
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2 style="border-top: none; margin-top: 0; padding-top: 0;">Activer un canvas</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">setActive</span><span class="sig-paren">(</span><span class="sig-param">canvasId</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">vrai/faux</span></div>
+    <div class="method-description">
+        Définit le canvas actif. Un seul canvas peut être actif à la fois dans toute l'instance VOH.
+        Le canvas précédemment actif est automatiquement désactivé. Si l'option
+        <code>bringCanvasToFrontOnActivation</code> est activée sur la zone parente, le canvas
+        passe aussi automatiquement au premier plan.
+    </div>
+    <table class="param-table">
+        <tr><th>Paramètre</th><th>Type</th><th>Description</th></tr>
+        <tr><td>canvasId</td><td>nombre</td><td>L'ID du canvas à activer</td></tr>
+    </table>
+    <div class="method-return">Retourne: <span class="return-type">vrai/faux</span> — <code>true</code> si réussi, <code>false</code> si canvas inexistant.</div>
+<pre><span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">setActive</span>(<span class="var">canvas2</span>);</pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Canvas actif actuel</h2>
+
+<div class="method">
+    <div class="method-sig"><span class="sig-obj">voh.canvas</span><span class="sig-sep">.</span><span class="sig-fn">getActiveId</span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-arrow">→</span> <span class="sig-return">nombre ou null</span></div>
+    <div class="method-description">
+        Retourne l'ID du canvas actuellement actif, ou <code>null</code> si aucun canvas n'est actif
+        (par exemple après avoir supprimé le canvas actif sans en activer un autre).
+    </div>
+    <div class="method-return">Retourne: <span class="return-type">nombre</span> — l'ID du canvas actif, ou <code>null</code>.</div>
+<pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getActiveId</span>());  <span class="cmt">// ex: 2</span></pre>
+</div>
+
+<!-- ════════════════════════════════════════ -->
+<h2>Exemple: réagir au survol sans tenir compte de l'état actif</h2>
+
+<div class="method">
+    <div class="method-description">
+        Les événements souris fonctionnent sur tous les canvas indépendamment. Dans cet exemple,
+        deux canvas coexistent et chacun réagit au survol de ses objets sans qu'un clic préalable
+        soit nécessaire.
+    </div>
+<pre><span class="cmt">// Les deux canvas écoutent leurs événements en parallèle</span>
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:mouseEnter'</span>, ({ <span class="var">objectId</span> }) =&gt; {
+    <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setBackgroundColor</span>(<span class="var">objectId</span>, <span class="str">'#ffcc00'</span>);
+});
+
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:mouseLeave'</span>, ({ <span class="var">objectId</span> }) =&gt; {
+    <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setBackgroundColor</span>(<span class="var">objectId</span>, <span class="str">'#ffffff'</span>);
+});
+
+<span class="cmt">// Si on veut conditionner à l'état actif, c'est au développeur de le gérer</span>
+<span class="var">voh</span>.<span class="fn">on</span>(<span class="str">'object:mouseEnter'</span>, ({ <span class="var">objectId</span>, <span class="var">canvasId</span> }) =&gt; {
+    <span class="kw">if</span> (<span class="var">canvasId</span> === <span class="var">voh</span>.<span class="var">canvas</span>.<span class="fn">getActiveId</span>()) {
+        <span class="var">voh</span>.<span class="var">objects</span>.<span class="fn">setBackgroundColor</span>(<span class="var">objectId</span>, <span class="str">'#ffcc00'</span>);
+    }
+});</pre></div>
+
+<script src="../scripts/doc-nav.js"></script>
+</body>
+</html>
