@@ -26,7 +26,7 @@ Si vous clonez le dépôt, vous devez télécharger les librairies suivantes et 
 
 ## Structure du projet
 
-- `Core/` — Moteur graphique (13 fichiers JavaScript)
+- `Core/` — Moteur graphique (Fichiers JavaScript)
 - `Exemples/` — Scripts d'exemples commentés (Zone, Canevas, Objets, Demo)
 - `Aide/` — Documentation HTML avec navigation
 - `Document de Conception/` — Les documents de conception
