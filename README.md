@@ -29,6 +29,9 @@ Si vous clonez le dépôt, vous devez télécharger les librairies suivantes et 
 - `Core/` — Moteur graphique (13 fichiers JavaScript)
 - `Exemples/` — Scripts d'exemples commentés (Zone, Canevas, Objets, Demo)
 - `Aide/` — Documentation HTML avec navigation
+- `Document de Conception/ — Les documents de conception
+- `Libraries/` — Les librairies (Pixi.js, CodeMirror, TypeScript)
+- `Medias/` — Les images et ressources
 - `Tests/` — Benchmarks et tests
 - `Index.html` — Éditeur de code intégré (CodeMirror)
 - `Runner.html` — Exécution des scripts
